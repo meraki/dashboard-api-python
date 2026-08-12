@@ -263,6 +263,7 @@ class ActionBatchDevices:
         - destination (object): The destination IP or subnet to lookup
         - nextHop (object): The next hop to lookup
         - vpn (object): VPN related search criteria
+        - vrf (object): Virtual routing and forwarding (VRF) search criteria
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
@@ -296,6 +297,7 @@ class ActionBatchDevices:
             "destination",
             "nextHop",
             "vpn",
+            "vrf",
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}

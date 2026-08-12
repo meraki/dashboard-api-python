@@ -3057,31 +3057,6 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def batchOrganizationSaseConnectorsDelete(self, organizationId: str, **kwargs):
-        """
-        **Delete SSE Connectors by ID**
-        https://developer.cisco.com/meraki/api-v1/#!batch-organization-sase-connectors-delete
-
-        - organizationId (string): Organization ID
-        - items (array): List of connectors to delete (maximum 20 items)
-        """
-
-        kwargs.update(locals())
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/sase/connectors/batchDelete"
-
-        body_params = [
-            "items",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "teardown",
-            "body": payload,
-        }
-        return action
-
     def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
         """
         **Create a new Secure Access integration**
@@ -3123,56 +3098,6 @@ class ActionBatchOrganizations:
         action = {
             "resource": resource,
             "operation": "destroy",
-        }
-        return action
-
-    def attachOrganizationSaseSites(self, organizationId: str, items: list, **kwargs):
-        """
-        **Attach sites in this organization to Secure Access. For an organization, a maximum of 2500 sites can be attached if they are in spoke mode or a maximum of 10 sites can be attached in hub mode.**
-        https://developer.cisco.com/meraki/api-v1/#!attach-organization-sase-sites
-
-        - organizationId (string): Organization ID
-        - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
-        """
-
-        kwargs = locals()
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/sase/sites/attach"
-
-        body_params = [
-            "items",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "create",
-            "body": payload,
-        }
-        return action
-
-    def detachOrganizationSaseSites(self, organizationId: str, **kwargs):
-        """
-        **Detach sites in this organization from Secure Access. This will remove the sites from Secure Access.**
-        https://developer.cisco.com/meraki/api-v1/#!detach-organization-sase-sites
-
-        - organizationId (string): Organization ID
-        - items (array): List of Secure Access sites to be detached.
-        """
-
-        kwargs.update(locals())
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/sase/sites/detach"
-
-        body_params = [
-            "items",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "detach",
-            "body": payload,
         }
         return action
 

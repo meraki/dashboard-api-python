@@ -120,12 +120,12 @@ class ActionBatchWireless:
 
     def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
         """
-        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles.**
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles. Read-only fields returned by this endpoint, such as 'serial', 'network', and 'radios[].band', may be included when sending a previously returned object back to this PUT endpoint and will be ignored.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
 
         - serial (string): Serial
-        - rfProfile (object): This device's RF profile
-        - radios (array): Radio overrides.
+        - rfProfile (object): This device's RF profile. If omitted, the existing RF profile assignment remains unchanged.
+        - radios (array): Radio overrides. If omitted, existing per-radio override settings remain unchanged. If provided, only the radios included in the array are updated; the array does not replace the device's full existing set of radio overrides. Read-only response fields for each radio, such as 'band', may be included in the request body and are ignored.
         """
 
         kwargs.update(locals())

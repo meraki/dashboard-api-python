@@ -3716,6 +3716,60 @@ class Organizations:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsInsightsByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Provides insights into wired successful connections experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-insights-by-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub-contributor insights.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsInsightsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/insights/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "contributor",
+            "subContributor",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def getOrganizationAssuranceWorkflows(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return workflows filtered by organization ID, network ID, type, and category**
@@ -7250,7 +7304,8 @@ class Organizations:
         - firmwareStatus (string): Limit the list of networks to those whose current firmware version has the specified end-of-support status.
         - firmwareType (string): Limit the list of networks to those whose current firmware version has the specified release type.
         - upgradeDependencyIds (array): Limit the list of networks to those that belong to one of the provided upgrade dependencies.
-        - upgradeAvailable (boolean): Limit the list of networks by upgrade availability.
+        - updateAvailable (boolean): Limit the list of networks by update availability.
+        - updateStatus (string): Limit the list of networks to those whose latest software update has the specified status.
         - templateRole (string): Limit the list of networks by config template role: non-template only, templates only, or templates and bound networks.
         """
 
@@ -7293,6 +7348,11 @@ class Organizations:
             assert kwargs["firmwareType"] in options, (
                 f'''"firmwareType" cannot be "{kwargs["firmwareType"]}", & must be set to one of: {options}'''
             )
+        if "updateStatus" in kwargs:
+            options = ["completed", "completed recently", "in progress", "not yet scheduled", "pending"]
+            assert kwargs["updateStatus"] in options, (
+                f'''"updateStatus" cannot be "{kwargs["updateStatus"]}", & must be set to one of: {options}'''
+            )
         if "templateRole" in kwargs:
             options = ["bound-templates", "non-template", "templates"]
             assert kwargs["templateRole"] in options, (
@@ -7321,7 +7381,8 @@ class Organizations:
             "firmwareStatus",
             "firmwareType",
             "upgradeDependencyIds",
-            "upgradeAvailable",
+            "updateAvailable",
+            "updateStatus",
             "templateRole",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}

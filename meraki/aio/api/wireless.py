@@ -353,12 +353,12 @@ class AsyncWireless:
 
     def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
         """
-        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles.**
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
 
         - serial (string): Serial
-        - rfProfile (object): This device's RF profile
-        - radios (array): Radio overrides.
+        - rfProfile (object): This device's RF profile. If omitted, the existing RF profile assignment remains unchanged.
+        - radios (array): Radio overrides. If omitted, existing per-radio override settings remain unchanged. If provided, only the radios included in the array are updated; the array does not replace the device's full existing set of radio overrides. Read-only response fields for each radio, such as 'band', may be included in the request body and are ignored.
         """
 
         kwargs.update(locals())
@@ -4658,6 +4658,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
@@ -4670,6 +4671,11 @@ class AsyncWireless:
 
         kwargs.update(locals())
 
+        if "insights" in kwargs:
+            options = ["dashboard", "rca"]
+            assert kwargs["insights"] in options, (
+                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
+            )
         if "contributor" in kwargs:
             options = ["Co-channel interference", "High traffic", "Non-wifi interference"]
             assert kwargs["contributor"] in options, (
@@ -4688,6 +4694,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "insights",
             "contributor",
             "subContributor",
             "t0",
@@ -5346,6 +5353,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
@@ -5358,6 +5366,11 @@ class AsyncWireless:
 
         kwargs.update(locals())
 
+        if "insights" in kwargs:
+            options = ["dashboard", "rca"]
+            assert kwargs["insights"] in options, (
+                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
+            )
         if "contributor" in kwargs:
             options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Weak signal"]
             assert kwargs["contributor"] in options, (
@@ -5376,6 +5389,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "insights",
             "contributor",
             "subContributor",
             "t0",
@@ -6991,6 +7005,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
         - variant (string): Wireless State Machine variant to use.
@@ -7004,6 +7019,11 @@ class AsyncWireless:
 
         kwargs.update(locals())
 
+        if "insights" in kwargs:
+            options = ["dashboard", "rca"]
+            assert kwargs["insights"] in options, (
+                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
+            )
         if "contributor" in kwargs:
             options = ["assoc", "auth", "dhcp", "dns"]
             assert kwargs["contributor"] in options, (
@@ -7027,6 +7047,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "insights",
             "contributor",
             "subContributor",
             "variant",
@@ -10263,6 +10284,76 @@ class AsyncWireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessRadioOverridesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessRadioPowerCapabilitiesByModel(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List radio transmit power capabilities by model for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-power-capabilities-by-model
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Restrict the model population to models deployed in the specified networks. Maximum 5 elements. Networks that are unreadable by the caller or that do not exist are silently omitted. Because capabilities are model-intrinsic (identical regardless of network), network metadata is not included in the response; this filter only narrows which deployed models are returned.
+        - radioBands (array): Filter results by radio-frequency band (in GHz). Enum per element: '2.4', '5', '6'. Case-sensitive (band values are numeric strings). Maximum 3 elements. Flex radios that support multiple bands appear if any band matches. Default: all bands returned.
+        - modelNames (array): Filter results to specific access point models by name. Accepts model names (e.g. MR46, CW9164I). Case-insensitive. Maximum 20 elements. Narrows the population selected by scope. When scope is 'deployed' (the default), returns only the named models that are deployed. When scope is 'known', returns only the named models from the full known set.
+        - scope (string): Select the model population. Enum: 'deployed' (only models deployed in the organization's networks), 'known' (every known access point model). Case-insensitive. Default: 'deployed'.
+        - modelEnvironment (string): Filter by access point model deployment environment. Enum: 'indoor', 'outdoor', 'mixed'. Case-insensitive. 'mixed' selects models that can be deployed in either environment. Default: all environments returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 200. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "scope" in kwargs:
+            options = ["deployed", "known"]
+            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
+        if "modelEnvironment" in kwargs:
+            options = ["indoor", "mixed", "outdoor"]
+            assert kwargs["modelEnvironment"] in options, (
+                f'''"modelEnvironment" cannot be "{kwargs["modelEnvironment"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "power", "capabilities", "byModel"],
+            "operation": "getOrganizationWirelessRadioPowerCapabilitiesByModel",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/power/capabilities/byModel"
+
+        query_params = [
+            "networkIds",
+            "radioBands",
+            "modelNames",
+            "scope",
+            "modelEnvironment",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "radioBands",
+            "modelNames",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioPowerCapabilitiesByModel: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

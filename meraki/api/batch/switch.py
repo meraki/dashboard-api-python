@@ -75,6 +75,8 @@ class ActionBatchSwitch:
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch port.
+        - fastPoe (object): Fast PoE settings for the switch port.
         - type (string): The type of the switch port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
@@ -132,6 +134,8 @@ class ActionBatchSwitch:
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",
@@ -1078,6 +1082,56 @@ class ActionBatchSwitch:
         action = {
             "resource": resource,
             "operation": "profiles/destroy",
+        }
+        return action
+
+    def updateNetworkSwitchPowerFlexible(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Updates Flexible Power over Ethernet (PoE) config for a switch network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-power-flexible
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether Flexible Power over Ethernet (PoE) is enabled for the network.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/power/flexible"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def batchNetworkSwitchPowerFlexibleExceptionsCreateOrDelete(self, networkId: str, items: list, **kwargs):
+        """
+        **Create or delete Flexible Power over Ethernet (PoE) switch or stack exceptions in atomic batch actions.**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-switch-power-flexible-exceptions-create-or-delete
+
+        - networkId (string): Network ID
+        - items (array): Array of switch or stack exception operations
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/power/flexible/exceptions/batchCreateOrDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "delete",
+            "body": payload,
         }
         return action
 

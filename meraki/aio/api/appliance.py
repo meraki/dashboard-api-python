@@ -2053,11 +2053,11 @@ class AsyncAppliance:
         - name (string): The name of the SSID.
         - enabled (boolean): Whether or not the SSID is enabled.
         - defaultVlanId (integer): The VLAN ID of the VLAN associated to this SSID. This parameter is only valid if the network is in routed mode.
-        - authMode (string): The association control method for the SSID ('open', 'psk', '8021x-meraki' or '8021x-radius').
+        - authMode (string): The association control method for the SSID ('open', 'psk', '8021x-meraki', '8021x-radius' or '8021x-nac').
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'.
         - radiusServers (array): The RADIUS 802.1x servers to be used for authentication. This param is only valid if the authMode is '8021x-radius'.
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'.
-        - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
+        - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius' OR (4) the authMode is '8021x-nac'
         - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
         - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
@@ -2066,7 +2066,7 @@ class AsyncAppliance:
         kwargs.update(locals())
 
         if "authMode" in kwargs:
-            options = ["8021x-meraki", "8021x-radius", "open", "psk"]
+            options = ["8021x-meraki", "8021x-nac", "8021x-radius", "open", "psk"]
             assert kwargs["authMode"] in options, (
                 f'''"authMode" cannot be "{kwargs["authMode"]}", & must be set to one of: {options}'''
             )
