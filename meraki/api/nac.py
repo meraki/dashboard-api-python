@@ -411,9 +411,28 @@ class Nac:
 
         return self._session.post(metadata, resource, payload)
 
+    def getOrganizationNacCertificatesAuthoritiesCrl(self, organizationId: str, crlId: str):
+        """
+        **Get a CRL, including its revoked serial numbers**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-nac-certificates-authorities-crl
+
+        - organizationId (string): Organization ID
+        - crlId (string): Crl ID
+        """
+
+        metadata = {
+            "tags": ["nac", "configure", "certificates", "authorities", "crls"],
+            "operation": "getOrganizationNacCertificatesAuthoritiesCrl",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        crlId = urllib.parse.quote(str(crlId), safe="")
+        resource = f"/organizations/{organizationId}/nac/certificates/authorities/crls/{crlId}"
+
+        return self._session.get(metadata, resource)
+
     def deleteOrganizationNacCertificatesAuthoritiesCrl(self, organizationId: str, crlId: str):
         """
-        **Deletes a whole CRL, including all its deltas (in case of base CRL removal)**
+        **Deletes a CRL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-nac-certificates-authorities-crl
 
         - organizationId (string): Organization ID
@@ -536,6 +555,7 @@ class Nac:
         - lastNetworkName (array): List of network names for client retrieval by last login network name
         - ssid (array): List of SSID's to filter
         - classification (object): Classification filters for client retrieval
+        - ipskConfigured (boolean): Filter clients by Identity Pre-Shared Key (iPSK) configuration status. true returns only clients with a per-client iPSK passphrase set; false returns only clients without one. Omit to return all clients regardless of iPSK status. When combined with other filters (clientIds, groupIds, search, classification, ssid, lastNetworkName), all conditions are applied together (logical AND).
         """
 
         kwargs.update(locals())
@@ -570,6 +590,7 @@ class Nac:
             "lastNetworkName",
             "ssid",
             "classification",
+            "ipskConfigured",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
@@ -606,6 +627,7 @@ class Nac:
         - userDetails (array): List of users of this network client
         - oui (object): Organizationally unique identifier assigned to a vendor of the client
         - groups (array): List of group members associated with the client
+        - ipsk (string): Per-client Identity Pre-Shared Key (iPSK) passphrase (8-63 printable ASCII characters). Only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit when the flag is disabled. Omit to create the client without a passphrase.
         """
 
         kwargs.update(locals())
@@ -630,6 +652,7 @@ class Nac:
             "userDetails",
             "oui",
             "groups",
+            "ipsk",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -680,6 +703,7 @@ class Nac:
         - organizationId (string): Organization ID
         - clientIds (array): List of clients ids to apply the bulk edit operation on.
         - description (string): User provided description to be applied on the list of clients provided
+        - ipsk (string): Per-client Identity Pre-Shared Key (iPSK) passphrase to apply to all selected clients (8-63 printable ASCII characters). Only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit when the flag is disabled. Send an empty string to clear the passphrase. Omit the field to leave existing passphrases unchanged.
         - groups (object): Client group information to be applied on the list of clients provided
         """
 
@@ -695,6 +719,7 @@ class Nac:
         body_params = [
             "clientIds",
             "description",
+            "ipsk",
             "groups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -715,7 +740,7 @@ class Nac:
         https://developer.cisco.com/meraki/api-v1/#!create-organization-nac-clients-bulk-upload
 
         - organizationId (string): Organization ID
-        - contents (string): CSV file content in Base64 encoded string format
+        - contents (string): CSV file content in Base64 encoded string format. Example CSV includes headers MAC Address, Endpoint device group, Description, IPSK.
         - updateClients (boolean): The updateClients indicates whether existing clients must be updated with new data from the CSV
         - createClientGroups (boolean): The createClientGroups indicates whether new client groups must be created or not
         """
@@ -932,6 +957,7 @@ class Nac:
         - uuid (string): Universally unique identifier of the client
         - userDetails (array): List of users of this network client
         - oui (object): Organizationally unique identifier assigned to a vendor of the client
+        - ipsk (string): Per-client Identity Pre-Shared Key (iPSK) passphrase (8-63 printable ASCII characters). Only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit when the flag is disabled. Send an empty string to clear the passphrase. Omit the field to leave any existing passphrase unchanged.
         - groups (object): Client group membership changes
         """
 
@@ -957,6 +983,7 @@ class Nac:
             "uuid",
             "userDetails",
             "oui",
+            "ipsk",
             "groups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}

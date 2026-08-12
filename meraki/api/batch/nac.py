@@ -61,7 +61,7 @@ class ActionBatchNac:
 
     def deleteOrganizationNacCertificatesAuthoritiesCrl(self, organizationId: str, crlId: str):
         """
-        **Deletes a whole CRL, including all its deltas (in case of base CRL removal)**
+        **Deletes a CRL. Deleting a base CRL also deletes deltas associated with that base CRL.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-nac-certificates-authorities-crl
 
         - organizationId (string): Organization ID
@@ -162,6 +162,7 @@ class ActionBatchNac:
         - organizationId (string): Organization ID
         - clientIds (array): List of clients ids to apply the bulk edit operation on.
         - description (string): User provided description to be applied on the list of clients provided
+        - ipsk (string): Per-client Identity Pre-Shared Key (iPSK) passphrase to apply to all selected clients (8-63 printable ASCII characters). Only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit when the flag is disabled. Send an empty string to clear the passphrase. Omit the field to leave existing passphrases unchanged.
         - groups (object): Client group information to be applied on the list of clients provided
         """
 
@@ -173,6 +174,7 @@ class ActionBatchNac:
         body_params = [
             "clientIds",
             "description",
+            "ipsk",
             "groups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -187,11 +189,11 @@ class ActionBatchNac:
         self, organizationId: str, contents: str, updateClients: bool, createClientGroups: bool, **kwargs
     ):
         """
-        **Bulk upload of clients, client groups and their associations for the organization**
+        **Bulk upload of clients, client groups and their associations for the organization. CSV columns: MAC Address, Endpoint device group, Description, and an optional IPSK column for per-client Identity Pre-Shared Key (iPSK) passphrases. The IPSK column is only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit the column when the flag is disabled. When the IPSK column is present, provide a valid passphrase (8-63 printable ASCII characters) per row to set or update it; leave the cell blank to skip setting a passphrase for that row. The response echoes errored rows in Base64 CSV format for troubleshooting; IPSK column values are never returned in the response.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-nac-clients-bulk-upload
 
         - organizationId (string): Organization ID
-        - contents (string): CSV file content in Base64 encoded string format
+        - contents (string): CSV file content in Base64 encoded string format. Example CSV includes headers MAC Address, Endpoint device group, Description, IPSK.
         - updateClients (boolean): The updateClients indicates whether existing clients must be updated with new data from the CSV
         - createClientGroups (boolean): The createClientGroups indicates whether new client groups must be created or not
         """
@@ -307,6 +309,7 @@ class ActionBatchNac:
         - uuid (string): Universally unique identifier of the client
         - userDetails (array): List of users of this network client
         - oui (object): Organizationally unique identifier assigned to a vendor of the client
+        - ipsk (string): Per-client Identity Pre-Shared Key (iPSK) passphrase (8-63 printable ASCII characters). Only accepted when the access-manager-ipsk-per-client feature flag is enabled; omit when the flag is disabled. Send an empty string to clear the passphrase. Omit the field to leave any existing passphrase unchanged.
         - groups (object): Client group membership changes
         """
 
@@ -328,6 +331,7 @@ class ActionBatchNac:
             "uuid",
             "userDetails",
             "oui",
+            "ipsk",
             "groups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}

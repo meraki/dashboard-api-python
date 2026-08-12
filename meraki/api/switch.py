@@ -204,6 +204,8 @@ class Switch:
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch port.
+        - fastPoe (object): Fast PoE settings for the switch port.
         - type (string): The type of the switch port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
@@ -265,6 +267,8 @@ class Switch:
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",
@@ -1875,6 +1879,70 @@ class Switch:
         resource = f"/networks/{networkId}/switch/ports/profiles/{id}"
 
         return self._session.delete(metadata, resource)
+
+    def updateNetworkSwitchPowerFlexible(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Updates Flexible Power over Ethernet (PoE) config for a switch network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-power-flexible
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether Flexible Power over Ethernet (PoE) is enabled for the network.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "power", "flexible"],
+            "operation": "updateNetworkSwitchPowerFlexible",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/power/flexible"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchPowerFlexible: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def batchNetworkSwitchPowerFlexibleExceptionsCreateOrDelete(self, networkId: str, items: list, **kwargs):
+        """
+        **Create or delete Flexible Power over Ethernet (PoE) switch or stack exceptions in atomic batch actions.**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-switch-power-flexible-exceptions-create-or-delete
+
+        - networkId (string): Network ID
+        - items (array): Array of switch or stack exception operations
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "power", "flexible", "exceptions"],
+            "operation": "batchNetworkSwitchPowerFlexibleExceptionsCreateOrDelete",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/power/flexible/exceptions/batchCreateOrDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchNetworkSwitchPowerFlexibleExceptionsCreateOrDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
 
     def getNetworkSwitchQosRules(self, networkId: str):
         """
@@ -5578,6 +5646,157 @@ class Switch:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationSwitchPortsUsageHistoryByDeviceByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPowerFlexibleByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns the Flexible Power over Ethernet (PoE) config for switch networks within an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-power-flexible-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the returned networks by network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "power", "flexible", "byNetwork"],
+            "operation": "getOrganizationSwitchPowerFlexibleByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/power/flexible/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPowerFlexibleByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPowerFlexibleExceptionsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns switches that are excluded from Flexible Power over Ethernet (PoE) inside an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-power-flexible-exceptions-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the returned switches by network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "power", "flexible", "exceptions", "byDevice"],
+            "operation": "getOrganizationSwitchPowerFlexibleExceptionsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/power/flexible/exceptions/byDevice"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPowerFlexibleExceptionsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPowerFlexibleExceptionsByStack(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns stacks that are excluded from Flexible Power over Ethernet (PoE) inside an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-power-flexible-exceptions-by-stack
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the returned stacks by network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "power", "flexible", "exceptions", "byStack"],
+            "operation": "getOrganizationSwitchPowerFlexibleExceptionsByStack",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/power/flexible/exceptions/byStack"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPowerFlexibleExceptionsByStack: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
