@@ -178,9 +178,9 @@ class ActionBatchSwitch:
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback', or 'oob_management'. Default is 'vlan'. IOS XE firmware 17.18 or higher is required for 'routed' mode; IOS XE firmware 26.1.2 or higher is required for 'oob_management' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -250,7 +250,7 @@ class ActionBatchSwitch:
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -689,6 +689,7 @@ class ActionBatchSwitch:
 
         - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable AMI configuration. If enabled, VLAN and protocols must be set
+        - useOobMgmt (boolean): Boolean value to use out-of-band management interface when configured
         - vlanId (integer): Alternate management VLAN, must be between 1 and 4094
         - protocols (array): Can be one or more of the following values: 'radius', 'snmp' or 'syslog'
         - switches (array): Array of switch serial number and IP assignment. If parameter is present, it cannot have empty body. Note: switches parameter is not applicable for template networks, in other words, do not put 'switches' in the body when updating template networks. Also, an empty 'switches' array will remove all previous assignments
@@ -701,6 +702,7 @@ class ActionBatchSwitch:
 
         body_params = [
             "enabled",
+            "useOobMgmt",
             "vlanId",
             "protocols",
             "switches",
@@ -1559,9 +1561,9 @@ class ActionBatchSwitch:
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback', or 'oob_management'. Default is 'vlan'. IOS XE firmware 17.18 or higher is required for 'routed' mode; IOS XE firmware 26.1.2 or higher is required for 'oob_management' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -1633,7 +1635,7 @@ class ActionBatchSwitch:
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.

@@ -185,10 +185,10 @@ class ActionBatchCampusGateway:
         }
         return action
 
-    def batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate(self, organizationId: str, **kwargs):
+    def batchOrganizationCampusGatewayClustersTunnelingUpdate(self, organizationId: str, **kwargs):
         """
         **Update MCG cluster-network tunnel settings for multiple networks**
-        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-by-cluster-by-network-update
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-update
 
         - organizationId (string): Organization ID
         - items (array): MCG cluster-network tunnel settings
@@ -197,7 +197,7 @@ class ActionBatchCampusGateway:
         kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork/batchUpdate"
+        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/batchUpdate"
 
         body_params = [
             "items",

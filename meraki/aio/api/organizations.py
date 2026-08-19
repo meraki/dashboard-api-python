@@ -3187,6 +3187,25 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceRcaDefaultContent(self, organizationId: str, alertType: str):
+        """
+        **Return default RCA content for an Assurance alert type**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-rca-default-content
+
+        - organizationId (string): Organization ID
+        - alertType (string): Alert type
+        """
+
+        metadata = {
+            "tags": ["organizations", "monitor", "rca", "defaultContent"],
+            "operation": "getOrganizationAssuranceRcaDefaultContent",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        alertType = urllib.parse.quote(str(alertType), safe="")
+        resource = f"/organizations/{organizationId}/assurance/rca/defaultContent/{alertType}"
+
+        return self._session.get(metadata, resource)
+
     def getOrganizationAssuranceScores(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get network health scores for a list of networks.**

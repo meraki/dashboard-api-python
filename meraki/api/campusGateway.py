@@ -657,6 +657,39 @@ class CampusGateway:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def batchOrganizationCampusGatewayClustersTunnelingUpdate(self, organizationId: str, **kwargs):
+        """
+        **Update MCG cluster-network tunnel settings for multiple networks**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-update
+
+        - organizationId (string): Organization ID
+        - items (array): MCG cluster-network tunnel settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "clusters", "tunneling"],
+            "operation": "batchOrganizationCampusGatewayClustersTunnelingUpdate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/batchUpdate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationCampusGatewayClustersTunnelingUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
     def getOrganizationCampusGatewayClustersTunnelingByClusterByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -712,39 +745,6 @@ class CampusGateway:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate(self, organizationId: str, **kwargs):
-        """
-        **Update MCG cluster-network tunnel settings for multiple networks**
-        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-by-cluster-by-network-update
-
-        - organizationId (string): Organization ID
-        - items (array): MCG cluster-network tunnel settings
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["campusGateway", "configure", "clusters", "tunneling", "byCluster", "byNetwork"],
-            "operation": "batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork/batchUpdate"
-
-        body_params = [
-            "items",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
 
     def getOrganizationCampusGatewayConnections(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
