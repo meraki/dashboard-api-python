@@ -1014,7 +1014,7 @@ class ActionBatchOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
 
         - organizationId (string): Organization ID
-        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
+        - managedBy (string): Certificate managed by type [system_manager, mr, mx, encrypted_syslog, grpc_dial_out]
         - contents (string): Certificate content in valid PEM format
         - description (string): Certificate description
         """
@@ -1022,7 +1022,7 @@ class ActionBatchOrganizations:
         kwargs = locals()
 
         if "managedBy" in kwargs:
-            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "mx", "system_manager"]
             assert kwargs["managedBy"] in options, (
                 f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
             )
@@ -2068,6 +2068,411 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def mcfDeleteAccount(self, organizationId: str, accountId: str):
+        """
+        **Delete an account**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-account
+
+        - organizationId (string): Organization ID
+        - accountId (string): Account ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        accountId = urllib.parse.quote(accountId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/accounts/{accountId}"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def mcfCreateIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
+        """
+                **Create an integration**
+                https://developer.cisco.com/meraki/api-v1/#!mcf-create-integration
+
+                - organizationId (string): Organization ID
+                - provider (string): Provider
+                - accessRights (array): List of access rights for the integration.
+        Possible values are:
+        - discover
+        - create_onboarding_resources
+        - update_vpc
+                - aws (object): AWS Credentials
+                - gcp (object): GCP Credentials Request
+                - azure (object): GCP Credentials Request
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations"
+
+        body_params = [
+            "provider",
+            "accessRights",
+            "aws",
+            "gcp",
+            "azure",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfPreviewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
+        """
+        **Validate proposed Azure credentials and return accessible subscriptions without creating or modifying application state**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-azure-accounts
+
+        - organizationId (string): Organization ID
+        - tenantId (string): Tenant id
+        - clientId (string): Client id
+        - clientSecret (string): Client secret
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/accounts/azure/preview"
+
+        body_params = [
+            "tenantId",
+            "clientId",
+            "clientSecret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfPreviewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
+        """
+        **Validate proposed GCP credentials and return accessible projects without creating or modifying application state**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-gcp-accounts
+
+        - organizationId (string): Organization ID
+        - keyJson (string): Key json
+        - parentType (string): Parent type
+        - parentId (string): Parent id
+        """
+
+        kwargs.update(locals())
+
+        if "parentType" in kwargs:
+            options = ["folder", "organization"]
+            assert kwargs["parentType"] in options, (
+                f'''"parentType" cannot be "{kwargs["parentType"]}", & must be set to one of: {options}'''
+            )
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/accounts/gcp/preview"
+
+        body_params = [
+            "keyJson",
+            "parentType",
+            "parentId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfUpdateIntegration(self, organizationId: str, integrationId: str, provider: str, accessRights: list, **kwargs):
+        """
+                **Update an integration**
+                https://developer.cisco.com/meraki/api-v1/#!mcf-update-integration
+
+                - organizationId (string): Organization ID
+                - integrationId (string): Integration ID
+                - provider (string): Provider
+                - accessRights (array): List of access rights for the integration.
+        Possible values are:
+        - discover
+        - create_onboarding_resources
+        - update_vpc
+                - aws (object): AWS Credentials
+                - gcp (object): GCP Credentials Request
+                - azure (object): GCP Credentials Request
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        integrationId = urllib.parse.quote(integrationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}"
+
+        body_params = [
+            "provider",
+            "accessRights",
+            "aws",
+            "gcp",
+            "azure",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfDeleteIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Delete an integration**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-integration
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        integrationId = urllib.parse.quote(integrationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def mcfDiscoverIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Discover an integration**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-discover-integration
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        integrationId = urllib.parse.quote(integrationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/discover"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def mcfConfirmRemovedResourcesBulk(self, organizationId: str, **kwargs):
+        """
+        **Confirm a bounded explicit removed-resource selection.**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resources-bulk
+
+        - organizationId (string): Organization ID
+        - resourceIds (object): Explicit resource IDs keyed by account, network, or subnet.
+        - selection (object): Scoped server-side selection for a bounded bulk confirmation.
+        - lifecycleStatuses (array): Optional filter. Only applies with at least one explicit ID set or selectAllPending selection.
+        - confirmInfrastructureTeardown (boolean): Confirm infrastructure teardown
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/removed-resources/bulk/confirm"
+
+        body_params = [
+            "resourceIds",
+            "selection",
+            "lifecycleStatuses",
+            "confirmInfrastructureTeardown",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfConfirmRemovedResource(self, organizationId: str, resourceType: str, resourceId: str, **kwargs):
+        """
+        **Confirm removal for one discovery-driven resource.**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resource
+
+        - organizationId (string): Organization ID
+        - resourceType (string): Resource type
+        - resourceId (string): Resource ID
+        - confirmInfrastructureTeardown (boolean): Required when confirming onboarded or failed infrastructure-bearing accounts or networks.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resourceType = urllib.parse.quote(resourceType, safe="")
+        resourceId = urllib.parse.quote(resourceId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/removed-resources/{resourceType}/{resourceId}/confirm"
+
+        body_params = [
+            "confirmInfrastructureTeardown",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfCreateTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
+        """
+                **Finds or creates the canonical tag identity for the exact organization,
+        key, value, and type tuple. A newly created tag is tombstoned until cloud
+        discovery observes it. This operation does not associate the tag with a
+        network or subnet.
+        **
+                https://developer.cisco.com/meraki/api-v1/#!mcf-create-tag
+
+                - organizationId (string): Organization ID
+                - key (string): Key
+                - value (string): Value
+                - type (string): Scope at which a tag identifies resources.
+        """
+
+        kwargs = locals()
+
+        if "type" in kwargs:
+            options = ["network-wide"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/tags"
+
+        body_params = [
+            "key",
+            "value",
+            "type",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfOffboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+        """
+        **Offboard VPCs**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-offboard-vpcs
+
+        - organizationId (string): Organization ID
+        - vpcs (array): Vpcs
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/vpcs/offboard"
+
+        body_params = [
+            "vpcs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfOnboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+        """
+        **Onboard VPCs**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-onboard-vpcs
+
+        - organizationId (string): Organization ID
+        - vpcs (array): Vpcs
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/vpcs/onboard"
+
+        body_params = [
+            "vpcs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfCreateZtrIntent(self, organizationId: str, name: str, endpointsA: list, endpointsB: list, **kwargs):
+        """
+        **Create a Zero Trust Routing intent. When enabled is true, realizations are created for each endpoint pair (subject to validation). When enabled is false, only the intent and its endpoints are stored.**
+        https://developer.cisco.com/meraki/api-v1/#!mcf-create-ztr-intent
+
+        - organizationId (string): Organization ID
+        - name (string): Name
+        - endpointsA (array): Endpoints a
+        - endpointsB (array): Endpoints b
+        - description (string): Description
+        - enabled (boolean): Enabled
+        - rule (string): Rule
+        """
+
+        kwargs.update(locals())
+
+        if "rule" in kwargs:
+            options = ["ALLOW", "DENY"]
+            assert kwargs["rule"] in options, f'''"rule" cannot be "{kwargs["rule"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/ztrIntents"
+
+        body_params = [
+            "name",
+            "description",
+            "enabled",
+            "rule",
+            "endpointsA",
+            "endpointsB",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def mcfDeleteZtrIntent(self, organizationId: str, ztrIntentId: str):
+        """
+                **Delete a ZTR intent by ID. Returns 404 if the intent does not exist or does not belong to the organization.
+        ztr_intent_endpoints and ztr_intent_realizations are deleted by cascade.
+        For each realization that was linked only to this intent (count of intent realizations for that realization in the org == 1), the ztr_realization row is also deleted.
+        **
+                https://developer.cisco.com/meraki/api-v1/#!mcf-delete-ztr-intent
+
+                - organizationId (string): Organization ID
+                - ztrIntentId (string): Ztr intent ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        ztrIntentId = urllib.parse.quote(ztrIntentId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/ztrIntents/{ztrIntentId}"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
         **Create a network**
@@ -3098,6 +3503,33 @@ class ActionBatchOrganizations:
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+
+    def bulkOrganizationSaseSitesRegionsUpdate(self, organizationId: str, sites: list, region: dict, **kwargs):
+        """
+        **Create a provisioning pipeline that bulk updates multiple already attached Secure Access sites to one selected region.**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-sase-sites-regions-update
+
+        - organizationId (string): Organization ID
+        - sites (array): Non-empty list of Secure Access sites to bulk update. One to 20 sites can be updated in a single request.
+        - region (object): Destination region applied uniformly to all listed Secure Access sites.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/regions/bulkUpdate"
+
+        body_params = [
+            "sites",
+            "region",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
         }
         return action
 

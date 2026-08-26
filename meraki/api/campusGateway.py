@@ -657,7 +657,7 @@ class CampusGateway:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def batchOrganizationCampusGatewayClustersTunnelingUpdate(self, organizationId: str, **kwargs):
+    def batchOrganizationCampusGatewayClustersTunnelingUpdate(self, organizationId: str, items: list, **kwargs):
         """
         **Update MCG cluster-network tunnel settings for multiple networks**
         https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-update
@@ -666,7 +666,7 @@ class CampusGateway:
         - items (array): MCG cluster-network tunnel settings
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["campusGateway", "configure", "clusters", "tunneling"],
