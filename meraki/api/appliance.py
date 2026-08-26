@@ -2613,7 +2613,7 @@ class Appliance:
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
-        - applications (array): NBAR Application based VPN exclusion rules. Available for networks on >=19.2 firmware
+        - applications (array): NBAR application-based VPN exclusion rules. The documented example is a Secure Router NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable. Available for networks on firmware >= 19.2.
         """
 
         kwargs.update(locals())

@@ -964,6 +964,36 @@ class ActionBatchSwitch:
         }
         return action
 
+    def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
+        """
+            **Add a switch port schedule**
+            https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
+
+            - networkId (string): Network ID
+            - name (string): The name for your port schedule. Required
+            - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
+        When it's empty, default schedule with all days of a week are configured.
+        Any unspecified day in the schedule is added as a default schedule configuration of the day.
+
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules"
+
+        body_params = [
+            "name",
+            "portSchedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
             **Update a switch port schedule**
@@ -1449,7 +1479,7 @@ class ActionBatchSwitch:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "settings/actions/update",
+            "operation": "update",
             "body": payload,
         }
         return action
