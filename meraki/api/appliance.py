@@ -1190,7 +1190,7 @@ class Appliance:
 
         - networkId (string): Network ID
         - interfaceId (string): Interface ID
-        - port (object): Port configuration
+        - port (object): Port configuration. Set to null to remove the port association.
         - ipv4 (object): IPv4 configuration
         - vrf (object): VRF assignment for the L3 interface
         """
