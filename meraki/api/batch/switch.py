@@ -43,6 +43,8 @@ class ActionBatchSwitch(object):
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch port.
+        - fastPoe (object): Fast PoE settings for the switch port.
         - type (string): The type of the switch port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
@@ -99,6 +101,8 @@ class ActionBatchSwitch(object):
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",
@@ -140,9 +144,9 @@ class ActionBatchSwitch(object):
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback', or 'oob_management'. Default is 'vlan'. IOS XE firmware 17.18 or higher is required for 'routed' mode; IOS XE firmware 26.1.2 or higher is required for 'oob_management' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -200,7 +204,7 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -898,6 +902,36 @@ class ActionBatchSwitch(object):
         }
         return action
 
+    def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
+        """
+            **Add a switch port schedule**
+            https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
+
+            - networkId (string): Network ID
+            - name (string): The name for your port schedule. Required
+            - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
+        When it's empty, default schedule with all days of a week are configured.
+        Any unspecified day in the schedule is added as a default schedule configuration of the day.
+
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules"
+
+        body_params = [
+            "name",
+            "portSchedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
             **Update a switch port schedule**
@@ -1250,7 +1284,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "settings/actions/update",
+            "operation": "update",
             "body": payload,
         }
         return action
@@ -1292,9 +1326,9 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback', or 'oob_management'. Default is 'vlan'. IOS XE firmware 17.18 or higher is required for 'routed' mode; IOS XE firmware 26.1.2 or higher is required for 'oob_management' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -1354,7 +1388,7 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
+        - switchPortId (string): Switch Port ID when in Routed mode (IOS XE firmware 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.

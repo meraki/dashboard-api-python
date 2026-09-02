@@ -12,9 +12,16 @@ class Licensing(object):
         https://developer.cisco.com/meraki/api-v1/#!get-administered-licensing-subscription-entitlements
 
         - skus (array): Filter to entitlements with the specified SKUs
+        - subscriptionType (string): Filter entitlements by subscription type
         """
 
         kwargs.update(locals())
+
+        if "subscriptionType" in kwargs:
+            options = ["termed", "unified"]
+            assert kwargs["subscriptionType"] in options, (
+                f'''"subscriptionType" cannot be "{kwargs["subscriptionType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["licensing", "configure", "subscription", "entitlements"],
@@ -24,6 +31,7 @@ class Licensing(object):
 
         query_params = [
             "skus",
+            "subscriptionType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 

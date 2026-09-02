@@ -248,6 +248,56 @@ class Wireless(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getDeviceWirelessRadioOverrides(self, serial: str):
+        """
+        **Return the radio overrides of a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides"],
+            "operation": "getDeviceWirelessRadioOverrides",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
+        """
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        - rfProfile (object): This device's RF profile. If omitted, the existing RF profile assignment remains unchanged.
+        - radios (array): Radio overrides. If omitted, existing per-radio override settings remain unchanged. If provided, only the radios included in the array are updated; the array does not replace the device's full existing set of radio overrides. Read-only response fields for each radio, such as 'band', may be included in the request body and are ignored.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides"],
+            "operation": "updateDeviceWirelessRadioOverrides",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        body_params = [
+            "rfProfile",
+            "radios",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceWirelessRadioOverrides: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getDeviceWirelessRadioSettings(self, serial: str):
         """
         **Return the manually configured radio settings overrides of a device, which take precedence over RF profiles.**
@@ -1933,6 +1983,7 @@ class Wireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -1967,6 +2018,7 @@ class Wireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1998,6 +2050,7 @@ class Wireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -2035,6 +2088,7 @@ class Wireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -5182,6 +5236,58 @@ class Wireless(object):
                 )
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWirelessRadioOverridesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return a list of radio overrides**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-overrides-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned radio overrides will be filtered to only include these networks.
+        - serials (array): A list of serial numbers. The returned radio overrides will be filtered to only include these serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides", "byDevice"],
+            "operation": "getOrganizationWirelessRadioOverridesByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/overrides/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioOverridesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessRadioRrmByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
