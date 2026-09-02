@@ -1200,9 +1200,10 @@ class AsyncNetworks:
 
         - networkId (string): Network ID
         - stages (array): All firmware upgrade stages in the network with their start time.
+        - products (object): Contains firmware upgrade settings
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "events"],
@@ -1212,6 +1213,7 @@ class AsyncNetworks:
         resource = f"/networks/{networkId}/firmwareUpgrades/staged/events"
 
         body_params = [
+            "products",
             "stages",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}

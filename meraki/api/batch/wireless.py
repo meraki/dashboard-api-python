@@ -89,6 +89,33 @@ class ActionBatchWireless(object):
         }
         return action
 
+    def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
+        """
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles. Read-only fields returned by this endpoint, such as 'serial', 'network', and 'radios[].band', may be included when sending a previously returned object back to this PUT endpoint and will be ignored.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        - rfProfile (object): This device's RF profile. If omitted, the existing RF profile assignment remains unchanged.
+        - radios (array): Radio overrides. If omitted, existing per-radio override settings remain unchanged. If provided, only the radios included in the array are updated; the array does not replace the device's full existing set of radio overrides. Read-only response fields for each radio, such as 'band', may be included in the request body and are ignored.
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        body_params = [
+            "rfProfile",
+            "radios",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateDeviceWirelessRadioSettings(self, serial: str, **kwargs):
         """
         **Update 2.4 GHz and 5 GHz radio settings (channel, channel width, power) that override RF profiles. For 6 GHz support or radio enable/disable, use updateDeviceWirelessRadioOverrides instead.**
@@ -529,6 +556,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -559,6 +587,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -588,6 +617,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -621,6 +651,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
