@@ -4,18 +4,23 @@ from datetime import datetime
 
 from meraki.aio.api.administered import AsyncAdministered
 from meraki.aio.api.appliance import AsyncAppliance
+from meraki.aio.api.assistant import AsyncAssistant
 from meraki.aio.api.camera import AsyncCamera
 from meraki.aio.api.campusGateway import AsyncCampusGateway
 from meraki.aio.api.cellularGateway import AsyncCellularGateway
 from meraki.aio.api.devices import AsyncDevices
 from meraki.aio.api.insight import AsyncInsight
 from meraki.aio.api.licensing import AsyncLicensing
+from meraki.aio.api.nac import AsyncNac
 from meraki.aio.api.networks import AsyncNetworks
 from meraki.aio.api.organizations import AsyncOrganizations
+from meraki.aio.api.secureConnect import AsyncSecureConnect
 from meraki.aio.api.sensor import AsyncSensor
 from meraki.aio.api.sm import AsyncSm
 from meraki.aio.api.spaces import AsyncSpaces
+from meraki.aio.api.support import AsyncSupport
 from meraki.aio.api.switch import AsyncSwitch
+from meraki.aio.api.users import AsyncUsers
 from meraki.aio.api.wireless import AsyncWireless
 from meraki.aio.api.wirelessController import AsyncWirelessController
 from meraki.aio.rest_session import AsyncRestSession
@@ -195,6 +200,11 @@ class AsyncDashboardAPI:
         self.spaces = AsyncSpaces(self._session)
         self.wirelessController = AsyncWirelessController(self._session)
         self.campusGateway = AsyncCampusGateway(self._session)
+        self.assistant = AsyncAssistant(self._session)
+        self.nac = AsyncNac(self._session)
+        self.secureConnect = AsyncSecureConnect(self._session)
+        self.support = AsyncSupport(self._session)
+        self.users = AsyncUsers(self._session)
 
         # Batch definitions
         self.batch = Batch()
