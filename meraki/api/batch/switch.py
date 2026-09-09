@@ -192,6 +192,7 @@ class ActionBatchSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -228,6 +229,7 @@ class ActionBatchSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -262,6 +264,7 @@ class ActionBatchSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -295,6 +298,7 @@ class ActionBatchSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -994,6 +998,25 @@ class ActionBatchSwitch:
         }
         return action
 
+    def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
+        """
+        **Delete a switch port schedule**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
+
+        - networkId (string): Network ID
+        - portScheduleId (string): Port schedule ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        portScheduleId = urllib.parse.quote(portScheduleId, safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
             **Update a switch port schedule**
@@ -1321,7 +1344,7 @@ class ActionBatchSwitch:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "ms/multicast/actions/update",
+            "operation": "update",
             "body": payload,
         }
         return action
@@ -1605,6 +1628,7 @@ class ActionBatchSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -1642,6 +1666,7 @@ class ActionBatchSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -1677,6 +1702,7 @@ class ActionBatchSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -1711,6 +1737,7 @@ class ActionBatchSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",

@@ -1421,6 +1421,33 @@ class ActionBatchWireless:
         }
         return action
 
+    def updateNetworkWirelessSsidOverrides(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the overrides for this SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-overrides
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - ccxNameIeEnabled (boolean): When true, enables CCX name IE, which allows the AP to broadcast its device name as part of its beacon (as defined by the network admin in the Dashboard).
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        number = urllib.parse.quote(number, safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/overrides"
+
+        body_params = [
+            "ccxNameIeEnabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkWirelessSsidPoliciesClientExclusion(self, networkId: str, number: str, **kwargs):
         """
         **Update the client exclusion status configuration for a given SSID**

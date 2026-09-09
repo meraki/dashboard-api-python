@@ -369,6 +369,7 @@ class AsyncSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -409,6 +410,7 @@ class AsyncSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -464,6 +466,7 @@ class AsyncSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -501,6 +504,7 @@ class AsyncSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -2866,6 +2870,7 @@ class AsyncSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -2907,6 +2912,7 @@ class AsyncSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -2967,6 +2973,7 @@ class AsyncSwitch:
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
         - staticV4Dns1 (string): Primary IPv4 DNS server address
         - staticV4Dns2 (string): Secondary IPv4 DNS server address
+        - cloud (object): Cloud uplink configuration for IPv4.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -3005,6 +3012,7 @@ class AsyncSwitch:
             "uplinkV6",
             "staticV4Dns1",
             "staticV4Dns2",
+            "cloud",
             "ospfSettings",
             "ipv6",
             "vrf",
