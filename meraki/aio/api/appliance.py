@@ -4534,12 +4534,10 @@ class AsyncAppliance:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAppliancePortsRadiusServersByNetwork(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
+    def getOrganizationAppliancePortsRadiusByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List shared MX port RADIUS servers by network**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-ports-radius-servers-by-network
+        **List MX appliance port RADIUS settings by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-ports-radius-by-network
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -4554,11 +4552,11 @@ class AsyncAppliance:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["appliance", "configure", "ports", "radius", "servers", "byNetwork"],
-            "operation": "getOrganizationAppliancePortsRadiusServersByNetwork",
+            "tags": ["appliance", "configure", "ports", "radius", "byNetwork"],
+            "operation": "getOrganizationAppliancePortsRadiusByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/appliance/ports/radius/servers/byNetwork"
+        resource = f"/organizations/{organizationId}/appliance/ports/radius/byNetwork"
 
         query_params = [
             "perPage",
@@ -4583,7 +4581,7 @@ class AsyncAppliance:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAppliancePortsRadiusServersByNetwork: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAppliancePortsRadiusByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -5897,6 +5895,7 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter VLANs by network ID. This filter uses multiple exact matches.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -5912,14 +5911,23 @@ class AsyncAppliance:
         resource = f"/organizations/{organizationId}/appliance/vlans"
 
         query_params = [
+            "networkIds",
             "perPage",
             "startingAfter",
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
         if self._session._validate_kwargs:
-            all_params = query_params
+            all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getOrganizationApplianceVlans: ignoring unrecognized kwargs: {invalid}")

@@ -2068,40 +2068,29 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfDeleteAccount(self, organizationId: str, accountId: str):
+    def createIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
         """
-        **Delete an account**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-account
-
-        - organizationId (string): Organization ID
-        - accountId (string): Account ID
-        """
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        accountId = urllib.parse.quote(accountId, safe="")
-        resource = f"/organizations/{organizationId}/mcf/accounts/{accountId}"
-
-        action = {
-            "resource": resource,
-            "operation": "batch",
-        }
-        return action
-
-    def mcfCreateIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
-        """
-                **Create an integration**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-create-integration
+                **Creates an AWS, Microsoft Azure, or Google Cloud integration for the specified Meraki Dashboard organization and starts initial cloud-resource discovery. The `provider` value selects the matching credential object; credential objects for other providers are ignored. The `201` response confirms that the integration was created and discovery was accepted for separate processing, not that discovery completed.**
+                https://developer.cisco.com/meraki/api-v1/#!create-integration
 
                 - organizationId (string): Organization ID
-                - provider (string): Provider
-                - accessRights (array): List of access rights for the integration.
-        Possible values are:
-        - discover
-        - create_onboarding_resources
-        - update_vpc
-                - aws (object): AWS Credentials
-                - gcp (object): GCP Credentials Request
-                - azure (object): GCP Credentials Request
+                - provider (string): Cloud provider for the new integration. The value selects the credential object used by the request:
+
+        - `aws` — Amazon Web Services; requires `aws` role details.
+        - `azure` — Microsoft Azure; requires `azure` service-principal credentials.
+        - `gcp` — Google Cloud; requires `gcp` service-account credentials.
+
+        Public creation does not accept `meraki`; MCN manages that integration
+        for Site discovery. Credential objects for providers other than the
+        selected value are ignored.
+                - accessRights (array): One or more requested provider capability bundles for the integration. MCN validates and stores these values, but they are not operation-time authorization switches.
+
+        - `discover` — Requests permissions used to inventory accounts or projects, networks, subnets, routing, and related metadata.
+        - `create_onboarding_resources` — Requests permissions used to create supported provider-side gateway and VPN resources during onboarding.
+        - `update_vpc` — Requests permissions associated with modifying supported cloud-network resources.
+                - aws (object): AWS assumed-role details. Required when `provider` is `aws`; otherwise this object is not used.
+                - gcp (object): Google Cloud service-account credentials and optional parent scope. Required when `provider` is `gcp`; otherwise this object is not used.
+                - azure (object): Microsoft Azure service-principal credentials. Required when `provider` is `azure`; otherwise this object is not used.
         """
 
         kwargs.update(locals())
@@ -2124,15 +2113,15 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfPreviewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
+    def previewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
         """
-        **Validate proposed Azure credentials and return accessible subscriptions without creating or modifying application state**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-azure-accounts
+        **Validates proposed Microsoft Azure service-principal credentials and returns the Azure subscriptions accessible to them. The preview does not create an integration or modify existing MCN account and network state.**
+        https://developer.cisco.com/meraki/api-v1/#!preview-azure-accounts
 
         - organizationId (string): Organization ID
-        - tenantId (string): Tenant id
-        - clientId (string): Client id
-        - clientSecret (string): Client secret
+        - tenantId (string): Microsoft Entra tenant (directory) ID that contains the service principal.
+        - clientId (string): Microsoft Entra application (client) ID of the service principal whose subscription access is previewed.
+        - clientSecret (string): Client secret used to authenticate the Azure service principal for this preview. This request-only value is not returned.
         """
 
         kwargs = locals()
@@ -2153,15 +2142,20 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfPreviewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
+    def previewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
         """
-        **Validate proposed GCP credentials and return accessible projects without creating or modifying application state**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-gcp-accounts
+                **Validates proposed Google Cloud service-account credentials and returns the Google Cloud projects accessible to them. The optional parent scope expands the preview to projects beneath one organization or folder; the preview does not create an integration or modify existing MCN account and network state.**
+                https://developer.cisco.com/meraki/api-v1/#!preview-gcp-accounts
 
-        - organizationId (string): Organization ID
-        - keyJson (string): Key json
-        - parentType (string): Parent type
-        - parentId (string): Parent id
+                - organizationId (string): Organization ID
+                - keyJson (string): Complete Google Cloud service-account key JSON used to authenticate this preview. This request-only value is not returned.
+                - parentType (string): Optional Google Cloud resource type beneath which accessible projects are previewed.
+
+        - `organization` — Preview projects beneath the Google Cloud organization identified by `parentId`.
+        - `folder` — Preview projects beneath the Google Cloud folder identified by `parentId`.
+
+        `parentType` and `parentId` must either both be supplied or both be omitted. When both are omitted, the preview is limited to the project identified by `keyJson`.
+                - parentId (string): Numeric Google Cloud organization or folder resource ID selected by `parentType`. Supply it together with `parentType`; omit both fields to preview only the service account's project.
         """
 
         kwargs.update(locals())
@@ -2188,49 +2182,10 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfUpdateIntegration(self, organizationId: str, integrationId: str, provider: str, accessRights: list, **kwargs):
+    def deleteIntegration(self, organizationId: str, integrationId: str):
         """
-                **Update an integration**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-update-integration
-
-                - organizationId (string): Organization ID
-                - integrationId (string): Integration ID
-                - provider (string): Provider
-                - accessRights (array): List of access rights for the integration.
-        Possible values are:
-        - discover
-        - create_onboarding_resources
-        - update_vpc
-                - aws (object): AWS Credentials
-                - gcp (object): GCP Credentials Request
-                - azure (object): GCP Credentials Request
-        """
-
-        kwargs.update(locals())
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        integrationId = urllib.parse.quote(integrationId, safe="")
-        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}"
-
-        body_params = [
-            "provider",
-            "accessRights",
-            "aws",
-            "gcp",
-            "azure",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "batch",
-            "body": payload,
-        }
-        return action
-
-    def mcfDeleteIntegration(self, organizationId: str, integrationId: str):
-        """
-        **Delete an integration**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-integration
+        **Deletes the integration and its discovered account, network, subnet, route-table, and route-table-association records. Deletion is rejected while the integration has onboarded networks.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-integration
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -2246,10 +2201,39 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfDiscoverIntegration(self, organizationId: str, integrationId: str):
+    def rotateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
         """
-        **Discover an integration**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-discover-integration
+        **Replaces secret material for an existing Microsoft Azure or Google Cloud integration after validating that the credential belongs to the existing principal. Rotation preserves the Azure tenant and client ID or the Google Cloud project and service-account identity, and does not change discovered accounts or networks. AWS integrations are not supported by this operation.**
+        https://developer.cisco.com/meraki/api-v1/#!rotate-integration-credentials
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        - azure (object): Replacement client secret for an Azure integration. Supply this field only when rotating an Azure integration.
+        - gcp (object): Replacement service-account key for a Google Cloud integration. Supply this field only when rotating a GCP integration.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        integrationId = urllib.parse.quote(integrationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/credentials/secret"
+
+        body_params = [
+            "azure",
+            "gcp",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def discoverIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Starts cloud-resource discovery for the integration identified by `integrationId`. A successful response confirms that the discovery request was accepted for separate processing, not that discovery completed. Use the integration detail or status-history operation to track subsequent state.**
+        https://developer.cisco.com/meraki/api-v1/#!discover-integration
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -2265,22 +2249,38 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfConfirmRemovedResourcesBulk(self, organizationId: str, **kwargs):
+    def confirmRemovedResourcesBulk(self, organizationId: str, **kwargs):
         """
-        **Confirm a bounded explicit removed-resource selection.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resources-bulk
+                **Accepts up to 100 explicitly identified resources or selects at most 100
+        top-level matches. Explicit targets plus the missing child networks of
+        each selected account must not exceed 100; child subnets processed for a
+        network do not count toward that request-size limit and can make the returned
+        outcome count exceed 100. Resources are processed in dependency order
+        without rolling back earlier results, so HTTP 200 can contain `conflict`
+        or `failed` per-resource outcomes.**
+                https://developer.cisco.com/meraki/api-v1/#!confirm-removed-resources-bulk
 
-        - organizationId (string): Organization ID
-        - resourceIds (object): Explicit resource IDs keyed by account, network, or subnet.
-        - selection (object): Scoped server-side selection for a bounded bulk confirmation.
-        - lifecycleStatuses (array): Optional filter. Only applies with at least one explicit ID set or selectAllPending selection.
-        - confirmInfrastructureTeardown (boolean): Confirm infrastructure teardown
+                - organizationId (string): Organization ID
+                - resourceIds (object): Explicit MCN UUIDs keyed by `account`, `network`, or `subnet`. Duplicate
+        type/UUID pairs are processed once. The request can contain at most 100
+        IDs across all keys. After duplicates are removed, request-size
+        validation also counts the missing child networks of selected accounts; child
+        subnets expanded from selected networks do not count toward that limit.
+                - selection (object): Scoped server-side selection used instead of `resourceIds`.
+                - lifecycleStatuses (array): Lifecycle values eligible for this request.
+
+        - `pending_removal` — Confirm resources awaiting first confirmation.
+        - `teardown_failed` — Retry resources whose teardown failed.
+
+        With server-side selection, omission defaults to `pending_removal`.
+                - confirmInfrastructureTeardown (boolean): Explicitly permits required provider-infrastructure teardown across the
+        selection. `false` or omission can produce per-resource conflicts.
         """
 
         kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/mcf/removed-resources/bulk/confirm"
+        resource = f"/organizations/{organizationId}/mcf/removedResources/bulk/confirm"
 
         body_params = [
             "resourceIds",
@@ -2296,15 +2296,25 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfConfirmRemovedResource(self, organizationId: str, resourceType: str, resourceId: str, **kwargs):
+    def confirmRemovedResource(self, organizationId: str, resourceType: str, resourceId: str, **kwargs):
         """
-        **Confirm removal for one discovery-driven resource.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resource
+                **Confirms one discovery-missing account, network, or subnet. Confirmation
+        can start asynchronous infrastructure teardown and return
+        `teardown_in_progress`; it does not mean deletion is complete. A network
+        confirmation processes its missing child subnets before the network and
+        conflicts when it has more than 100 such subnets. An account confirmation
+        similarly processes its missing child networks first and conflicts when
+        it has more than 100 such networks; each child network applies its own
+        child-subnet limit.**
+                https://developer.cisco.com/meraki/api-v1/#!confirm-removed-resource
 
-        - organizationId (string): Organization ID
-        - resourceType (string): Resource type
-        - resourceId (string): Resource ID
-        - confirmInfrastructureTeardown (boolean): Required when confirming onboarded or failed infrastructure-bearing accounts or networks.
+                - organizationId (string): Organization ID
+                - resourceType (string): Resource type
+                - resourceId (string): Resource ID
+                - confirmInfrastructureTeardown (boolean): Explicit acknowledgement that provider infrastructure may be torn down.
+        Set to `true` when an onboarded network, or an account containing one,
+        requires infrastructure cleanup. `false` or omission does not authorize
+        that teardown and can produce a conflict.
         """
 
         kwargs.update(locals())
@@ -2312,7 +2322,7 @@ class ActionBatchOrganizations:
         organizationId = urllib.parse.quote(organizationId, safe="")
         resourceType = urllib.parse.quote(resourceType, safe="")
         resourceId = urllib.parse.quote(resourceId, safe="")
-        resource = f"/organizations/{organizationId}/mcf/removed-resources/{resourceType}/{resourceId}/confirm"
+        resource = f"/organizations/{organizationId}/mcf/removedResources/{resourceType}/{resourceId}/confirm"
 
         body_params = [
             "confirmInfrastructureTeardown",
@@ -2325,19 +2335,22 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfCreateTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
+    def createTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
         """
                 **Finds or creates the canonical tag identity for the exact organization,
-        key, value, and type tuple. A newly created tag is tombstoned until cloud
-        discovery observes it. This operation does not associate the tag with a
-        network or subnet.
-        **
-                https://developer.cisco.com/meraki/api-v1/#!mcf-create-tag
+        key, value, and type tuple. The operation does not associate the tag with
+        a VPC, Site, or subnet. A newly created identity can remain absent from
+        ordinary discovery-backed list results until cloud discovery observes
+        the same tag.**
+                https://developer.cisco.com/meraki/api-v1/#!create-tag
 
                 - organizationId (string): Organization ID
-                - key (string): Key
-                - value (string): Value
-                - type (string): Scope at which a tag identifies resources.
+                - key (string): Provider-origin tag key. It is matched exactly, including case, and
+        cannot contain a null character.
+                - value (string): Provider-origin tag value. It is matched exactly, including case, and
+        cannot contain a null character.
+                - type (string): Tag scope. The only supported value is `network-wide`, which identifies
+        a VPC- or Site-level tag rather than a subnet tag.
         """
 
         kwargs = locals()
@@ -2362,13 +2375,13 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfOffboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+    def offboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
         """
-        **Offboard VPCs**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-offboard-vpcs
+        **Validates 1–50 distinct organization-owned VPC IDs and attempts to offboard each VPC. The entire request is rejected before batch creation when its shape or identifiers are invalid, a VPC is missing, or any requested VPC belongs to an active onboarding or offboarding batch. An existing VPC with no onboarding record is instead returned as a response-only rejection; it is not added to the batch tracker and does not prevent other VPCs from being processed. A successful item means MCN either completed immediate cleanup for a failed onboarding with no recorded provider resources or started asynchronous teardown. The batch reports terminal outcomes only for accepted VPCs; onboarding state history reports asynchronous teardown.**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-vpcs
 
         - organizationId (string): Organization ID
-        - vpcs (array): Vpcs
+        - vpcs (array): One to 50 distinct VPCs to offboard.
         """
 
         kwargs = locals()
@@ -2387,13 +2400,13 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfOnboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+    def onboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
         """
-        **Onboard VPCs**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-onboard-vpcs
+        **Validates 1–50 distinct organization-owned VPC IDs and attempts to start onboarding for each VPC. Invalid input, a missing VPC, an unsupported workflow state, or a VPC already in an active onboarding or offboarding batch rejects the entire request before a batch is created. After validation, a start failure for one VPC does not prevent attempts for the others. A successful item means onboarding was started, not that provider resources are provisioned, the data plane is configured, or tunnels are healthy. The returned batch contains every validated request item; use it and each VPC's onboarding state history to track progress.**
+        https://developer.cisco.com/meraki/api-v1/#!onboard-vpcs
 
         - organizationId (string): Organization ID
-        - vpcs (array): Vpcs
+        - vpcs (array): One to 50 distinct VPCs to onboard. Array order is preserved in per-VPC results.
         """
 
         kwargs = locals()
@@ -2412,18 +2425,36 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfCreateZtrIntent(self, organizationId: str, name: str, endpointsA: list, endpointsB: list, **kwargs):
+    def createZtrIntent(self, organizationId: str, name: str, endpointsA: list, endpointsB: list, **kwargs):
         """
-        **Create a Zero Trust Routing intent. When enabled is true, realizations are created for each endpoint pair (subject to validation). When enabled is false, only the intent and its endpoints are stored.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-create-ztr-intent
+                **Creates a policy intent over the Cartesian set of endpoint-side A and
+        endpoint-side B selections. An enabled request stores a `PENDING` intent
+        and then requests asynchronous organization reconciliation; a
+        disabled request stores a `DISABLED` intent without starting realization.
+        A successful response records the desired state but does not guarantee
+        that reconciliation has begun. Each side can contain at most one
+        `tags` selector. Enabled Meraki-to-Meraki pairs are rejected, while
+        disabled intents skip that topology check.**
+                https://developer.cisco.com/meraki/api-v1/#!create-ztr-intent
 
-        - organizationId (string): Organization ID
-        - name (string): Name
-        - endpointsA (array): Endpoints a
-        - endpointsB (array): Endpoints b
-        - description (string): Description
-        - enabled (boolean): Enabled
-        - rule (string): Rule
+                - organizationId (string): Organization ID
+                - name (string): Required caller-provided display name of the intent.
+                - endpointsA (array): Non-empty endpoint selections for side A. At most one entry can use
+        `endpointAType=tags`.
+                - endpointsB (array): Non-empty endpoint selections for side B. At most one entry can use
+        `endpointBType=tags`.
+                - description (string): Optional caller-provided explanation of the intent's purpose.
+                - enabled (boolean): Whether to start asynchronous realization after creation. Omission
+        defaults to `true`; `false` stores a `DISABLED` intent and skips the
+        enabled-only Meraki-to-Meraki topology check.
+                - rule (string): Rule selection for the intent.
+
+        - `ALLOW` — Default when omitted; contributes selected endpoint
+          prefixes to allowed routing output.
+        - `DENY` — Accepted, but contributes the same output as
+          `ALLOW`, without a distinct deny or exclusion effect.
+
+        The two values produce identical routing behavior.
         """
 
         kwargs.update(locals())
@@ -2451,13 +2482,15 @@ class ActionBatchOrganizations:
         }
         return action
 
-    def mcfDeleteZtrIntent(self, organizationId: str, ztrIntentId: str):
+    def deleteZtrIntent(self, organizationId: str, ztrIntentId: str):
         """
-                **Delete a ZTR intent by ID. Returns 404 if the intent does not exist or does not belong to the organization.
-        ztr_intent_endpoints and ztr_intent_realizations are deleted by cascade.
-        For each realization that was linked only to this intent (count of intent realizations for that realization in the org == 1), the ztr_realization row is also deleted.
-        **
-                https://developer.cisco.com/meraki/api-v1/#!mcf-delete-ztr-intent
+                **Transitions the organization-scoped intent to `PENDING_DELETE` and then
+        requests asynchronous reconciliation that removes its routing
+        contribution. A successful response records the deletion state but does
+        not guarantee that reconciliation has begun. The intent is deleted only
+        after successful reconciliation; reconciliation failures leave a
+        `DELETED_FAILED` intent that remains excluded from realization.**
+                https://developer.cisco.com/meraki/api-v1/#!delete-ztr-intent
 
                 - organizationId (string): Organization ID
                 - ztrIntentId (string): Ztr intent ID

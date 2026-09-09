@@ -524,6 +524,7 @@ class SecureConnect:
         - endingBefore (string): The name of the resource to end before for a paginated response. Use '' for the final page.
         - sortBy (string): Parameter to specify the field used to sort objects, by default, resources are returned by name asc.
         - sortOrder (string): Parameter to specify the direction used to sort objects, by default, resources are returned by name asc.
+        - nameIncludes (string): Text to search for in private resource names. The search is case-insensitive.
         """
 
         kwargs.update(locals())
@@ -541,6 +542,7 @@ class SecureConnect:
             "endingBefore",
             "sortBy",
             "sortOrder",
+            "nameIncludes",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 

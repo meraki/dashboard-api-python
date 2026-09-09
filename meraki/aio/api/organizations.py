@@ -3735,6 +3735,56 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByVlan(self, organizationId: str, **kwargs):
+        """
+        **Summarizes wired connection successes and failures by VLAN.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-vlan
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byVlan"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByVlan",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byVlan"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByVlan: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsInsightsByNetwork(self, organizationId: str, **kwargs):
         """
         **Provides insights into wired successful connections experience by network.**
@@ -9625,42 +9675,43 @@ class AsyncOrganizations:
 
         return self._session.put(metadata, resource, payload)
 
-    def mcfGetOrganization(self, organizationId: str):
+    def getMcfOrganization(self, organizationId: str):
         """
-        **Return the MCF details stored for the Meraki organization identified by organizationId**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-organization
+        **Returns the MCN organization record associated with the Meraki Dashboard organization identified by `organizationId`**
+        https://developer.cisco.com/meraki/api-v1/#!get-mcf-organization
 
         - organizationId (string): Organization ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf"],
-            "operation": "mcfGetOrganization",
+            "operation": "getMcfOrganization",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf"
 
         return self._session.get(metadata, resource)
 
-    def mcfGetAccounts(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def getAccounts(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List accounts**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-accounts
+                **Returns account records discovered through cloud integrations for the
+        specified Meraki Dashboard organization**
+                https://developer.cisco.com/meraki/api-v1/#!get-accounts
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - integrationId (string): Integration ID
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - integrationId (string): Multi-Cloud Networking (MCN)-assigned UUID of the integration whose discovered accounts are returned. If omitted, accounts from all integrations in the organization are returned.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "accounts"],
-            "operation": "mcfGetAccounts",
+            "operation": "getAccounts",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/accounts"
@@ -9677,14 +9728,14 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetAccounts: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getAccounts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetAccount(self, organizationId: str, accountId: str):
+    def getAccount(self, organizationId: str, accountId: str):
         """
-        **Return an account**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-account
+        **Returns the discovered account identified by `accountId`**
+        https://developer.cisco.com/meraki/api-v1/#!get-account
 
         - organizationId (string): Organization ID
         - accountId (string): Account ID
@@ -9692,7 +9743,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "accounts"],
-            "operation": "mcfGetAccount",
+            "operation": "getAccount",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         accountId = urllib.parse.quote(str(accountId), safe="")
@@ -9700,37 +9751,19 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfDeleteAccount(self, organizationId: str, accountId: str):
+    def getAccountStatuses(self, organizationId: str, accountId: str):
         """
-        **Delete an account**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-account
+                **Returns the recorded lifecycle history for the account identified by
+        `accountId`**
+                https://developer.cisco.com/meraki/api-v1/#!get-account-statuses
 
-        - organizationId (string): Organization ID
-        - accountId (string): Account ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "accounts"],
-            "operation": "mcfDeleteAccount",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        accountId = urllib.parse.quote(str(accountId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/accounts/{accountId}"
-
-        return self._session.delete(metadata, resource)
-
-    def mcfGetAccountStatuses(self, organizationId: str, accountId: str):
-        """
-        **Return account statuses**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-account-statuses
-
-        - organizationId (string): Organization ID
-        - accountId (string): Account ID
+                - organizationId (string): Organization ID
+                - accountId (string): Account ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "accounts", "statuses"],
-            "operation": "mcfGetAccountStatuses",
+            "operation": "getAccountStatuses",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         accountId = urllib.parse.quote(str(accountId), safe="")
@@ -9738,35 +9771,60 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfGetBgpSessionStatus(self, organizationId: str, window: str, resolution: str, **kwargs):
+    def getBgpSessionStatus(self, organizationId: str, **kwargs):
         """
-                **Returns BGP session status grouped by VPC or Site, with member series
-        nested under each resource entry**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-get-bgp-session-status
+                **Returns aligned aggregate and member BGP-session-health series for
+        onboarded VPCs and Sites in the requested trailing window**
+                https://developer.cisco.com/meraki/api-v1/#!get-bgp-session-status
 
                 - organizationId (string): Organization ID
-                - window (string): Trailing time window expressed as a Go duration string (e.g. "1h",
-        "30m"). Must be a whole number of seconds and must divide evenly by
-        `resolution`.
-                - resolution (string): Sample resolution expressed as a Go duration string (e.g. "1m",
-        "30s"). Must be a whole number of seconds. `window / resolution`
-        must not exceed 4096.
-                - vpcId (string): Optional cloud VPC UUID. Mutually exclusive with `siteId` and the
-        deprecated `networkId`.
-                - siteId (string): Optional Site UUID. Mutually exclusive with `vpcId` and the
-        deprecated `networkId`.
+                - windowSeconds (integer): Trailing query duration, in seconds. When this parameter is supplied,
+        `resolutionSeconds` is required. The value must be at least 60, be a
+        multiple of 60, and be evenly divisible by `resolutionSeconds`. The
+        pair can produce at most 4,096 samples, including both endpoints.
+                - resolutionSeconds (integer): Bucket width and spacing between samples, in seconds. When this
+        parameter is supplied, `windowSeconds` is required. The value must be
+        at least 60, be a multiple of 60, and divide `windowSeconds` evenly.
+        The response contains
+        `windowSeconds / resolutionSeconds + 1` samples, up to 4,096. When
+        `resolutionSeconds` is greater than 720, the sum of both parameters
+        cannot exceed 2,949,120 seconds.
+                - window (string): Deprecated: Use `windowSeconds` with `resolutionSeconds`. Legacy
+        trailing query duration expressed with `h`, `m`, or `s`, such as
+        `1h`, `30m`, or `3600s`. Use it with `resolution` only when neither
+        seconds parameter is supplied. If either seconds parameter is
+        supplied, both legacy values are ignored and both seconds parameters
+        are required. The duration must resolve to a positive whole-minute
+        value and be evenly divisible by `resolution`. The pair can produce
+        at most 4,096 samples, including both endpoints.
+                - resolution (string): Deprecated: Use `resolutionSeconds` with `windowSeconds`. Legacy
+        bucket width and sample spacing expressed with `h`, `m`, or `s`, such
+        as `1m` or `5m`. Use it with `window` only when neither seconds
+        parameter is supplied. If either seconds parameter is supplied, both
+        legacy values are ignored and both seconds parameters are required.
+        The duration must be at least one minute in whole-minute increments
+        and divide `window` evenly. The response contains
+        `window / resolution + 1` samples, up to 4,096. For resolutions
+        greater than 12 minutes, `window + resolution` cannot exceed 34 days,
+        3 hours, and 12 minutes.
+                - vpcId (string): MCN-assigned UUID of one AWS, Azure, or GCP VPC to return. Mutually
+        exclusive with `siteId` and deprecated `networkId`.
+                - siteId (string): MCN-assigned UUID of one Meraki Site to return. Mutually exclusive
+        with `vpcId` and deprecated `networkId`.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "bgpSessionStatus"],
-            "operation": "mcfGetBgpSessionStatus",
+            "operation": "getBgpSessionStatus",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/bgpSessionStatus"
 
         query_params = [
+            "windowSeconds",
+            "resolutionSeconds",
             "window",
             "resolution",
             "vpcId",
@@ -9778,88 +9836,116 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetBgpSessionStatus: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getBgpSessionStatus: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
-    def mcfGetOrganizationConfig(self, organizationId: str):
+    def getOrganizationConfig(self, organizationId: str):
         """
-        **Return MCF configuration for the Meraki organization identified by organizationId.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-organization-config
+        **Returns the Multi-Cloud Networking (MCN) configuration for the Meraki Dashboard organization identified by `organizationId`, including Site-to-Cloud state and provider-specific integration setup information.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config
 
         - organizationId (string): Organization ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "config"],
-            "operation": "mcfGetOrganizationConfig",
+            "operation": "getOrganizationConfig",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/config"
 
         return self._session.get(metadata, resource)
 
-    def mcfListEventLogs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listEventLogs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-                **Return a page of event-log rows for the organization, newest first**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-list-event-logs
+                **Returns organization event logs ordered by event time and event ID,
+        newest first**
+                https://developer.cisco.com/meraki/api-v1/#!list-event-logs
 
                 - organizationId (string): Organization ID
                 - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
                 - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - since (string): Inclusive lower bound on event_time (RFC 3339).
-                - until (string): Inclusive upper bound on event_time (RFC 3339).
-                - triggerType (array): Filter by one or more trigger_type values (repeatable). Allowed
-        values: `user_action`, `system_action`. Validated server-side;
-        unknown values produce 400.
-                - outcome (array): Filter by one or more outcome values (repeatable). Allowed values:
-        `information`, `warning`, `error`. Validated server-side; unknown
-        values produce 400.
-                - entityType (array): Filter by one or more entity_type values (repeatable). Allowed values:
-        `integration`, `account`, `vpc`, `site`, `subnet`, and the deprecated
-        compatibility value `network`. `vpc` and `site` are translated to the
-        existing persisted `network` entity type by the gateway. Validated
-        server-side; unknown values produce 400.
-                - entityId (array): Filter by one or more entity_id values (repeatable). The
-        `entity_id` column is the denormalised primary-subject id and is
-        indexed independently of the per-type *_id columns, so this
-        filter is the cross-type point lookup.
-                - cloudProvider (array): Filter by one or more cloud_provider values (repeatable). Allowed
-        values: `aws`, `azure`, `gcp`, `meraki`. Validated server-side;
-        unknown values produce 400.
-                - event (array): Filter by one or more event headline values (repeatable). The
-        `event` field is a producer-supplied short summary of what
-        happened (e.g. `Subnet discovered`, `Permissions denied`).
-        Matching is exact and case-sensitive; the empty string is never
-        offered as a facet value, so passing it as a chip just resolves
-        to "no rows".
-                - integrationId (array): Filter by one or more integration ids (repeatable).
-                - accountId (array): Filter by one or more account ids (repeatable).
-                - vpcId (array): Filter by one or more cloud VPC ids (repeatable).
-                - siteId (array): Filter by one or more Site ids (repeatable).
-                - subnetId (array): Filter by one or more subnet ids (repeatable).
-                - regionId (array): Filter by one or more region UUIDs (repeatable). Backed by a
-        bloom-filter skip index on `region_id`, so this is the cheap
-        cross-region cardinality lookup the UI's region chip emits.
-                - regionName (array): Filter by one or more cloud-provider region display names
-        (repeatable). Useful when the caller only knows the region by
-        its display string (e.g. `us-east-1`) and not the UUID.
-                - userId (array): Filter by one or more user_id values (repeatable, opaque IdP subject).
-                - userEmail (array): Filter by one or more user_email values (repeatable).
-                - groupId (array): Filter by one or more group_id values (repeatable). Producer-
-        supplied correlation id; lets the UI collapse events that belong
-        to the same logical action.
-                - search (string): Free-text search applied against the event details column. Empty or
-        separator-only input is treated as no search.
-                - perPage (integer): The number of entries per page returned.
-                - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - since (string): Inclusive RFC 3339 lower bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `until`
+        sets `since` to 24 hours before `until`; omitting both uses the previous
+        24 hours. Histogram and facets require the effective `since` to be
+        earlier than `until`; the list applies supplied bounds independently.
+                - until (string): Inclusive RFC 3339 upper bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `since`
+        sets `until` to the current time; omitting both uses the previous 24
+        hours. Histogram and facets require the effective `until` to be later
+        than `since`; the list applies supplied bounds independently.
+                - triggerType (array): Restricts results by initiation type. Repeat the parameter to OR values.
+
+        - `user_action` — Initiated through a user or API action.
+        - `system_action` — Initiated by background system processing.
+
+        Unknown values return HTTP 400.
+                - outcome (array): Restricts results by event classification. Repeat the parameter to OR values.
+
+        - `information` — Informational event.
+        - `warning` — Event with a noteworthy condition.
+        - `error` — Failed or error event.
+
+        These values classify the event, not an HTTP response. Unknown values
+        return HTTP 400.
+                - entityType (array): Restricts results by primary event subject. Repeat the parameter to OR values.
+
+        - `integration` — Cloud integration subject.
+        - `account` — Discovered cloud-account subject.
+        - `subnet` — Discovered subnet or VLAN subject.
+        - `vpc` — Request alias for a public-cloud `network` subject.
+        - `site` — Request alias for a Meraki `network` subject.
+        - `network` — Deprecated legacy subject spanning VPCs and Sites.
+
+        The `vpc` and `site` aliases constrain provider family only when this
+        filter contains family aliases exclusively. Mixing either alias with
+        `integration`, `account`, or `subnet` drops that constraint
+        and can broaden matching `network` events. Unknown values return HTTP 400.
+                - entityId (array): Restricts results to exact primary-subject identifiers across all entity
+        types. Repeat the parameter to OR identifiers.
+                - cloudProvider (array): Restricts results by provider attribution. Repeat the parameter to OR values.
+
+        - `aws` — Amazon Web Services.
+        - `azure` — Microsoft Azure.
+        - `gcp` — Google Cloud.
+        - `meraki` — Meraki Site resources or Meraki-attributed events.
+
+        Unknown values return HTTP 400.
+                - event (array): Restricts results to exact, case-sensitive event-source-supplied
+        headlines. Repeat the parameter to OR headlines. The headline is not a
+        closed vocabulary, and an empty value matches no rows exposed through
+        event facets.
+                - integrationId (array): Restricts results to exact MCN cloud-integration UUIDs; repeat to OR values.
+                - accountId (array): Restricts results to exact MCN cloud-account UUIDs; repeat to OR values.
+                - vpcId (array): Restricts results to exact MCN VPC UUIDs; repeat to OR values. When VPC
+        IDs are supplied without Site or deprecated Network IDs, only AWS,
+        Azure, and GCP network events match.
+                - siteId (array): Restricts results to exact MCN Site UUIDs; repeat to OR values. When Site
+        IDs are supplied without VPC or deprecated Network IDs, only Meraki
+        network events match.
+                - subnetId (array): Restricts results to exact MCN subnet UUIDs; repeat to OR values.
+                - regionId (array): Restricts results to exact MCN region UUIDs; repeat to OR values.
+                - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
+        to OR values.
+                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
+                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
+        IDs; repeat to OR values.
+                - search (string): Case-insensitive free-text search across event details. The input is
+        split on characters other than ASCII letters, digits, or underscores,
+        and every resulting token must match. Empty or separator-only input
+        applies no search constraint.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "eventLogs"],
-            "operation": "mcfListEventLogs",
+            "operation": "listEventLogs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/eventLogs"
@@ -9916,68 +10002,95 @@ class AsyncOrganizations:
             all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListEventLogs: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listEventLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetEventLogFacets(self, organizationId: str, **kwargs):
+    def getEventLogFacets(self, organizationId: str, **kwargs):
         """
-                **Return the available values and per-value counts for every filter
-        dimension under the current chip selection**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-get-event-log-facets
+                **Returns available values and event counts for every supported filter
+        dimension**
+                https://developer.cisco.com/meraki/api-v1/#!get-event-log-facets
 
                 - organizationId (string): Organization ID
-                - since (string): Inclusive lower bound on event_time (RFC 3339).
-                - until (string): Inclusive upper bound on event_time (RFC 3339).
-                - triggerType (array): Filter by one or more trigger_type values (repeatable). Allowed
-        values: `user_action`, `system_action`. Validated server-side;
-        unknown values produce 400.
-                - outcome (array): Filter by one or more outcome values (repeatable). Allowed values:
-        `information`, `warning`, `error`. Validated server-side; unknown
-        values produce 400.
-                - entityType (array): Filter by one or more entity_type values (repeatable). Allowed values:
-        `integration`, `account`, `vpc`, `site`, `subnet`, and the deprecated
-        compatibility value `network`. `vpc` and `site` are translated to the
-        existing persisted `network` entity type by the gateway. Validated
-        server-side; unknown values produce 400.
-                - entityId (array): Filter by one or more entity_id values (repeatable). The
-        `entity_id` column is the denormalised primary-subject id and is
-        indexed independently of the per-type *_id columns, so this
-        filter is the cross-type point lookup.
-                - cloudProvider (array): Filter by one or more cloud_provider values (repeatable). Allowed
-        values: `aws`, `azure`, `gcp`, `meraki`. Validated server-side;
-        unknown values produce 400.
-                - event (array): Filter by one or more event headline values (repeatable). The
-        `event` field is a producer-supplied short summary of what
-        happened (e.g. `Subnet discovered`, `Permissions denied`).
-        Matching is exact and case-sensitive; the empty string is never
-        offered as a facet value, so passing it as a chip just resolves
-        to "no rows".
-                - integrationId (array): Filter by one or more integration ids (repeatable).
-                - accountId (array): Filter by one or more account ids (repeatable).
-                - vpcId (array): Filter by one or more cloud VPC ids (repeatable).
-                - siteId (array): Filter by one or more Site ids (repeatable).
-                - subnetId (array): Filter by one or more subnet ids (repeatable).
-                - regionId (array): Filter by one or more region UUIDs (repeatable). Backed by a
-        bloom-filter skip index on `region_id`, so this is the cheap
-        cross-region cardinality lookup the UI's region chip emits.
-                - regionName (array): Filter by one or more cloud-provider region display names
-        (repeatable). Useful when the caller only knows the region by
-        its display string (e.g. `us-east-1`) and not the UUID.
-                - userId (array): Filter by one or more user_id values (repeatable, opaque IdP subject).
-                - userEmail (array): Filter by one or more user_email values (repeatable).
-                - groupId (array): Filter by one or more group_id values (repeatable). Producer-
-        supplied correlation id; lets the UI collapse events that belong
-        to the same logical action.
-                - search (string): Free-text search applied against the event details column. Empty or
-        separator-only input is treated as no search.
+                - since (string): Inclusive RFC 3339 lower bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `until`
+        sets `since` to 24 hours before `until`; omitting both uses the previous
+        24 hours. Histogram and facets require the effective `since` to be
+        earlier than `until`; the list applies supplied bounds independently.
+                - until (string): Inclusive RFC 3339 upper bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `since`
+        sets `until` to the current time; omitting both uses the previous 24
+        hours. Histogram and facets require the effective `until` to be later
+        than `since`; the list applies supplied bounds independently.
+                - triggerType (array): Restricts results by initiation type. Repeat the parameter to OR values.
+
+        - `user_action` — Initiated through a user or API action.
+        - `system_action` — Initiated by background system processing.
+
+        Unknown values return HTTP 400.
+                - outcome (array): Restricts results by event classification. Repeat the parameter to OR values.
+
+        - `information` — Informational event.
+        - `warning` — Event with a noteworthy condition.
+        - `error` — Failed or error event.
+
+        These values classify the event, not an HTTP response. Unknown values
+        return HTTP 400.
+                - entityType (array): Restricts results by primary event subject. Repeat the parameter to OR values.
+
+        - `integration` — Cloud integration subject.
+        - `account` — Discovered cloud-account subject.
+        - `subnet` — Discovered subnet or VLAN subject.
+        - `vpc` — Request alias for a public-cloud `network` subject.
+        - `site` — Request alias for a Meraki `network` subject.
+        - `network` — Deprecated legacy subject spanning VPCs and Sites.
+
+        The `vpc` and `site` aliases constrain provider family only when this
+        filter contains family aliases exclusively. Mixing either alias with
+        `integration`, `account`, or `subnet` drops that constraint
+        and can broaden matching `network` events. Unknown values return HTTP 400.
+                - entityId (array): Restricts results to exact primary-subject identifiers across all entity
+        types. Repeat the parameter to OR identifiers.
+                - cloudProvider (array): Restricts results by provider attribution. Repeat the parameter to OR values.
+
+        - `aws` — Amazon Web Services.
+        - `azure` — Microsoft Azure.
+        - `gcp` — Google Cloud.
+        - `meraki` — Meraki Site resources or Meraki-attributed events.
+
+        Unknown values return HTTP 400.
+                - event (array): Restricts results to exact, case-sensitive event-source-supplied
+        headlines. Repeat the parameter to OR headlines. The headline is not a
+        closed vocabulary, and an empty value matches no rows exposed through
+        event facets.
+                - integrationId (array): Restricts results to exact MCN cloud-integration UUIDs; repeat to OR values.
+                - accountId (array): Restricts results to exact MCN cloud-account UUIDs; repeat to OR values.
+                - vpcId (array): Restricts results to exact MCN VPC UUIDs; repeat to OR values. When VPC
+        IDs are supplied without Site or deprecated Network IDs, only AWS,
+        Azure, and GCP network events match.
+                - siteId (array): Restricts results to exact MCN Site UUIDs; repeat to OR values. When Site
+        IDs are supplied without VPC or deprecated Network IDs, only Meraki
+        network events match.
+                - subnetId (array): Restricts results to exact MCN subnet UUIDs; repeat to OR values.
+                - regionId (array): Restricts results to exact MCN region UUIDs; repeat to OR values.
+                - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
+        to OR values.
+                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
+                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
+        IDs; repeat to OR values.
+                - search (string): Case-insensitive free-text search across event details. The input is
+        split on characters other than ASCII letters, digits, or underscores,
+        and every resulting token must match. Empty or separator-only input
+        applies no search constraint.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "eventLogs", "facets"],
-            "operation": "mcfGetEventLogFacets",
+            "operation": "getEventLogFacets",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/eventLogs/facets"
@@ -10032,67 +10145,94 @@ class AsyncOrganizations:
             all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetEventLogFacets: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getEventLogFacets: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
-    def mcfGetEventLogHistogram(self, organizationId: str, **kwargs):
+    def getEventLogHistogram(self, organizationId: str, **kwargs):
         """
-                **Return a time-bucketed count of event-log rows for the organization**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-get-event-log-histogram
+                **Returns time-bucketed counts of matching organization events**
+                https://developer.cisco.com/meraki/api-v1/#!get-event-log-histogram
 
                 - organizationId (string): Organization ID
-                - since (string): Inclusive lower bound on event_time (RFC 3339).
-                - until (string): Inclusive upper bound on event_time (RFC 3339).
-                - triggerType (array): Filter by one or more trigger_type values (repeatable). Allowed
-        values: `user_action`, `system_action`. Validated server-side;
-        unknown values produce 400.
-                - outcome (array): Filter by one or more outcome values (repeatable). Allowed values:
-        `information`, `warning`, `error`. Validated server-side; unknown
-        values produce 400.
-                - entityType (array): Filter by one or more entity_type values (repeatable). Allowed values:
-        `integration`, `account`, `vpc`, `site`, `subnet`, and the deprecated
-        compatibility value `network`. `vpc` and `site` are translated to the
-        existing persisted `network` entity type by the gateway. Validated
-        server-side; unknown values produce 400.
-                - entityId (array): Filter by one or more entity_id values (repeatable). The
-        `entity_id` column is the denormalised primary-subject id and is
-        indexed independently of the per-type *_id columns, so this
-        filter is the cross-type point lookup.
-                - cloudProvider (array): Filter by one or more cloud_provider values (repeatable). Allowed
-        values: `aws`, `azure`, `gcp`, `meraki`. Validated server-side;
-        unknown values produce 400.
-                - event (array): Filter by one or more event headline values (repeatable). The
-        `event` field is a producer-supplied short summary of what
-        happened (e.g. `Subnet discovered`, `Permissions denied`).
-        Matching is exact and case-sensitive; the empty string is never
-        offered as a facet value, so passing it as a chip just resolves
-        to "no rows".
-                - integrationId (array): Filter by one or more integration ids (repeatable).
-                - accountId (array): Filter by one or more account ids (repeatable).
-                - vpcId (array): Filter by one or more cloud VPC ids (repeatable).
-                - siteId (array): Filter by one or more Site ids (repeatable).
-                - subnetId (array): Filter by one or more subnet ids (repeatable).
-                - regionId (array): Filter by one or more region UUIDs (repeatable). Backed by a
-        bloom-filter skip index on `region_id`, so this is the cheap
-        cross-region cardinality lookup the UI's region chip emits.
-                - regionName (array): Filter by one or more cloud-provider region display names
-        (repeatable). Useful when the caller only knows the region by
-        its display string (e.g. `us-east-1`) and not the UUID.
-                - userId (array): Filter by one or more user_id values (repeatable, opaque IdP subject).
-                - userEmail (array): Filter by one or more user_email values (repeatable).
-                - groupId (array): Filter by one or more group_id values (repeatable). Producer-
-        supplied correlation id; lets the UI collapse events that belong
-        to the same logical action.
-                - search (string): Free-text search applied against the event details column. Empty or
-        separator-only input is treated as no search.
+                - since (string): Inclusive RFC 3339 lower bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `until`
+        sets `since` to 24 hours before `until`; omitting both uses the previous
+        24 hours. Histogram and facets require the effective `since` to be
+        earlier than `until`; the list applies supplied bounds independently.
+                - until (string): Inclusive RFC 3339 upper bound on when events occurred. The list has no
+        default when omitted. For histogram and facets, supplying only `since`
+        sets `until` to the current time; omitting both uses the previous 24
+        hours. Histogram and facets require the effective `until` to be later
+        than `since`; the list applies supplied bounds independently.
+                - triggerType (array): Restricts results by initiation type. Repeat the parameter to OR values.
+
+        - `user_action` — Initiated through a user or API action.
+        - `system_action` — Initiated by background system processing.
+
+        Unknown values return HTTP 400.
+                - outcome (array): Restricts results by event classification. Repeat the parameter to OR values.
+
+        - `information` — Informational event.
+        - `warning` — Event with a noteworthy condition.
+        - `error` — Failed or error event.
+
+        These values classify the event, not an HTTP response. Unknown values
+        return HTTP 400.
+                - entityType (array): Restricts results by primary event subject. Repeat the parameter to OR values.
+
+        - `integration` — Cloud integration subject.
+        - `account` — Discovered cloud-account subject.
+        - `subnet` — Discovered subnet or VLAN subject.
+        - `vpc` — Request alias for a public-cloud `network` subject.
+        - `site` — Request alias for a Meraki `network` subject.
+        - `network` — Deprecated legacy subject spanning VPCs and Sites.
+
+        The `vpc` and `site` aliases constrain provider family only when this
+        filter contains family aliases exclusively. Mixing either alias with
+        `integration`, `account`, or `subnet` drops that constraint
+        and can broaden matching `network` events. Unknown values return HTTP 400.
+                - entityId (array): Restricts results to exact primary-subject identifiers across all entity
+        types. Repeat the parameter to OR identifiers.
+                - cloudProvider (array): Restricts results by provider attribution. Repeat the parameter to OR values.
+
+        - `aws` — Amazon Web Services.
+        - `azure` — Microsoft Azure.
+        - `gcp` — Google Cloud.
+        - `meraki` — Meraki Site resources or Meraki-attributed events.
+
+        Unknown values return HTTP 400.
+                - event (array): Restricts results to exact, case-sensitive event-source-supplied
+        headlines. Repeat the parameter to OR headlines. The headline is not a
+        closed vocabulary, and an empty value matches no rows exposed through
+        event facets.
+                - integrationId (array): Restricts results to exact MCN cloud-integration UUIDs; repeat to OR values.
+                - accountId (array): Restricts results to exact MCN cloud-account UUIDs; repeat to OR values.
+                - vpcId (array): Restricts results to exact MCN VPC UUIDs; repeat to OR values. When VPC
+        IDs are supplied without Site or deprecated Network IDs, only AWS,
+        Azure, and GCP network events match.
+                - siteId (array): Restricts results to exact MCN Site UUIDs; repeat to OR values. When Site
+        IDs are supplied without VPC or deprecated Network IDs, only Meraki
+        network events match.
+                - subnetId (array): Restricts results to exact MCN subnet UUIDs; repeat to OR values.
+                - regionId (array): Restricts results to exact MCN region UUIDs; repeat to OR values.
+                - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
+        to OR values.
+                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
+                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
+        IDs; repeat to OR values.
+                - search (string): Case-insensitive free-text search across event details. The input is
+        split on characters other than ASCII letters, digits, or underscores,
+        and every resulting token must match. Empty or separator-only input
+        applies no search constraint.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "eventLogs", "histogram"],
-            "operation": "mcfGetEventLogHistogram",
+            "operation": "getEventLogHistogram",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/eventLogs/histogram"
@@ -10147,29 +10287,37 @@ class AsyncOrganizations:
             all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetEventLogHistogram: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getEventLogHistogram: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
-    def mcfGetIntegrations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def getIntegrations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **Return all integrations**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-integrations
+                **Returns cloud integrations for the specified Meraki Dashboard organization. `provider` restricts the response to AWS, Microsoft Azure, or Google Cloud integrations; an unfiltered response can also include the MCN-managed Meraki integration used for Site discovery**
+                https://developer.cisco.com/meraki/api-v1/#!get-integrations
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - provider (string): Filter by provider
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - provider (string): Filters integrations by cloud provider. Matching is exact and accepts:
+
+        - `aws` — Amazon Web Services integrations.
+        - `azure` — Microsoft Azure integrations.
+        - `gcp` — Google Cloud integrations.
+
+        If omitted, integrations from all providers are returned, including
+        the MCN-managed `meraki` integration when Site discovery is enabled.
+        `meraki` is not accepted as a filter value.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations"],
-            "operation": "mcfGetIntegrations",
+            "operation": "getIntegrations",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/integrations"
@@ -10186,32 +10334,40 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetIntegrations: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getIntegrations: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfCreateIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
+    def createIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
         """
-                **Create an integration**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-create-integration
+                **Creates an AWS, Microsoft Azure, or Google Cloud integration for the specified Meraki Dashboard organization and starts initial cloud-resource discovery**
+                https://developer.cisco.com/meraki/api-v1/#!create-integration
 
                 - organizationId (string): Organization ID
-                - provider (string): Provider
-                - accessRights (array): List of access rights for the integration.
-        Possible values are:
-        - discover
-        - create_onboarding_resources
-        - update_vpc
-                - aws (object): AWS Credentials
-                - gcp (object): GCP Credentials Request
-                - azure (object): GCP Credentials Request
+                - provider (string): Cloud provider for the new integration. The value selects the credential object used by the request:
+
+        - `aws` — Amazon Web Services; requires `aws` role details.
+        - `azure` — Microsoft Azure; requires `azure` service-principal credentials.
+        - `gcp` — Google Cloud; requires `gcp` service-account credentials.
+
+        Public creation does not accept `meraki`; MCN manages that integration
+        for Site discovery. Credential objects for providers other than the
+        selected value are ignored.
+                - accessRights (array): One or more requested provider capability bundles for the integration. MCN validates and stores these values, but they are not operation-time authorization switches.
+
+        - `discover` — Requests permissions used to inventory accounts or projects, networks, subnets, routing, and related metadata.
+        - `create_onboarding_resources` — Requests permissions used to create supported provider-side gateway and VPN resources during onboarding.
+        - `update_vpc` — Requests permissions associated with modifying supported cloud-network resources.
+                - aws (object): AWS assumed-role details. Required when `provider` is `aws`; otherwise this object is not used.
+                - gcp (object): Google Cloud service-account credentials and optional parent scope. Required when `provider` is `gcp`; otherwise this object is not used.
+                - azure (object): Microsoft Azure service-principal credentials. Required when `provider` is `azure`; otherwise this object is not used.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations"],
-            "operation": "mcfCreateIntegration",
+            "operation": "createIntegration",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/integrations"
@@ -10229,26 +10385,26 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfCreateIntegration: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"createIntegration: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfPreviewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
+    def previewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
         """
-        **Validate proposed Azure credentials and return accessible subscriptions without creating or modifying application state**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-azure-accounts
+        **Validates proposed Microsoft Azure service-principal credentials and returns the Azure subscriptions accessible to them**
+        https://developer.cisco.com/meraki/api-v1/#!preview-azure-accounts
 
         - organizationId (string): Organization ID
-        - tenantId (string): Tenant id
-        - clientId (string): Client id
-        - clientSecret (string): Client secret
+        - tenantId (string): Microsoft Entra tenant (directory) ID that contains the service principal.
+        - clientId (string): Microsoft Entra application (client) ID of the service principal whose subscription access is previewed.
+        - clientSecret (string): Client secret used to authenticate the Azure service principal for this preview. This request-only value is not returned.
         """
 
         kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations", "accounts", "azure"],
-            "operation": "mcfPreviewAzureAccounts",
+            "operation": "previewAzureAccounts",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/integrations/accounts/azure/preview"
@@ -10264,19 +10420,24 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfPreviewAzureAccounts: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"previewAzureAccounts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfPreviewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
+    def previewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
         """
-        **Validate proposed GCP credentials and return accessible projects without creating or modifying application state**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-preview-gcp-accounts
+                **Validates proposed Google Cloud service-account credentials and returns the Google Cloud projects accessible to them**
+                https://developer.cisco.com/meraki/api-v1/#!preview-gcp-accounts
 
-        - organizationId (string): Organization ID
-        - keyJson (string): Key json
-        - parentType (string): Parent type
-        - parentId (string): Parent id
+                - organizationId (string): Organization ID
+                - keyJson (string): Complete Google Cloud service-account key JSON used to authenticate this preview. This request-only value is not returned.
+                - parentType (string): Optional Google Cloud resource type beneath which accessible projects are previewed.
+
+        - `organization` — Preview projects beneath the Google Cloud organization identified by `parentId`.
+        - `folder` — Preview projects beneath the Google Cloud folder identified by `parentId`.
+
+        `parentType` and `parentId` must either both be supplied or both be omitted. When both are omitted, the preview is limited to the project identified by `keyJson`.
+                - parentId (string): Numeric Google Cloud organization or folder resource ID selected by `parentType`. Supply it together with `parentType`; omit both fields to preview only the service account's project.
         """
 
         kwargs.update(locals())
@@ -10289,7 +10450,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations", "accounts", "gcp"],
-            "operation": "mcfPreviewGcpAccounts",
+            "operation": "previewGcpAccounts",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/integrations/accounts/gcp/preview"
@@ -10305,14 +10466,14 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfPreviewGcpAccounts: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"previewGcpAccounts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfGetIntegration(self, organizationId: str, integrationId: str):
+    def getIntegration(self, organizationId: str, integrationId: str):
         """
-        **Return an integration**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-integration
+        **Returns the cloud integration identified by `integrationId`, including lifecycle and discovery state, requested capability bundles, discovery-snapshot resource counts, and non-secret provider identity metadata**
+        https://developer.cisco.com/meraki/api-v1/#!get-integration
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -10320,7 +10481,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations"],
-            "operation": "mcfGetIntegration",
+            "operation": "getIntegration",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         integrationId = urllib.parse.quote(str(integrationId), safe="")
@@ -10328,55 +10489,10 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfUpdateIntegration(self, organizationId: str, integrationId: str, provider: str, accessRights: list, **kwargs):
+    def deleteIntegration(self, organizationId: str, integrationId: str):
         """
-                **Update an integration**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-update-integration
-
-                - organizationId (string): Organization ID
-                - integrationId (string): Integration ID
-                - provider (string): Provider
-                - accessRights (array): List of access rights for the integration.
-        Possible values are:
-        - discover
-        - create_onboarding_resources
-        - update_vpc
-                - aws (object): AWS Credentials
-                - gcp (object): GCP Credentials Request
-                - azure (object): GCP Credentials Request
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "integrations"],
-            "operation": "mcfUpdateIntegration",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        integrationId = urllib.parse.quote(str(integrationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}"
-
-        body_params = [
-            "provider",
-            "accessRights",
-            "aws",
-            "gcp",
-            "azure",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfUpdateIntegration: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.put(metadata, resource, payload)
-
-    def mcfDeleteIntegration(self, organizationId: str, integrationId: str):
-        """
-        **Delete an integration**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-integration
+        **Deletes the integration and its discovered account, network, subnet, route-table, and route-table-association records**
+        https://developer.cisco.com/meraki/api-v1/#!delete-integration
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -10384,7 +10500,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations"],
-            "operation": "mcfDeleteIntegration",
+            "operation": "deleteIntegration",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         integrationId = urllib.parse.quote(str(integrationId), safe="")
@@ -10392,10 +10508,45 @@ class AsyncOrganizations:
 
         return self._session.delete(metadata, resource)
 
-    def mcfDiscoverIntegration(self, organizationId: str, integrationId: str):
+    def rotateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
         """
-        **Discover an integration**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-discover-integration
+        **Replaces secret material for an existing Microsoft Azure or Google Cloud integration after validating that the credential belongs to the existing principal**
+        https://developer.cisco.com/meraki/api-v1/#!rotate-integration-credentials
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        - azure (object): Replacement client secret for an Azure integration. Supply this field only when rotating an Azure integration.
+        - gcp (object): Replacement service-account key for a Google Cloud integration. Supply this field only when rotating a GCP integration.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "integrations", "credentials"],
+            "operation": "rotateIntegrationCredentials",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        integrationId = urllib.parse.quote(str(integrationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/credentials/secret"
+
+        body_params = [
+            "azure",
+            "gcp",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"rotateIntegrationCredentials: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def discoverIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Starts cloud-resource discovery for the integration identified by `integrationId`**
+        https://developer.cisco.com/meraki/api-v1/#!discover-integration
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -10403,7 +10554,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations", "discover"],
-            "operation": "mcfDiscoverIntegration",
+            "operation": "discoverIntegration",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         integrationId = urllib.parse.quote(str(integrationId), safe="")
@@ -10411,10 +10562,10 @@ class AsyncOrganizations:
 
         return self._session.post(metadata, resource)
 
-    def mcfGetIntegrationStatuses(self, organizationId: str, integrationId: str):
+    def getIntegrationStatuses(self, organizationId: str, integrationId: str):
         """
-        **Return an integration statuses**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-integration-statuses
+        **Returns the recorded lifecycle history for the cloud integration identified by `integrationId`**
+        https://developer.cisco.com/meraki/api-v1/#!get-integration-statuses
 
         - organizationId (string): Organization ID
         - integrationId (string): Integration ID
@@ -10422,7 +10573,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "integrations", "statuses"],
-            "operation": "mcfGetIntegrationStatuses",
+            "operation": "getIntegrationStatuses",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         integrationId = urllib.parse.quote(str(integrationId), safe="")
@@ -10430,21 +10581,32 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListRegions(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listRegions(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List regions**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-regions
+                **Returns cloud-provider region records correlated with MCN vPOP capacity**
+                https://developer.cisco.com/meraki/api-v1/#!list-regions
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - provider (string): Filter by provider
-        - type (string): Filter by vpop type
-        - hasOnboardedNetworks (boolean): Deprecated. Use `hasOnboardedVpcs`.
-        - hasOnboardedVpcs (boolean): If true, return only regions where the organization has at least one successfully onboarded VPC
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - provider (string): Filters by the cloud-provider namespace of the region and its MCN vPOP capacity. Known returned values are:
+
+        - `aws` — Amazon Web Services region capacity.
+        - `azure` — Microsoft Azure region capacity.
+        - `gcp` — Google Cloud region capacity.
+
+        If omitted, all provider namespaces are returned. Matching is exact; an unrecognized value returns no matches rather than selecting a connected integration provider.
+                - type (string): Filters regions by eligible MCN connection capacity.
+
+        - `autovpn` — The region has an eligible AutoVPN vPOP address.
+        - `ipsec` — The region has an eligible IPsec vPOP address.
+
+        This value selects a connection type and does not identify the cloud-integration provider. If omitted, regions are not restricted by connection type.
+                - hasOnboardedNetworks (boolean): Deprecated: Use `hasOnboardedVpcs`. When `true`, returns only regions associated with at least one successfully onboarded legacy Network for the organization; when `false`, it adds no filter. If both parameters are supplied, `hasOnboardedVpcs` takes precedence.
+                - hasOnboardedVpcs (boolean): When `true`, returns only regions associated with at least one successfully onboarded VPC for the organization; when `false` or omitted, it adds no filter. This condition is evaluated independently of the `type` filter. This preferred field takes precedence over `hasOnboardedNetworks` when both are supplied.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -10455,7 +10617,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "regions"],
-            "operation": "mcfListRegions",
+            "operation": "listRegions",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/regions"
@@ -10475,27 +10637,53 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListRegions: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listRegions: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfListRemovedResources(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listRemovedResources(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List discovery-driven resources pending removal confirmation.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-removed-resources
+                **Lists cloud accounts, networks, and subnets that discovery no longer
+        observes and that require confirmation or teardown tracking**
+                https://developer.cisco.com/meraki/api-v1/#!list-removed-resources
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - resourceType (string): Restrict results to accounts, networks, or subnets.
-        - includeRemoved (boolean): Include resources whose removal was already confirmed.
-        - lifecycleStatus (array): Restrict results to one or more removal lifecycle states.
-        - integrationId (string): Restrict results to one integration UUID.
-        - provider (string): Restrict results to a cloud-provider name.
-        - accountId (string): Restrict results to an account and its descendants.
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - resourceType (string): Restricts results to one resource category.
+
+        - `account` — AWS account, Azure subscription, Google Cloud project,
+          or Meraki Dashboard organization boundary that discovery no longer
+          observes.
+        - `network` — AWS VPC, Azure VNet, Google Cloud VPC network, or
+          Meraki Site represented by the legacy Network category.
+        - `subnet` — Public-cloud subnet or Meraki Site VLAN represented by
+          the Subnet category.
+                - includeRemoved (boolean): Whether to include resources whose lifecycle reached `removed` when
+        `lifecycleStatus` is omitted. `false` returns the active removal
+        lifecycle only; `true` also includes finalized removals.
+                - lifecycleStatus (array): Restricts results to one or more lifecycle values. Repeated values
+        are ORed within this filter and combined with other filters using AND.
+
+        - `pending_removal` — Missing from discovery and awaiting confirmation.
+        - `teardown_in_progress` — Confirmation was accepted and cleanup is running.
+        - `teardown_failed` — Cleanup or finalization failed.
+        - `removed` — Removal was finalized.
+                - integrationId (string): MCN-assigned UUID of the cloud integration whose resources are returned.
+                - provider (string): Restricts results by provider attribution.
+
+        - `aws` — Amazon Web Services resources.
+        - `azure` — Microsoft Azure resources.
+        - `gcp` — Google Cloud resources.
+        - `meraki` — Meraki Site-discovery resources.
+
+        Matching is exact. Any other value is used as a provider name and
+        returns no matches unless records carry that value.
+                - accountId (string): MCN-assigned cloud-account UUID. Returns the account and matching
+        descendant networks and subnets, subject to other filters.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -10507,11 +10695,11 @@ class AsyncOrganizations:
             )
 
         metadata = {
-            "tags": ["organizations", "configure", "mcf", "removed-resources"],
-            "operation": "mcfListRemovedResources",
+            "tags": ["organizations", "configure", "mcf", "removedResources"],
+            "operation": "listRemovedResources",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/removed-resources"
+        resource = f"/organizations/{organizationId}/mcf/removedResources"
 
         query_params = [
             "resourceType",
@@ -10538,30 +10726,41 @@ class AsyncOrganizations:
             all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListRemovedResources: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listRemovedResources: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfConfirmRemovedResourcesBulk(self, organizationId: str, **kwargs):
+    def confirmRemovedResourcesBulk(self, organizationId: str, **kwargs):
         """
-        **Confirm a bounded explicit removed-resource selection.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resources-bulk
+                **Accepts up to 100 explicitly identified resources or selects at most 100
+        top-level matches**
+                https://developer.cisco.com/meraki/api-v1/#!confirm-removed-resources-bulk
 
-        - organizationId (string): Organization ID
-        - resourceIds (object): Explicit resource IDs keyed by account, network, or subnet.
-        - selection (object): Scoped server-side selection for a bounded bulk confirmation.
-        - lifecycleStatuses (array): Optional filter. Only applies with at least one explicit ID set or selectAllPending selection.
-        - confirmInfrastructureTeardown (boolean): Confirm infrastructure teardown
+                - organizationId (string): Organization ID
+                - resourceIds (object): Explicit MCN UUIDs keyed by `account`, `network`, or `subnet`. Duplicate
+        type/UUID pairs are processed once. The request can contain at most 100
+        IDs across all keys. After duplicates are removed, request-size
+        validation also counts the missing child networks of selected accounts; child
+        subnets expanded from selected networks do not count toward that limit.
+                - selection (object): Scoped server-side selection used instead of `resourceIds`.
+                - lifecycleStatuses (array): Lifecycle values eligible for this request.
+
+        - `pending_removal` — Confirm resources awaiting first confirmation.
+        - `teardown_failed` — Retry resources whose teardown failed.
+
+        With server-side selection, omission defaults to `pending_removal`.
+                - confirmInfrastructureTeardown (boolean): Explicitly permits required provider-infrastructure teardown across the
+        selection. `false` or omission can produce per-resource conflicts.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["organizations", "configure", "mcf", "removed-resources", "bulk"],
-            "operation": "mcfConfirmRemovedResourcesBulk",
+            "tags": ["organizations", "configure", "mcf", "removedResources", "bulk"],
+            "operation": "confirmRemovedResourcesBulk",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/removed-resources/bulk/confirm"
+        resource = f"/organizations/{organizationId}/mcf/removedResources/bulk/confirm"
 
         body_params = [
             "resourceIds",
@@ -10575,31 +10774,34 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfConfirmRemovedResourcesBulk: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"confirmRemovedResourcesBulk: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfConfirmRemovedResource(self, organizationId: str, resourceType: str, resourceId: str, **kwargs):
+    def confirmRemovedResource(self, organizationId: str, resourceType: str, resourceId: str, **kwargs):
         """
-        **Confirm removal for one discovery-driven resource.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-confirm-removed-resource
+                **Confirms one discovery-missing account, network, or subnet**
+                https://developer.cisco.com/meraki/api-v1/#!confirm-removed-resource
 
-        - organizationId (string): Organization ID
-        - resourceType (string): Resource type
-        - resourceId (string): Resource ID
-        - confirmInfrastructureTeardown (boolean): Required when confirming onboarded or failed infrastructure-bearing accounts or networks.
+                - organizationId (string): Organization ID
+                - resourceType (string): Resource type
+                - resourceId (string): Resource ID
+                - confirmInfrastructureTeardown (boolean): Explicit acknowledgement that provider infrastructure may be torn down.
+        Set to `true` when an onboarded network, or an account containing one,
+        requires infrastructure cleanup. `false` or omission does not authorize
+        that teardown and can produce a conflict.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["organizations", "configure", "mcf", "removed-resources"],
-            "operation": "mcfConfirmRemovedResource",
+            "tags": ["organizations", "configure", "mcf", "removedResources"],
+            "operation": "confirmRemovedResource",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resourceType = urllib.parse.quote(str(resourceType), safe="")
         resourceId = urllib.parse.quote(str(resourceId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/removed-resources/{resourceType}/{resourceId}/confirm"
+        resource = f"/organizations/{organizationId}/mcf/removedResources/{resourceType}/{resourceId}/confirm"
 
         body_params = [
             "confirmInfrastructureTeardown",
@@ -10610,28 +10812,37 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfConfirmRemovedResource: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"confirmRemovedResource: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfListRouteTableAssociations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listRouteTableAssociations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-                **List route table associations**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-list-route-table-associations
+                **Lists discovered associations between cloud route tables and VPCs or
+        subnets in the Meraki Dashboard organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-route-table-associations
 
                 - organizationId (string): Organization ID
                 - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
                 - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - routeTableId (string): Filter by route table ID
-                - vpcId (string): Filter by VPC ID
-                - subnetId (string): Filter by subnet ID
-                - scope (string): Filter by association scope. `vpc` is the preferred request alias for
-        the stored `network` scope. Existing responses preserve `network` for
-        backward compatibility.
-                - isDefault (boolean): Filter by default association status
-                - perPage (integer): The number of entries per page returned.
-                - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-                - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - routeTableId (string): MCN-assigned UUID of the route table whose associations are returned.
+                - vpcId (string): MCN-assigned UUID of the VPC whose route-table associations are
+        returned. If deprecated `networkId` is also supplied, the UUIDs must
+        match.
+                - subnetId (string): MCN-assigned UUID of the subnet whose association is returned.
+                - scope (string): Restricts results by association scope.
+
+        - `vpc` — Preferred request alias for a VPC-level association;
+          responses use `network`.
+        - `network` — Deprecated: Legacy request value for the same VPC-level
+          scope. Responses return `network` for compatibility.
+        - `subnet` — Association between a route table and one subnet.
+                - isDefault (boolean): Restricts results by provider default-association designation. `true`
+        returns default associations; `false` returns non-default
+        associations. Omission does not filter by this designation.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -10642,7 +10853,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "routeTableAssociations"],
-            "operation": "mcfListRouteTableAssociations",
+            "operation": "listRouteTableAssociations",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/routeTableAssociations"
@@ -10663,22 +10874,23 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListRouteTableAssociations: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listRouteTableAssociations: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetRouteTableAssociation(self, organizationId: str, associationId: str):
+    def getRouteTableAssociation(self, organizationId: str, associationId: str):
         """
-        **Get a route table association**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-route-table-association
+                **Returns one discovered association between a cloud route table and a VPC
+        or subnet, selected by its MCN-assigned UUID.**
+                https://developer.cisco.com/meraki/api-v1/#!get-route-table-association
 
-        - organizationId (string): Organization ID
-        - associationId (string): Association ID
+                - organizationId (string): Organization ID
+                - associationId (string): Association ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "routeTableAssociations"],
-            "operation": "mcfGetRouteTableAssociation",
+            "operation": "getRouteTableAssociation",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         associationId = urllib.parse.quote(str(associationId), safe="")
@@ -10686,24 +10898,38 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListRouteTables(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listRouteTables(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-                **List route tables**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-list-route-tables
+                **Lists route tables discovered for cloud accounts in the Meraki Dashboard
+        organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-route-tables
 
                 - organizationId (string): Organization ID
                 - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
                 - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - provider (string): Filter by cloud provider
-                - accountId (string): Filter by account ID
-                - vpcId (string): Filter by VPC ID
-                - isDefault (boolean): Filter by default route table status
-                - scope (string): Filter by route table scope. `vpc` is the preferred request alias for
-        the stored `network` scope. Existing responses preserve `network` for
-        backward compatibility.
-                - perPage (integer): The number of entries per page returned.
-                - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-                - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - provider (string): Restricts results by the route table's cloud provider.
+
+        - `aws` — Amazon Web Services route tables.
+        - `azure` — Microsoft Azure route tables.
+        - `gcp` — Google Cloud route tables.
+                - accountId (string): MCN-assigned UUID of the cloud account whose route tables are returned.
+                - vpcId (string): MCN-assigned UUID of the VPC whose network-scoped route tables are
+        returned. If the deprecated `networkId` is also supplied, the UUIDs
+        must match.
+                - isDefault (boolean): Restricts results by provider default-route-table designation.
+        `true` returns default route tables; `false` returns non-default
+        route tables. Omission does not filter by this designation.
+                - scope (string): Restricts results by route-table scope.
+
+        - `vpc` — Preferred request alias for a route table attached to one
+          VPC; responses use `network`.
+        - `network` — Deprecated: Legacy request value for the same VPC-level
+          scope. Responses return `network` for compatibility.
+        - `global` — Provider-wide route table that is not confined to one
+          VPC.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -10719,7 +10945,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "routeTables"],
-            "operation": "mcfListRouteTables",
+            "operation": "listRouteTables",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/routeTables"
@@ -10740,22 +10966,23 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListRouteTables: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listRouteTables: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetRouteTable(self, organizationId: str, routeTableId: str):
+    def getRouteTable(self, organizationId: str, routeTableId: str):
         """
-        **Get a route table**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-route-table
+                **Returns one discovered cloud-provider route table by its MCN-assigned
+        UUID**
+                https://developer.cisco.com/meraki/api-v1/#!get-route-table
 
-        - organizationId (string): Organization ID
-        - routeTableId (string): Route table ID
+                - organizationId (string): Organization ID
+                - routeTableId (string): Route table ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "routeTables"],
-            "operation": "mcfGetRouteTable",
+            "operation": "getRouteTable",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         routeTableId = urllib.parse.quote(str(routeTableId), safe="")
@@ -10763,27 +10990,27 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List Sites**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-sites
+        **Returns Meraki network records represented as MCN Sites for site-to-cloud connectivity in the specified organization**
+        https://developer.cisco.com/meraki/api-v1/#!list-sites
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - onboarded (boolean): Filter by onboarded status
-        - accountId (string): Filter by account ID
-        - integrationId (string): Filter by integration ID
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - onboarded (boolean): When `true`, return only Sites currently marked as onboarded. When `false`, return only Sites not currently marked as onboarded. Omit to include both.
+        - accountId (string): MCN-assigned UUID of the MCN-managed Meraki account whose Sites are returned.
+        - integrationId (string): MCN-assigned UUID of the MCN-managed Meraki integration whose Sites are returned.
+        - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+        - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+        - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "sites"],
-            "operation": "mcfListSites",
+            "operation": "listSites",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/sites"
@@ -10802,29 +11029,29 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListSites: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listSites: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfListSiteSubnets(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listSiteSubnets(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List Site subnets**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-site-subnets
+        **Returns subnet records stored under Meraki networks represented as MCN Sites in the specified organization**
+        https://developer.cisco.com/meraki/api-v1/#!list-site-subnets
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - siteId (string): Filter by parent Site ID
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - siteId (string): MCN-assigned UUID of the parent Site whose subnets are returned.
+        - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+        - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+        - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "sites", "subnets"],
-            "operation": "mcfListSiteSubnets",
+            "operation": "listSiteSubnets",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/sites/subnets"
@@ -10841,14 +11068,14 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListSiteSubnets: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listSiteSubnets: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetSiteSubnet(self, organizationId: str, subnetId: str):
+    def getSiteSubnet(self, organizationId: str, subnetId: str):
         """
-        **Get a Site subnet**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-site-subnet
+        **Returns one organization-owned subnet from a Meraki network represented as an MCN Site, including tag associations stored by MCN**
+        https://developer.cisco.com/meraki/api-v1/#!get-site-subnet
 
         - organizationId (string): Organization ID
         - subnetId (string): Subnet ID
@@ -10856,7 +11083,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "sites", "subnets"],
-            "operation": "mcfGetSiteSubnet",
+            "operation": "getSiteSubnet",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         subnetId = urllib.parse.quote(str(subnetId), safe="")
@@ -10864,10 +11091,10 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfGetSite(self, organizationId: str, siteId: str):
+    def getSite(self, organizationId: str, siteId: str):
         """
-        **Get a Site**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-site
+        **Returns one organization-owned Meraki network represented as an MCN Site, including subnet and tag associations stored by MCN**
+        https://developer.cisco.com/meraki/api-v1/#!get-site
 
         - organizationId (string): Organization ID
         - siteId (string): Site ID
@@ -10875,7 +11102,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "sites"],
-            "operation": "mcfGetSite",
+            "operation": "getSite",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         siteId = urllib.parse.quote(str(siteId), safe="")
@@ -10883,27 +11110,37 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListTags(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listTags(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-                **List tags**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-list-tags
+                **Lists discovery-visible canonical tags for the Meraki Dashboard
+        organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-tags
 
                 - organizationId (string): Organization ID
                 - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
                 - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - type (string): Filter by tag type. `network` is a deprecated compatibility alias;
-        use `vpc` or `site` for network-backed resources.
+                - type (string): Restricts results by the resource level where the tag was discovered.
+
+        - `subnet` — Tags associated with a subnet.
+        - `vpc` — Preferred VPC-family view of a network-wide tag.
+        - `site` — Preferred Site-family view of a network-wide tag.
+        - `network` — Deprecated: Cross-family value; use `vpc` or `site`.
                 - provider (string): Filter tags to those associated with at least one resource from the
-        specified cloud provider. When type is `vpc`, only network tag
-        associations are considered; when type is `subnet`, only subnet tag
-        associations are considered. This filter cannot be combined with
-        type `site` because the supported providers are VPC providers.
-                - subnetId (string): Filter by subnet ID. Only valid if type is subnet.
-                - vpcId (string): Filter by VPC ID. Only valid if type is vpc.
-                - siteId (string): Filter by Site ID. Only valid if type is site.
-                - perPage (integer): The number of entries per page returned.
-                - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-                - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        selected public-cloud provider.
+
+        - `aws` — Amazon Web Services resources.
+        - `azure` — Microsoft Azure resources.
+        - `gcp` — Google Cloud resources.
+
+        With `type=vpc`, only VPC associations are considered; with
+        `type=subnet`, only subnet associations are considered. This filter
+        cannot be combined with `type=site`.
+                - subnetId (string): MCN-assigned subnet UUID filter. Valid only with `type=subnet`.
+                - vpcId (string): MCN-assigned VPC UUID filter. Valid only with `type=vpc`.
+                - siteId (string): MCN-assigned Site UUID filter. Valid only with `type=site`.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -10919,7 +11156,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "tags"],
-            "operation": "mcfListTags",
+            "operation": "listTags",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/tags"
@@ -10940,20 +11177,23 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListTags: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listTags: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfCreateTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
+    def createTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
         """
                 **Finds or creates the canonical tag identity for the exact organization,
         key, value, and type tuple**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-create-tag
+                https://developer.cisco.com/meraki/api-v1/#!create-tag
 
                 - organizationId (string): Organization ID
-                - key (string): Key
-                - value (string): Value
-                - type (string): Scope at which a tag identifies resources.
+                - key (string): Provider-origin tag key. It is matched exactly, including case, and
+        cannot contain a null character.
+                - value (string): Provider-origin tag value. It is matched exactly, including case, and
+        cannot contain a null character.
+                - type (string): Tag scope. The only supported value is `network-wide`, which identifies
+        a VPC- or Site-level tag rather than a subnet tag.
         """
 
         kwargs = locals()
@@ -10964,7 +11204,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "tags"],
-            "operation": "mcfCreateTag",
+            "operation": "createTag",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/tags"
@@ -10980,22 +11220,23 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfCreateTag: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"createTag: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfGetTag(self, organizationId: str, tagId: str):
+    def getTag(self, organizationId: str, tagId: str):
         """
-        **Get a tag**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-tag
+                **Returns one canonical provider-origin tag identity by its MCN-assigned
+        UUID**
+                https://developer.cisco.com/meraki/api-v1/#!get-tag
 
-        - organizationId (string): Organization ID
-        - tagId (string): Tag ID
+                - organizationId (string): Organization ID
+                - tagId (string): Tag ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "tags"],
-            "operation": "mcfGetTag",
+            "operation": "getTag",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         tagId = urllib.parse.quote(str(tagId), safe="")
@@ -11003,35 +11244,60 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfGetTunnelStatus(self, organizationId: str, window: str, resolution: str, **kwargs):
+    def getTunnelStatus(self, organizationId: str, **kwargs):
         """
-                **Returns tunnel status grouped by VPC or Site, with member series nested
-        under each resource entry**
-                https://developer.cisco.com/meraki/api-v1/#!mcf-get-tunnel-status
+                **Returns aligned aggregate and member tunnel-health series for onboarded
+        VPCs and Sites in the requested trailing window**
+                https://developer.cisco.com/meraki/api-v1/#!get-tunnel-status
 
                 - organizationId (string): Organization ID
-                - window (string): Trailing time window expressed as a Go duration string (e.g. "1h",
-        "30m"). Must be a whole number of seconds and must divide evenly by
-        `resolution`.
-                - resolution (string): Sample resolution expressed as a Go duration string (e.g. "1m",
-        "30s"). Must be a whole number of seconds. `window / resolution`
-        must not exceed 4096.
-                - vpcId (string): Optional cloud VPC UUID. Mutually exclusive with `siteId` and the
-        deprecated `networkId`.
-                - siteId (string): Optional Site UUID. Mutually exclusive with `vpcId` and the
-        deprecated `networkId`.
+                - windowSeconds (integer): Trailing query duration, in seconds. When this parameter is supplied,
+        `resolutionSeconds` is required. The value must be at least 60, be a
+        multiple of 60, and be evenly divisible by `resolutionSeconds`. The
+        pair can produce at most 4,096 samples, including both endpoints.
+                - resolutionSeconds (integer): Bucket width and spacing between samples, in seconds. When this
+        parameter is supplied, `windowSeconds` is required. The value must be
+        at least 60, be a multiple of 60, and divide `windowSeconds` evenly.
+        The response contains
+        `windowSeconds / resolutionSeconds + 1` samples, up to 4,096. When
+        `resolutionSeconds` is greater than 720, the sum of both parameters
+        cannot exceed 2,949,120 seconds.
+                - window (string): Deprecated: Use `windowSeconds` with `resolutionSeconds`. Legacy
+        trailing query duration expressed with `h`, `m`, or `s`, such as
+        `1h`, `30m`, or `3600s`. Use it with `resolution` only when neither
+        seconds parameter is supplied. If either seconds parameter is
+        supplied, both legacy values are ignored and both seconds parameters
+        are required. The duration must resolve to a positive whole-minute
+        value and be evenly divisible by `resolution`. The pair can produce
+        at most 4,096 samples, including both endpoints.
+                - resolution (string): Deprecated: Use `resolutionSeconds` with `windowSeconds`. Legacy
+        bucket width and sample spacing expressed with `h`, `m`, or `s`, such
+        as `1m` or `5m`. Use it with `window` only when neither seconds
+        parameter is supplied. If either seconds parameter is supplied, both
+        legacy values are ignored and both seconds parameters are required.
+        The duration must be at least one minute in whole-minute increments
+        and divide `window` evenly. The response contains
+        `window / resolution + 1` samples, up to 4,096. For resolutions
+        greater than 12 minutes, `window + resolution` cannot exceed 34 days,
+        3 hours, and 12 minutes.
+                - vpcId (string): MCN-assigned UUID of one AWS, Azure, or GCP VPC to return. Mutually
+        exclusive with `siteId` and deprecated `networkId`.
+                - siteId (string): MCN-assigned UUID of one Meraki Site to return. Mutually exclusive
+        with `vpcId` and deprecated `networkId`.
         """
 
         kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "tunnelStatus"],
-            "operation": "mcfGetTunnelStatus",
+            "operation": "getTunnelStatus",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/tunnelStatus"
 
         query_params = [
+            "windowSeconds",
+            "resolutionSeconds",
             "window",
             "resolution",
             "vpcId",
@@ -11043,23 +11309,36 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfGetTunnelStatus: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"getTunnelStatus: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
-    def mcfListVpcOnboardingBatches(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listVpcOnboardingBatches(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List VPC onboarding batches**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-vpc-onboarding-batches
+                **Lists VPC onboarding and offboarding batch trackers for the organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-vpc-onboarding-batches
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - type (string): Filter by VPC onboarding batch type
-        - status (string): Filter by VPC onboarding batch status
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - type (string): Return only batches for the specified requested action. Omission does
+        not filter by action.
+
+        - `onboard` — The batch starts onboarding for selected VPCs.
+        - `offboard` — The batch starts offboarding for selected VPCs.
+                - status (string): Return only batches with the specified tracker status. Omission does
+        not filter by status.
+
+        - `in_progress` — The tracker remains open because at least one item has not recorded a terminal outcome.
+        - `completed` — Every tracked item has a recorded `succeeded` or
+          `failed` batch outcome; the batch can contain failures.
+        - `timed_out` — The tracker reached its age limit while at least one
+          item remained non-terminal. Items and counters retain their last
+          recorded outcomes; this is not a cloud-provider operation, data-plane,
+          or tunnel-health result.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -11075,7 +11354,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcOnboardingBatches"],
-            "operation": "mcfListVpcOnboardingBatches",
+            "operation": "listVpcOnboardingBatches",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/vpcOnboardingBatches"
@@ -11093,14 +11372,14 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListVpcOnboardingBatches: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listVpcOnboardingBatches: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetVpcOnboardingBatch(self, organizationId: str, batchId: str):
+    def getVpcOnboardingBatch(self, organizationId: str, batchId: str):
         """
-        **Get a VPC onboarding batch**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-vpc-onboarding-batch
+        **Returns one VPC onboarding or offboarding batch tracker, including per-VPC progress items**
+        https://developer.cisco.com/meraki/api-v1/#!get-vpc-onboarding-batch
 
         - organizationId (string): Organization ID
         - batchId (string): Batch ID
@@ -11108,7 +11387,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcOnboardingBatches"],
-            "operation": "mcfGetVpcOnboardingBatch",
+            "operation": "getVpcOnboardingBatch",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         batchId = urllib.parse.quote(str(batchId), safe="")
@@ -11116,24 +11395,28 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListVpcs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listVpcs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List VPCs**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-vpcs
+                **Returns discovered public-cloud networks for the specified Meraki organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-vpcs
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - onboarded (boolean): Filter by onboarded status
-        - provider (string): Filter by cloud provider
-        - accountId (string): Filter by account ID
-        - integrationId (string): Filter by integration ID
-        - isDefault (boolean): Filter by default VPC status
-        - tagKey (string): Exact, case-sensitive VPC tag key. Must be supplied together with tagValue.
-        - tagValue (string): Exact, case-sensitive VPC tag value. Must be supplied together with tagKey.
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - onboarded (boolean): When `true`, return only VPCs currently marked as onboarded. When `false`, return only VPCs not currently marked as onboarded. Omit to include both.
+                - provider (string): Return only VPCs discovered from the specified cloud provider:
+
+        - `aws` — Amazon Web Services VPCs.
+        - `azure` — Microsoft Azure virtual networks (VNets).
+        - `gcp` — Google Cloud VPC networks.
+                - accountId (string): MCN-assigned UUID of the discovered cloud account whose VPCs are returned.
+                - integrationId (string): MCN-assigned UUID of the cloud integration whose discovered VPCs are returned.
+                - isDefault (boolean): When `true`, return only provider-designated default VPCs. When `false`, return only VPCs that are not provider-designated defaults. Omit to include both.
+                - tagKey (string): Exact, case-sensitive provider tag key. Supply together with `tagValue`; omitting either member of the pair returns a validation error.
+                - tagValue (string): Exact, case-sensitive provider tag value. Supply together with `tagKey`; omitting either member of the pair returns a validation error.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -11146,7 +11429,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs"],
-            "operation": "mcfListVpcs",
+            "operation": "listVpcs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/vpcs"
@@ -11169,24 +11452,24 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListVpcs: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listVpcs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfOffboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+    def offboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
         """
-        **Offboard VPCs**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-offboard-vpcs
+        **Validates 1–50 distinct organization-owned VPC IDs and attempts to offboard each VPC**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-vpcs
 
         - organizationId (string): Organization ID
-        - vpcs (array): Vpcs
+        - vpcs (array): One to 50 distinct VPCs to offboard.
         """
 
         kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs", "offboard"],
-            "operation": "mcfOffboardVpcs",
+            "operation": "offboardVpcs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/vpcs/offboard"
@@ -11200,24 +11483,24 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfOffboardVpcs: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"offboardVpcs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfOnboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
+    def onboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
         """
-        **Onboard VPCs**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-onboard-vpcs
+        **Validates 1–50 distinct organization-owned VPC IDs and attempts to start onboarding for each VPC**
+        https://developer.cisco.com/meraki/api-v1/#!onboard-vpcs
 
         - organizationId (string): Organization ID
-        - vpcs (array): Vpcs
+        - vpcs (array): One to 50 distinct VPCs to onboard. Array order is preserved in per-VPC results.
         """
 
         kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs", "onboard"],
-            "operation": "mcfOnboardVpcs",
+            "operation": "onboardVpcs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/vpcs/onboard"
@@ -11231,24 +11514,28 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfOnboardVpcs: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"onboardVpcs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfListVpcSubnets(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+    def listVpcSubnets(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List VPC subnets**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-vpc-subnets
+                **Returns discovered subnets that belong to the public-cloud VPC resource family for the specified Meraki organization**
+                https://developer.cisco.com/meraki/api-v1/#!list-vpc-subnets
 
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - vpcId (string): Filter by parent VPC ID
-        - provider (string): Filter by cloud provider
-        - accountId (string): Filter by account ID
-        - perPage (integer): The number of entries per page returned.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+                - organizationId (string): Organization ID
+                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+                - direction (string): direction to paginate, either "next" (default) or "prev" page
+                - vpcId (string): MCN-assigned UUID of the parent VPC whose subnets are returned.
+                - provider (string): Return only subnets discovered from VPCs of the specified provider:
+
+        - `aws` — Amazon Web Services VPC subnets.
+        - `azure` — Microsoft Azure VNet subnets.
+        - `gcp` — Google Cloud VPC subnets.
+                - accountId (string): MCN-assigned UUID of the discovered cloud account whose VPC subnets are returned.
+                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
+                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
+                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         """
 
         kwargs.update(locals())
@@ -11261,7 +11548,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs", "subnets"],
-            "operation": "mcfListVpcSubnets",
+            "operation": "listVpcSubnets",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/vpcs/subnets"
@@ -11280,14 +11567,14 @@ class AsyncOrganizations:
             all_params = query_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfListVpcSubnets: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"listVpcSubnets: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def mcfGetVpcSubnet(self, organizationId: str, subnetId: str):
+    def getVpcSubnet(self, organizationId: str, subnetId: str):
         """
-        **Get a VPC subnet**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-vpc-subnet
+        **Returns one organization-owned subnet from an Amazon Web Services VPC, Microsoft Azure VNet, or Google Cloud VPC network, including its discovered tags**
+        https://developer.cisco.com/meraki/api-v1/#!get-vpc-subnet
 
         - organizationId (string): Organization ID
         - subnetId (string): Subnet ID
@@ -11295,7 +11582,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs", "subnets"],
-            "operation": "mcfGetVpcSubnet",
+            "operation": "getVpcSubnet",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         subnetId = urllib.parse.quote(str(subnetId), safe="")
@@ -11303,10 +11590,10 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfGetVpc(self, organizationId: str, vpcId: str):
+    def getVpc(self, organizationId: str, vpcId: str):
         """
-        **Get a VPC**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-vpc
+        **Returns one organization-owned public-cloud VPC and its discovered subnets and tags**
+        https://developer.cisco.com/meraki/api-v1/#!get-vpc
 
         - organizationId (string): Organization ID
         - vpcId (string): Vpc ID
@@ -11314,7 +11601,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs"],
-            "operation": "mcfGetVpc",
+            "operation": "getVpc",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         vpcId = urllib.parse.quote(str(vpcId), safe="")
@@ -11322,10 +11609,10 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfGetVpcOnboardingStates(self, organizationId: str, vpcId: str):
+    def getVpcOnboardingStates(self, organizationId: str, vpcId: str):
         """
-        **Get VPC onboarding states**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-vpc-onboarding-states
+        **Returns the recorded onboarding and offboarding state transitions for one organization-owned public-cloud VPC**
+        https://developer.cisco.com/meraki/api-v1/#!get-vpc-onboarding-states
 
         - organizationId (string): Organization ID
         - vpcId (string): Vpc ID
@@ -11333,7 +11620,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "vpcs", "onboarding", "states"],
-            "operation": "mcfGetVpcOnboardingStates",
+            "operation": "getVpcOnboardingStates",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         vpcId = urllib.parse.quote(str(vpcId), safe="")
@@ -11341,35 +11628,49 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfListZtrIntents(self, organizationId: str):
+    def listZtrIntents(self, organizationId: str):
         """
-        **List Zero Trust Routing intents for the organization.**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-list-ztr-intents
+                **Returns every Zero Trust Routing intent for the Meraki organization,
+        including both endpoint sides and current asynchronous realization
+        status**
+                https://developer.cisco.com/meraki/api-v1/#!list-ztr-intents
 
-        - organizationId (string): Organization ID
+                - organizationId (string): Organization ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "ztrIntents"],
-            "operation": "mcfListZtrIntents",
+            "operation": "listZtrIntents",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/ztrIntents"
 
         return self._session.get(metadata, resource)
 
-    def mcfCreateZtrIntent(self, organizationId: str, name: str, endpointsA: list, endpointsB: list, **kwargs):
+    def createZtrIntent(self, organizationId: str, name: str, endpointsA: list, endpointsB: list, **kwargs):
         """
-        **Create a Zero Trust Routing intent**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-create-ztr-intent
+                **Creates a policy intent over the Cartesian set of endpoint-side A and
+        endpoint-side B selections**
+                https://developer.cisco.com/meraki/api-v1/#!create-ztr-intent
 
-        - organizationId (string): Organization ID
-        - name (string): Name
-        - endpointsA (array): Endpoints a
-        - endpointsB (array): Endpoints b
-        - description (string): Description
-        - enabled (boolean): Enabled
-        - rule (string): Rule
+                - organizationId (string): Organization ID
+                - name (string): Required caller-provided display name of the intent.
+                - endpointsA (array): Non-empty endpoint selections for side A. At most one entry can use
+        `endpointAType=tags`.
+                - endpointsB (array): Non-empty endpoint selections for side B. At most one entry can use
+        `endpointBType=tags`.
+                - description (string): Optional caller-provided explanation of the intent's purpose.
+                - enabled (boolean): Whether to start asynchronous realization after creation. Omission
+        defaults to `true`; `false` stores a `DISABLED` intent and skips the
+        enabled-only Meraki-to-Meraki topology check.
+                - rule (string): Rule selection for the intent.
+
+        - `ALLOW` — Default when omitted; contributes selected endpoint
+          prefixes to allowed routing output.
+        - `DENY` — Accepted, but contributes the same output as
+          `ALLOW`, without a distinct deny or exclusion effect.
+
+        The two values produce identical routing behavior.
         """
 
         kwargs.update(locals())
@@ -11380,7 +11681,7 @@ class AsyncOrganizations:
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "ztrIntents"],
-            "operation": "mcfCreateZtrIntent",
+            "operation": "createZtrIntent",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/mcf/ztrIntents"
@@ -11399,22 +11700,23 @@ class AsyncOrganizations:
             all_params = [] + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
-                self._session._logger.warning(f"mcfCreateZtrIntent: ignoring unrecognized kwargs: {invalid}")
+                self._session._logger.warning(f"createZtrIntent: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
-    def mcfGetZtrIntent(self, organizationId: str, ztrIntentId: str):
+    def getZtrIntent(self, organizationId: str, ztrIntentId: str):
         """
-        **Get a single Zero Trust Routing intent by ID**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-get-ztr-intent
+                **Returns one organization-scoped Zero Trust Routing intent, its endpoint
+        selections, and current asynchronous realization status.**
+                https://developer.cisco.com/meraki/api-v1/#!get-ztr-intent
 
-        - organizationId (string): Organization ID
-        - ztrIntentId (string): Ztr intent ID
+                - organizationId (string): Organization ID
+                - ztrIntentId (string): Ztr intent ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "ztrIntents"],
-            "operation": "mcfGetZtrIntent",
+            "operation": "getZtrIntent",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         ztrIntentId = urllib.parse.quote(str(ztrIntentId), safe="")
@@ -11422,18 +11724,20 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def mcfDeleteZtrIntent(self, organizationId: str, ztrIntentId: str):
+    def deleteZtrIntent(self, organizationId: str, ztrIntentId: str):
         """
-        **Delete a ZTR intent by ID**
-        https://developer.cisco.com/meraki/api-v1/#!mcf-delete-ztr-intent
+                **Transitions the organization-scoped intent to `PENDING_DELETE` and then
+        requests asynchronous reconciliation that removes its routing
+        contribution**
+                https://developer.cisco.com/meraki/api-v1/#!delete-ztr-intent
 
-        - organizationId (string): Organization ID
-        - ztrIntentId (string): Ztr intent ID
+                - organizationId (string): Organization ID
+                - ztrIntentId (string): Ztr intent ID
         """
 
         metadata = {
             "tags": ["organizations", "configure", "mcf", "ztrIntents"],
-            "operation": "mcfDeleteZtrIntent",
+            "operation": "deleteZtrIntent",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         ztrIntentId = urllib.parse.quote(str(ztrIntentId), safe="")

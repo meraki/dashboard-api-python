@@ -371,6 +371,7 @@ class AsyncDevices:
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-arp-table
 
         - serial (string): Serial
+        - ip (object): Optional IPv4 address used to filter ARP table entries.
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
@@ -384,6 +385,7 @@ class AsyncDevices:
         resource = f"/devices/{serial}/liveTools/arpTable"
 
         body_params = [
+            "ip",
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
