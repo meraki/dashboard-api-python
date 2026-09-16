@@ -5704,7 +5704,7 @@ class Appliance:
 
     def getOrganizationApplianceUplinkStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the uplink status of every Meraki MX and Z series appliances in the organization**
+        **List the uplink status of every Meraki MX appliance, Z series appliance, and Secure Router in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplink-statuses
 
         - organizationId (string): Organization ID

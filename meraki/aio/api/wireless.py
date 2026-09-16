@@ -267,6 +267,39 @@ class AsyncWireless:
 
         return self._session.get(metadata, resource, params)
 
+    def updateDeviceWirelessMeshGatewaysPreferred(self, serial: str, gateways: list, **kwargs):
+        """
+        **Replace the complete list of preferred gateways for this device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-mesh-gateways-preferred
+
+        - serial (string): Serial
+        - gateways (array): Complete list of preferred gateways, ordered by priority. Each gateway must specify exactly one of serial or mac. Send an empty array to clear the list. Maximum: 2 gateways.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "mesh", "gateways", "preferred"],
+            "operation": "updateDeviceWirelessMeshGatewaysPreferred",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/mesh/gateways/preferred"
+
+        body_params = [
+            "gateways",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceWirelessMeshGatewaysPreferred: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getDeviceWirelessRadioAfcPosition(self, serial: str):
         """
         **Return the position for a wireless device**
@@ -9794,6 +9827,60 @@ class AsyncWireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessLocationWayfindingByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessMeshGatewaysPreferredByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List preferred gateways for this organization by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-mesh-gateways-preferred-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional filter for preferred gateways by exact network ID. Maximum: 100 network IDs.
+        - serials (array): Optional filter for preferred gateways by exact device serial number. Maximum: 100 serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "mesh", "gateways", "preferred", "byDevice"],
+            "operation": "getOrganizationWirelessMeshGatewaysPreferredByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/mesh/gateways/preferred/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessMeshGatewaysPreferredByDevice: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
