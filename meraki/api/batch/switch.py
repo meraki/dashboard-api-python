@@ -2058,6 +2058,8 @@ class ActionBatchSwitch:
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch template port.
+        - fastPoe (object): Fast PoE settings for the switch template port.
         - type (string): The type of the switch template port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
@@ -2117,6 +2119,8 @@ class ActionBatchSwitch:
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",

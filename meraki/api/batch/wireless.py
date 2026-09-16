@@ -91,6 +91,31 @@ class ActionBatchWireless:
         }
         return action
 
+    def updateDeviceWirelessMeshGatewaysPreferred(self, serial: str, gateways: list, **kwargs):
+        """
+        **Replace the complete list of preferred gateways for this device. Send an empty gateways array to clear the list. The list is ordered by priority and supports at most two gateways. **
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-mesh-gateways-preferred
+
+        - serial (string): Serial
+        - gateways (array): Complete list of preferred gateways, ordered by priority. Each gateway must specify exactly one of serial or mac. Send an empty array to clear the list. Maximum: 2 gateways.
+        """
+
+        kwargs = locals()
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/wireless/mesh/gateways/preferred"
+
+        body_params = [
+            "gateways",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateDeviceWirelessRadioAfcPosition(self, serial: str, **kwargs):
         """
         **Update the position attributes for this device**

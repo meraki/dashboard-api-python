@@ -3597,6 +3597,8 @@ class Switch:
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch template port.
+        - fastPoe (object): Fast PoE settings for the switch template port.
         - type (string): The type of the switch template port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
@@ -3660,6 +3662,8 @@ class Switch:
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",
@@ -7361,6 +7365,47 @@ class Switch:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchSoftwareUpdatesRetriesCandidates(self, organizationId: str, **kwargs):
+        """
+        **List switch update retry candidates in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-software-updates-retries-candidates
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Optional array of network IDs used to limit results to specific networks in the organization.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "software", "updates", "retries", "candidates"],
+            "operation": "getOrganizationSwitchSoftwareUpdatesRetriesCandidates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/software/updates/retries/candidates"
+
+        query_params = [
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchSoftwareUpdatesRetriesCandidates: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationSwitchSpanningTree(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
