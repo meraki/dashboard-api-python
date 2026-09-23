@@ -2442,7 +2442,7 @@ class AsyncAppliance:
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
-            **Update the traffic shaping settings rules for an MX network**
+            **Update the traffic shaping settings rules for a Security Appliance or Secure Router network**
             https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
             - networkId (string): Network ID
@@ -2480,7 +2480,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceTrafficShapingRules(self, networkId: str):
         """
-        **Display the traffic shaping settings rules for an MX network**
+        **Display the traffic shaping settings rules for a Security Appliance or Secure Router network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-rules
 
         - networkId (string): Network ID
@@ -5704,7 +5704,7 @@ class AsyncAppliance:
 
     def getOrganizationApplianceUplinkStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the uplink status of every Meraki MX appliance, Z series appliance, and Secure Router in the organization**
+        **List the uplink status of every Meraki MX and Z series appliances in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplink-statuses
 
         - organizationId (string): Organization ID

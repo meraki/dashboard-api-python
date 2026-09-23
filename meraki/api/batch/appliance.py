@@ -910,7 +910,7 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
-            **Update the traffic shaping settings rules for an MX network**
+            **Update the traffic shaping settings rules for a Security Appliance or Secure Router network**
             https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
             - networkId (string): Network ID
