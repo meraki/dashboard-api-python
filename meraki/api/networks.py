@@ -3326,7 +3326,7 @@ class Networks:
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
-        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
+        - activeVlans (string): The active VLANs for the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
         kwargs.update(locals())
@@ -3340,7 +3340,7 @@ class Networks:
 
         body_params = [
             "name",
-            "allowedVlans",
+            "activeVlans",
             "vlanNames",
             "vlanGroups",
             "iname",
@@ -3476,7 +3476,7 @@ class Networks:
         - name (string): Name of the profile, string length must be from 1 to 255 characters
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
-        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
+        - activeVlans (string): The active VLANs for the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
         kwargs.update(locals())
@@ -3491,7 +3491,7 @@ class Networks:
 
         body_params = [
             "name",
-            "allowedVlans",
+            "activeVlans",
             "vlanNames",
             "vlanGroups",
         ]

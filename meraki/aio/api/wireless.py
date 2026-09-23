@@ -1619,6 +1619,39 @@ class AsyncWireless:
 
         return self._session.get(metadata, resource)
 
+    def batchNetworkWirelessDevicesIotRolesUpdate(self, networkId: str, items: list, **kwargs):
+        """
+        **Batch update IoT roles for a list of devices in a network**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-wireless-devices-iot-roles-update
+
+        - networkId (string): Network ID
+        - items (array): List of device IoT role assignments to update (max 100)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "iot", "roles"],
+            "operation": "batchNetworkWirelessDevicesIotRolesUpdate",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/devices/iot/roles/batchUpdate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchNetworkWirelessDevicesIotRolesUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
     def getNetworkWirelessDevicesLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by node**
@@ -1699,6 +1732,7 @@ class AsyncWireless:
         - hostname (string): Desired ESL hostname of the network
         - enabled (boolean): Turn ESL features on and off for this network
         - mode (string): Electronic shelf label mode of the network. Valid options are 'Bluetooth', 'high frequency'
+        - sepioo (object): sepioo IIoT settings
         """
 
         kwargs.update(locals())
@@ -1718,6 +1752,7 @@ class AsyncWireless:
             "hostname",
             "enabled",
             "mode",
+            "sepioo",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2002,6 +2037,37 @@ class AsyncWireless:
                 self._session._logger.warning(f"getNetworkWirelessFailedConnections: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
+
+    def updateNetworkWirelessIotRoles(self, networkId: str, roles: dict, **kwargs):
+        """
+        **Update the IoT roles for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-iot-roles
+
+        - networkId (string): Network ID
+        - roles (object): IoT roles configuration
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "iot", "roles"],
+            "operation": "updateNetworkWirelessIotRoles",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/iot/roles"
+
+        body_params = [
+            "roles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessIotRoles: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessLatencyHistory(self, networkId: str, **kwargs):
         """
@@ -8305,6 +8371,61 @@ class AsyncWireless:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationWirelessDevicesIotRoles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the IoT role for each device in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-iot-roles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter by one or more network IDs
+        - serials (array): Optional parameter to filter by one or more device serials
+        - roles (array): Optional parameter to filter by one or more IoT roles. Use 'none' to filter for devices with no assigned role.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "iot", "roles"],
+            "operation": "getOrganizationWirelessDevicesIotRoles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/iot/roles"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "roles",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "roles",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesIotRoles: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessDevicesLatencyByClient(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get latency summaries for all wireless devices in an organization.**
@@ -9577,6 +9698,55 @@ class AsyncWireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessDevicesWirelessControllersByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessIotRolesByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the IoT role configurations for networks in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-iot-roles-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter by one or more network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "iot", "roles", "byNetwork"],
+            "operation": "getOrganizationWirelessIotRolesByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/iot/roles/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessIotRolesByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

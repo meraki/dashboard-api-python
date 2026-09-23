@@ -371,6 +371,31 @@ class ActionBatchWireless:
         }
         return action
 
+    def batchNetworkWirelessDevicesIotRolesUpdate(self, networkId: str, items: list, **kwargs):
+        """
+        **Batch update IoT roles for a list of devices in a network**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-wireless-devices-iot-roles-update
+
+        - networkId (string): Network ID
+        - items (array): List of device IoT role assignments to update (max 100)
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/wireless/devices/iot/roles/batchUpdate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkWirelessElectronicShelfLabel(self, networkId: str, **kwargs):
         """
         **Update the ESL settings of a wireless network**
@@ -380,6 +405,7 @@ class ActionBatchWireless:
         - hostname (string): Desired ESL hostname of the network
         - enabled (boolean): Turn ESL features on and off for this network
         - mode (string): Electronic shelf label mode of the network. Valid options are 'Bluetooth', 'high frequency'
+        - sepioo (object): sepioo IIoT settings
         """
 
         kwargs.update(locals())
@@ -395,6 +421,7 @@ class ActionBatchWireless:
             "hostname",
             "enabled",
             "mode",
+            "sepioo",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -536,6 +563,31 @@ class ActionBatchWireless:
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+
+    def updateNetworkWirelessIotRoles(self, networkId: str, roles: dict, **kwargs):
+        """
+        **Update the IoT roles for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-iot-roles
+
+        - networkId (string): Network ID
+        - roles (object): IoT roles configuration
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/wireless/iot/roles"
+
+        body_params = [
+            "roles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
         }
         return action
 

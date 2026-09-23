@@ -197,6 +197,7 @@ class ActionBatchSwitch:
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -234,6 +235,7 @@ class ActionBatchSwitch:
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -269,6 +271,7 @@ class ActionBatchSwitch:
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -303,6 +306,7 @@ class ActionBatchSwitch:
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -354,6 +358,8 @@ class ActionBatchSwitch:
          - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
          - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
          - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
+         - dhcpDefaultRouterIps (string): The DHCP default router IPs for the DHCP server running on the switch interface
+         - dhcpDomainName (string): The DHCP domain name for the DHCP server running on the switch interface
         """
 
         kwargs.update(locals())
@@ -390,6 +396,8 @@ class ActionBatchSwitch:
             "dhcpOptions",
             "reservedIpRanges",
             "fixedIpAssignments",
+            "dhcpDefaultRouterIps",
+            "dhcpDomainName",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1633,6 +1641,7 @@ class ActionBatchSwitch:
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -1671,6 +1680,7 @@ class ActionBatchSwitch:
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1707,6 +1717,7 @@ class ActionBatchSwitch:
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -1742,6 +1753,7 @@ class ActionBatchSwitch:
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1797,6 +1809,8 @@ class ActionBatchSwitch:
         switch stack interface
         - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
+        - dhcpDefaultRouterIps (string): The DHCP default router IPs for the DHCP server running on the switch stack interface
+        - dhcpDomainName (string): The DHCP domain name for the DHCP server running on the switch stack interface
         """
 
         kwargs.update(locals())
@@ -1834,6 +1848,8 @@ class ActionBatchSwitch:
             "dhcpOptions",
             "reservedIpRanges",
             "fixedIpAssignments",
+            "dhcpDefaultRouterIps",
+            "dhcpDomainName",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

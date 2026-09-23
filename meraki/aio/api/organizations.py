@@ -4523,7 +4523,7 @@ class AsyncOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
 
         - organizationId (string): Organization ID
-        - managedBy (string): Certificate managed by type [system_manager, mr, mx, encrypted_syslog, grpc_dial_out]
+        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
         - contents (string): Certificate content in valid PEM format
         - description (string): Certificate description
         """
@@ -4531,7 +4531,7 @@ class AsyncOrganizations:
         kwargs = locals()
 
         if "managedBy" in kwargs:
-            options = ["encrypted_syslog", "grpc_dial_out", "mr", "mx", "system_manager"]
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
             assert kwargs["managedBy"] in options, (
                 f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
             )
@@ -11894,6 +11894,7 @@ class AsyncOrganizations:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - groupIds (array): Optional parameter to filter network groups by ID
+        - search (string): Optional parameter to filter network groups by a case-insensitive partial group name match
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -11910,6 +11911,7 @@ class AsyncOrganizations:
 
         query_params = [
             "groupIds",
+            "search",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -14486,7 +14488,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
         - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
-        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be either 'MD5' or 'SHA'.
+        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be one of 'SHA', 'MD5', 'SHA256', 'SHA384', or 'SHA512'. MD5 is not supported in the Cisco Meraki US Government Region.
         - v3AuthPass (string): The SNMP version 3 authentication password. Must be at least 8 characters if specified.
         - v3PrivMode (string): The SNMP version 3 privacy mode. Can be either 'DES' or 'AES128'.
         - v3PrivPass (string): The SNMP version 3 privacy password. Must be at least 8 characters if specified.
@@ -14496,7 +14498,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if "v3AuthMode" in kwargs:
-            options = ["MD5", "SHA"]
+            options = ["MD5", "SHA", "SHA256", "SHA384", "SHA512"]
             assert kwargs["v3AuthMode"] in options, (
                 f'''"v3AuthMode" cannot be "{kwargs["v3AuthMode"]}", & must be set to one of: {options}'''
             )
