@@ -110,6 +110,11 @@ class TestDashboardAPIInit:
         assert d.devices is not None
         assert d.appliance is not None
         assert d.wireless is not None
+        assert d.nac is not None
+        assert d.secureConnect is not None
+        assert d.support is not None
+        assert d.users is not None
+        assert d.assistant is not None
 
 
 class TestDashboardAPILogging:

@@ -5,6 +5,7 @@ from datetime import datetime
 from meraki._version import __version__  # noqa: F401
 from meraki.api.administered import Administered
 from meraki.api.appliance import Appliance
+from meraki.api.assistant import Assistant
 
 # Batch class imports
 from meraki.api.batch import Batch
@@ -14,12 +15,16 @@ from meraki.api.cellularGateway import CellularGateway
 from meraki.api.devices import Devices
 from meraki.api.insight import Insight
 from meraki.api.licensing import Licensing
+from meraki.api.nac import Nac
 from meraki.api.networks import Networks
 from meraki.api.organizations import Organizations
+from meraki.api.secureConnect import SecureConnect
 from meraki.api.sensor import Sensor
 from meraki.api.sm import Sm
 from meraki.api.spaces import Spaces
+from meraki.api.support import Support
 from meraki.api.switch import Switch
+from meraki.api.users import Users
 from meraki.api.wireless import Wireless
 from meraki.api.wirelessController import WirelessController
 
@@ -202,6 +207,11 @@ class DashboardAPI:
         self.spaces = Spaces(self._session)
         self.wirelessController = WirelessController(self._session)
         self.campusGateway = CampusGateway(self._session)
+        self.assistant = Assistant(self._session)
+        self.nac = Nac(self._session)
+        self.secureConnect = SecureConnect(self._session)
+        self.support = Support(self._session)
+        self.users = Users(self._session)
 
         # Batch definitions
         self.batch = Batch()
