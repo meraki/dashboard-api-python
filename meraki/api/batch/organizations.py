@@ -799,6 +799,7 @@ class ActionBatchOrganizations:
                - organizationId (string): Organization ID
                - name (string): Name of the Dashboard branding policy.
                - enabled (boolean): Boolean indicating whether this policy is enabled.
+               - appearance (object): Dashboard appearance settings.
                - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
                - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
              'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -816,6 +817,7 @@ class ActionBatchOrganizations:
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -863,6 +865,7 @@ class ActionBatchOrganizations:
           - brandingPolicyId (string): Branding policy ID
           - name (string): Name of the Dashboard branding policy.
           - enabled (boolean): Boolean indicating whether this policy is enabled.
+          - appearance (object): Dashboard appearance settings.
           - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
           - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
         'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -881,6 +884,7 @@ class ActionBatchOrganizations:
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -2201,6 +2205,37 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def updateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
+        """
+        **Replace the principal for an existing cloud integration while preserving integration, account, and network state**
+        https://developer.cisco.com/meraki/api-v1/#!update-integration-credentials
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        - aws (object): Replacement AWS IAM role principal for an existing integration
+        - azure (object): Replacement Azure service principal credentials for an existing integration
+        - gcp (object): Replacement GCP service account key JSON for an existing integration
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        integrationId = urllib.parse.quote(integrationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/credentials"
+
+        body_params = [
+            "aws",
+            "azure",
+            "gcp",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
     def rotateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
         """
         **Replaces secret material for an existing Microsoft Azure or Google Cloud integration after validating that the credential belongs to the existing principal. Rotation preserves the Azure tenant and client ID or the Google Cloud project and service-account identity, and does not change discovered accounts or networks. AWS integrations are not supported by this operation.**
@@ -3105,6 +3140,64 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsAssign(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Assign Network Enforcement Targets to an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-assign
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to assign network enforcement targets to
+        - targets (array): Network enforcement targets to assign to the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkAssign"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_create",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsDelete(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Remove Network Enforcement Targets from an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-delete
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to remove network enforcement targets from
+        - targets (array): Network enforcement targets to remove for the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkDelete"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_delete",
+            "body": payload,
+        }
+        return action
+
     def updateOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, policyId: str, **kwargs):
         """
         **Update an Organization-Wide Policy**
@@ -3492,31 +3585,6 @@ class ActionBatchOrganizations:
         action = {
             "resource": resource,
             "operation": "destroy",
-        }
-        return action
-
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
-        """
-        **Create a new Secure Access integration**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
-
-        - organizationId (string): Organization ID
-        - api (object): API credentials
-        """
-
-        kwargs = locals()
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/sase/integrations"
-
-        body_params = [
-            "api",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "create",
-            "body": payload,
         }
         return action
 

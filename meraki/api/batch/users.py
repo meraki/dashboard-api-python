@@ -129,7 +129,7 @@ class ActionBatchUsers:
         - type (string): Type of the identity provider
         - idpConfig (object): Identity provider configuration. Required for external identity providers.
         - description (string): Optional. Description of the identity provider
-        - syncType (string): The synchronization method for the identity provider. Set to 'proactive' to sync all users and groups from your identity provider.
+        - syncType (string): The synchronization method for the identity provider. Set to 'proactive' to sync all users and groups from Microsoft Entra ID. Set to 'scim' to accept SCIM provisioning requests. Set to null for on-demand user and group provisioning.
         """
 
         kwargs.update(locals())
@@ -138,7 +138,7 @@ class ActionBatchUsers:
             options = ["Azure AD"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
         if "syncType" in kwargs and kwargs["syncType"] is not None:
-            options = ["proactive"]
+            options = ["proactive", "scim"]
             assert kwargs["syncType"] in options, (
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''
             )
@@ -188,12 +188,13 @@ class ActionBatchUsers:
         }
         return action
 
-    def createOrganizationIamUsersIdpsUser(self, organizationId: str, **kwargs):
+    def createOrganizationIamUsersIdpsUser(self, organizationId: str, accountType: str, **kwargs):
         """
         **Create a Meraki user**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-iam-users-idps-user
 
         - organizationId (string): Organization ID
+        - accountType (string): The type of user account to create.
         - displayName (string): A human-readable identifier for the created user.
         - email (string): An email address identified with the user.
         - password (string): The password for the user account.
@@ -201,6 +202,12 @@ class ActionBatchUsers:
         """
 
         kwargs.update(locals())
+
+        if "accountType" in kwargs:
+            options = ["802.1X", "Guest"]
+            assert kwargs["accountType"] in options, (
+                f'''"accountType" cannot be "{kwargs["accountType"]}", & must be set to one of: {options}'''
+            )
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/users"
@@ -210,6 +217,7 @@ class ActionBatchUsers:
             "email",
             "password",
             "sendPassword",
+            "accountType",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -310,13 +318,13 @@ class ActionBatchUsers:
         - name (string): Name of the identity provider
         - description (string): Description of the identity provider
         - idpConfig (object): Identity provider configuration. You can update individual attributes
-        - syncType (string): The synchronization method for the identity provider. Set to 'proactive' to sync all users and groups from your identity provider. Set to 'null' for on-demand user and group provisioning.
+        - syncType (string): The synchronization method for the identity provider. Set to 'proactive' to sync all users and groups from Microsoft Entra ID. Set to 'scim' to accept SCIM provisioning requests. Set to null for on-demand user and group provisioning.
         """
 
         kwargs.update(locals())
 
         if "syncType" in kwargs and kwargs["syncType"] is not None:
-            options = ["proactive"]
+            options = ["proactive", "scim"]
             assert kwargs["syncType"] in options, (
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''
             )

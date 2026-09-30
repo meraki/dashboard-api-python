@@ -209,3 +209,78 @@ class ActionBatchCampusGateway:
             "body": payload,
         }
         return action
+
+    def createOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, name: str, types: list, **kwargs):
+        """
+        **Create an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - name (string): Display name of the custom mDNS service.
+        - types (array): One to ten DNS-SD service types. Accepted shorthand is normalized by the API.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, key: str, **kwargs):
+        """
+        **Update an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - key (string): Key
+        - name (string): Updated display name of the custom mDNS service.
+        - types (array): Replacement ordered list of one to ten DNS-SD service types.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        key = urllib.parse.quote(key, safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom/{key}"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, key: str):
+        """
+        **Delete an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - key (string): Key
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        key = urllib.parse.quote(key, safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom/{key}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action

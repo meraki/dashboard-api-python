@@ -941,3 +941,205 @@ class CampusGateway:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationCampusGatewayMdnsServices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List mDNS service definitions visible to the caller in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-mdns-services
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - keys (array): Exact service key filter. Maximum 100 values.
+        - types (array): Exact canonical DNS-SD service type filter. Maximum 100 values.
+        - name (string): Case-insensitive partial display-name filter.
+        - scopes (array): Exact service-scope filter. Maximum 100 values.
+        - networkIds (array): Network filter for network-scoped custom services. Maximum 100 values.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services"],
+            "operation": "getOrganizationCampusGatewayMdnsServices",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services"
+
+        query_params = [
+            "keys",
+            "types",
+            "name",
+            "scopes",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "keys",
+            "types",
+            "scopes",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCampusGatewayMdnsServices: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationCampusGatewayMdnsServicesAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List active mDNS service assignments on concrete SSIDs visible to the caller.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-mdns-services-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - keys (array): Exact service key filter. Maximum 100 values.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "assignments"],
+            "operation": "getOrganizationCampusGatewayMdnsServicesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/assignments"
+
+        query_params = [
+            "keys",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "keys",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCampusGatewayMdnsServicesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, name: str, types: list, **kwargs):
+        """
+        **Create an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - name (string): Display name of the custom mDNS service.
+        - types (array): One to ten DNS-SD service types. Accepted shorthand is normalized by the API.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "createOrganizationCampusGatewayMdnsServicesCustom",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCampusGatewayMdnsServicesCustom: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, key: str, **kwargs):
+        """
+        **Update an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - key (string): Key
+        - name (string): Updated display name of the custom mDNS service.
+        - types (array): Replacement ordered list of one to ten DNS-SD service types.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "updateOrganizationCampusGatewayMdnsServicesCustom",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        key = urllib.parse.quote(str(key), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom/{key}"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCampusGatewayMdnsServicesCustom: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationCampusGatewayMdnsServicesCustom(self, organizationId: str, key: str):
+        """
+        **Delete an organization-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-campus-gateway-mdns-services-custom
+
+        - organizationId (string): Organization ID
+        - key (string): Key
+        """
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "deleteOrganizationCampusGatewayMdnsServicesCustom",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        key = urllib.parse.quote(str(key), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/mdns/services/custom/{key}"
+
+        return self._session.delete(metadata, resource)

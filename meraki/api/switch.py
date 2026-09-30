@@ -200,7 +200,7 @@ class Switch:
 
         - serial (string): Serial
         - portId (string): Port ID
-        - name (string): The name of the switch port.
+        - name (string): The name of the switch port. For IOS XE Catalyst switches, this value is the interface description.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
@@ -3609,7 +3609,7 @@ class Switch:
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch template port.
+        - name (string): The name of the switch template port. For IOS XE Catalyst switches, this value is the interface description.
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
@@ -7335,13 +7335,16 @@ class Switch:
 
     def getOrganizationSwitchRoutingStaticRoutes(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List layer 3 static routes for switches within an organization**
+        **List layer 3 static routes for switches in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-static-routes
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - networkIds (array): Optional parameter to filter static routes by network ID.
+        - staticRouteIds (array): Optional parameter to filter static routes by static route ID.
+        - serials (array): Optional parameter to filter static routes by standalone switch serial.
+        - switchStackIds (array): Optional parameter to filter static routes by switch stack ID.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 20.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -7358,6 +7361,9 @@ class Switch:
 
         query_params = [
             "networkIds",
+            "staticRouteIds",
+            "serials",
+            "switchStackIds",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -7366,6 +7372,9 @@ class Switch:
 
         array_params = [
             "networkIds",
+            "staticRouteIds",
+            "serials",
+            "switchStackIds",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:

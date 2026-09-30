@@ -6,6 +6,37 @@ class AsyncSpaces:
         super().__init__()
         self._session = session
 
+    def updateNetworkSpacesAuth(self, networkId: str, **kwargs):
+        """
+        **Set the Spaces token**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-spaces-auth
+
+        - networkId (string): Network ID
+        - token (object): The token from Spaces
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["spaces", "configure", "auth"],
+            "operation": "updateNetworkSpacesAuth",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/spaces/auth"
+
+        body_params = [
+            "token",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSpacesAuth: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def createNetworkSpacesSitesBuilding(self, networkId: str, name: str, **kwargs):
         """
         **Create a new building**
