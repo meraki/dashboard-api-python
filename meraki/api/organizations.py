@@ -4108,6 +4108,7 @@ class Organizations:
                - organizationId (string): Organization ID
                - name (string): Name of the Dashboard branding policy.
                - enabled (boolean): Boolean indicating whether this policy is enabled.
+               - appearance (object): Dashboard appearance settings.
                - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
                - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
              'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -4129,6 +4130,7 @@ class Organizations:
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -4222,6 +4224,7 @@ class Organizations:
           - brandingPolicyId (string): Branding policy ID
           - name (string): Name of the Dashboard branding policy.
           - enabled (boolean): Boolean indicating whether this policy is enabled.
+          - appearance (object): Dashboard appearance settings.
           - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
           - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
         'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -4244,6 +4247,7 @@ class Organizations:
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -4785,7 +4789,7 @@ class Organizations:
 
     def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
         """
-        **Return summary information around client data usage (in kb) across the given organization.**
+        **Return summary information around client data usage in MiB across the given organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-overview
 
         - organizationId (string): Organization ID
@@ -9751,26 +9755,6 @@ class Organizations:
 
         return self._session.get(metadata, resource)
 
-    def getAccountStatuses(self, organizationId: str, accountId: str):
-        """
-                **Returns the recorded lifecycle history for the account identified by
-        `accountId`**
-                https://developer.cisco.com/meraki/api-v1/#!get-account-statuses
-
-                - organizationId (string): Organization ID
-                - accountId (string): Account ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "accounts", "statuses"],
-            "operation": "getAccountStatuses",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        accountId = urllib.parse.quote(str(accountId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/accounts/{accountId}/statuses"
-
-        return self._session.get(metadata, resource)
-
     def getBgpSessionStatus(self, organizationId: str, **kwargs):
         """
                 **Returns aligned aggregate and member BGP-session-health series for
@@ -10508,6 +10492,43 @@ class Organizations:
 
         return self._session.delete(metadata, resource)
 
+    def updateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
+        """
+        **Replace the principal for an existing cloud integration while preserving integration, account, and network state**
+        https://developer.cisco.com/meraki/api-v1/#!update-integration-credentials
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        - aws (object): Replacement AWS IAM role principal for an existing integration
+        - azure (object): Replacement Azure service principal credentials for an existing integration
+        - gcp (object): Replacement GCP service account key JSON for an existing integration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "integrations"],
+            "operation": "updateIntegrationCredentials",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        integrationId = urllib.parse.quote(str(integrationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/credentials"
+
+        body_params = [
+            "aws",
+            "azure",
+            "gcp",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateIntegrationCredentials: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def rotateIntegrationCredentials(self, organizationId: str, integrationId: str, **kwargs):
         """
         **Replaces secret material for an existing Microsoft Azure or Google Cloud integration after validating that the credential belongs to the existing principal**
@@ -10561,25 +10582,6 @@ class Organizations:
         resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/discover"
 
         return self._session.post(metadata, resource)
-
-    def getIntegrationStatuses(self, organizationId: str, integrationId: str):
-        """
-        **Returns the recorded lifecycle history for the cloud integration identified by `integrationId`**
-        https://developer.cisco.com/meraki/api-v1/#!get-integration-statuses
-
-        - organizationId (string): Organization ID
-        - integrationId (string): Integration ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "integrations", "statuses"],
-            "operation": "getIntegrationStatuses",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        integrationId = urllib.parse.quote(str(integrationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/integrations/{integrationId}/statuses"
-
-        return self._session.get(metadata, resource)
 
     def listRegions(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -10816,180 +10818,6 @@ class Organizations:
 
         return self._session.post(metadata, resource, payload)
 
-    def listRouteTableAssociations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
-        """
-                **Lists discovered associations between cloud route tables and VPCs or
-        subnets in the Meraki Dashboard organization**
-                https://developer.cisco.com/meraki/api-v1/#!list-route-table-associations
-
-                - organizationId (string): Organization ID
-                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-                - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - routeTableId (string): MCN-assigned UUID of the route table whose associations are returned.
-                - vpcId (string): MCN-assigned UUID of the VPC whose route-table associations are
-        returned. If deprecated `networkId` is also supplied, the UUIDs must
-        match.
-                - subnetId (string): MCN-assigned UUID of the subnet whose association is returned.
-                - scope (string): Restricts results by association scope.
-
-        - `vpc` — Preferred request alias for a VPC-level association;
-          responses use `network`.
-        - `network` — Deprecated: Legacy request value for the same VPC-level
-          scope. Responses return `network` for compatibility.
-        - `subnet` — Association between a route table and one subnet.
-                - isDefault (boolean): Restricts results by provider default-association designation. `true`
-        returns default associations; `false` returns non-default
-        associations. Omission does not filter by this designation.
-                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
-                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
-                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
-        """
-
-        kwargs.update(locals())
-
-        if "scope" in kwargs:
-            options = ["network", "subnet", "vpc"]
-            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "routeTableAssociations"],
-            "operation": "listRouteTableAssociations",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/routeTableAssociations"
-
-        query_params = [
-            "routeTableId",
-            "vpcId",
-            "subnetId",
-            "scope",
-            "isDefault",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        if self._session._validate_kwargs:
-            all_params = query_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"listRouteTableAssociations: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getRouteTableAssociation(self, organizationId: str, associationId: str):
-        """
-                **Returns one discovered association between a cloud route table and a VPC
-        or subnet, selected by its MCN-assigned UUID.**
-                https://developer.cisco.com/meraki/api-v1/#!get-route-table-association
-
-                - organizationId (string): Organization ID
-                - associationId (string): Association ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "routeTableAssociations"],
-            "operation": "getRouteTableAssociation",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        associationId = urllib.parse.quote(str(associationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/routeTableAssociations/{associationId}"
-
-        return self._session.get(metadata, resource)
-
-    def listRouteTables(self, organizationId: str, total_pages=1, direction="next", **kwargs):
-        """
-                **Lists route tables discovered for cloud accounts in the Meraki Dashboard
-        organization**
-                https://developer.cisco.com/meraki/api-v1/#!list-route-tables
-
-                - organizationId (string): Organization ID
-                - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-                - direction (string): direction to paginate, either "next" (default) or "prev" page
-                - provider (string): Restricts results by the route table's cloud provider.
-
-        - `aws` — Amazon Web Services route tables.
-        - `azure` — Microsoft Azure route tables.
-        - `gcp` — Google Cloud route tables.
-                - accountId (string): MCN-assigned UUID of the cloud account whose route tables are returned.
-                - vpcId (string): MCN-assigned UUID of the VPC whose network-scoped route tables are
-        returned. If the deprecated `networkId` is also supplied, the UUIDs
-        must match.
-                - isDefault (boolean): Restricts results by provider default-route-table designation.
-        `true` returns default route tables; `false` returns non-default
-        route tables. Omission does not filter by this designation.
-                - scope (string): Restricts results by route-table scope.
-
-        - `vpc` — Preferred request alias for a route table attached to one
-          VPC; responses use `network`.
-        - `network` — Deprecated: Legacy request value for the same VPC-level
-          scope. Responses return `network` for compatibility.
-        - `global` — Provider-wide route table that is not confined to one
-          VPC.
-                - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
-                - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
-                - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
-        """
-
-        kwargs.update(locals())
-
-        if "provider" in kwargs:
-            options = ["aws", "azure", "gcp"]
-            assert kwargs["provider"] in options, (
-                f'''"provider" cannot be "{kwargs["provider"]}", & must be set to one of: {options}'''
-            )
-        if "scope" in kwargs:
-            options = ["global", "network", "vpc"]
-            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "routeTables"],
-            "operation": "listRouteTables",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/routeTables"
-
-        query_params = [
-            "provider",
-            "accountId",
-            "vpcId",
-            "isDefault",
-            "scope",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        if self._session._validate_kwargs:
-            all_params = query_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"listRouteTables: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getRouteTable(self, organizationId: str, routeTableId: str):
-        """
-                **Returns one discovered cloud-provider route table by its MCN-assigned
-        UUID**
-                https://developer.cisco.com/meraki/api-v1/#!get-route-table
-
-                - organizationId (string): Organization ID
-                - routeTableId (string): Route table ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "mcf", "routeTables"],
-            "operation": "getRouteTable",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        routeTableId = urllib.parse.quote(str(routeTableId), safe="")
-        resource = f"/organizations/{organizationId}/mcf/routeTables/{routeTableId}"
-
-        return self._session.get(metadata, resource)
-
     def listSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns Meraki network records represented as MCN Sites for site-to-cloud connectivity in the specified organization**
@@ -11107,6 +10935,24 @@ class Organizations:
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         siteId = urllib.parse.quote(str(siteId), safe="")
         resource = f"/organizations/{organizationId}/mcf/sites/{siteId}"
+
+        return self._session.get(metadata, resource)
+
+    def getSummary(self, organizationId: str):
+        """
+                **Returns the aggregate values required to populate organization summary
+        cards**
+                https://developer.cisco.com/meraki/api-v1/#!get-summary
+
+                - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "summary"],
+            "operation": "getSummary",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/summary"
 
         return self._session.get(metadata, resource)
 
@@ -13087,6 +12933,199 @@ class Organizations:
         )
 
         return self._session.delete(metadata, resource)
+
+    def getOrganizationPoliciesGlobalGroupPoliciesNetworks(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all available Network Enforcement Targets for an Organization and their associated Organization-Wide Policies if applicable**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-group-policies-networks
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - policyIds (array): Filter network enforcement targets by policy IDs
+        - networkIds (array): Filter network enforcement targets by network IDs
+        - firewallTypes (array): Filter network enforcement targets by firewall enforcement types for a network
+        - name (string): Filter network enforcement targets by network name with support for partial matches. Case insensitive.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "networks"],
+            "operation": "getOrganizationPoliciesGlobalGroupPoliciesNetworks",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks"
+
+        query_params = [
+            "policyIds",
+            "networkIds",
+            "firewallTypes",
+            "name",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "policyIds",
+            "networkIds",
+            "firewallTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationPoliciesGlobalGroupPoliciesNetworksAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Network Enforcement Target Assignments for Organization-Wide policies for the specified organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-group-policies-networks-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - assignmentIds (array): Filter network enforcement target assignments by assignment IDs
+        - policyIds (array): Filter network enforcement target assignments by policy IDs
+        - networkIds (array): Filter network enforcement target assignments by network IDs
+        - firewallTypes (array): Filter network enforcement target assignments by firewall enforcement types for a network
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "networks", "assignments"],
+            "operation": "getOrganizationPoliciesGlobalGroupPoliciesNetworksAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments"
+
+        query_params = [
+            "assignmentIds",
+            "policyIds",
+            "networkIds",
+            "firewallTypes",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "assignmentIds",
+            "policyIds",
+            "networkIds",
+            "firewallTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesNetworksAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsAssign(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Assign Network Enforcement Targets to an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-assign
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to assign network enforcement targets to
+        - targets (array): Network enforcement targets to assign to the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "networks", "assignments"],
+            "operation": "bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsAssign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkAssign"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsAssign: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsDelete(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Remove Network Enforcement Targets from an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-delete
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to remove network enforcement targets from
+        - targets (array): Network enforcement targets to remove for the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "networks", "assignments"],
+            "operation": "bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkDelete"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def updateOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, policyId: str, **kwargs):
         """

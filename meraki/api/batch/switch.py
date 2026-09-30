@@ -71,7 +71,7 @@ class ActionBatchSwitch:
 
         - serial (string): Serial
         - portId (string): Port ID
-        - name (string): The name of the switch port.
+        - name (string): The name of the switch port. For IOS XE Catalyst switches, this value is the interface description.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
@@ -2070,7 +2070,7 @@ class ActionBatchSwitch:
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch template port.
+        - name (string): The name of the switch template port. For IOS XE Catalyst switches, this value is the interface description.
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.

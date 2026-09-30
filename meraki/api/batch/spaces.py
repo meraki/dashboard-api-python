@@ -5,6 +5,31 @@ class ActionBatchSpaces:
     def __init__(self):
         super().__init__()
 
+    def updateNetworkSpacesAuth(self, networkId: str, **kwargs):
+        """
+        **Set the Spaces token**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-spaces-auth
+
+        - networkId (string): Network ID
+        - token (object): The token from Spaces
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/spaces/auth"
+
+        body_params = [
+            "token",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createNetworkSpacesSitesBuilding(self, networkId: str, name: str, **kwargs):
         """
         **Create a new building**
