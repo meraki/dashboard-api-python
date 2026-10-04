@@ -115,6 +115,18 @@ class TestDashboardAPIInit:
         assert d.support is not None
         assert d.users is not None
         assert d.assistant is not None
+        assert d.administered is not None
+        assert d.batch is not None
+        assert d.camera is not None
+        assert d.campusGateway is not None
+        assert d.cellularGateway is not None
+        assert d.insight is not None
+        assert d.licensing is not None
+        assert d.sensor is not None
+        assert d.sm is not None
+        assert d.spaces is not None
+        assert d.switch is not None
+        assert d.wirelessController is not None
 
 
 class TestDashboardAPILogging:
