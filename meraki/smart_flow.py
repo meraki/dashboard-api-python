@@ -19,6 +19,7 @@ import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 from typing import Any, Callable, Coroutine, Dict, Optional, Set
 
 import json
@@ -199,15 +200,15 @@ class OrgRateLimiter:
 
     def resolve_org(self, url: str) -> Optional[str]:
         """Extract org ID from URL, using cache for network/device lookups."""
-        m = _ORG_PATTERN.search(url)
+        m = _ORG_PATTERN.search(urlsplit(url).path)
         if m:
             return m.group(1)
 
-        m = _NETWORK_PATTERN.search(url)
+        m = _NETWORK_PATTERN.search(urlsplit(url).path)
         if m:
             return self._network_to_org.get(m.group(1))
 
-        m = _DEVICE_PATTERN.search(url)
+        m = _DEVICE_PATTERN.search(urlsplit(url).path)
         if m:
             return self._serial_to_org.get(m.group(1))
 
@@ -231,11 +232,11 @@ class OrgRateLimiter:
         if not self._resolver:
             return
 
-        m = _NETWORK_PATTERN.search(url)
+        m = _NETWORK_PATTERN.search(urlsplit(url).path)
         if m:
             identifier, id_type = m.group(1), "network"
         else:
-            m = _DEVICE_PATTERN.search(url)
+            m = _DEVICE_PATTERN.search(urlsplit(url).path)
             if m:
                 identifier, id_type = m.group(1), "device"
             else:
@@ -377,17 +378,17 @@ class OrgRateLimiter:
 
     @staticmethod
     def _org_id_from_url(url: str) -> Optional[str]:
-        m = _ORG_PATTERN.search(url)
+        m = _ORG_PATTERN.search(urlsplit(url).path)
         return m.group(1) if m else None
 
     @staticmethod
     def _network_id_from_url(url: str) -> Optional[str]:
-        m = _NETWORK_PATTERN.search(url)
+        m = _NETWORK_PATTERN.search(urlsplit(url).path)
         return m.group(1) if m else None
 
     @staticmethod
     def _serial_from_url(url: str) -> Optional[str]:
-        m = _DEVICE_PATTERN.search(url)
+        m = _DEVICE_PATTERN.search(urlsplit(url).path)
         return m.group(1) if m else None
 
     @staticmethod
@@ -529,15 +530,15 @@ class AsyncOrgRateLimiter:
 
     def resolve_org(self, url: str) -> Optional[str]:
         """Extract org ID from URL, using cache for network/device lookups."""
-        m = _ORG_PATTERN.search(url)
+        m = _ORG_PATTERN.search(urlsplit(url).path)
         if m:
             return m.group(1)
 
-        m = _NETWORK_PATTERN.search(url)
+        m = _NETWORK_PATTERN.search(urlsplit(url).path)
         if m:
             return self._network_to_org.get(m.group(1))
 
-        m = _DEVICE_PATTERN.search(url)
+        m = _DEVICE_PATTERN.search(urlsplit(url).path)
         if m:
             return self._serial_to_org.get(m.group(1))
 
@@ -558,11 +559,11 @@ class AsyncOrgRateLimiter:
         if not self._resolver:
             return
 
-        m = _NETWORK_PATTERN.search(url)
+        m = _NETWORK_PATTERN.search(urlsplit(url).path)
         if m:
             identifier, id_type = m.group(1), "network"
         else:
-            m = _DEVICE_PATTERN.search(url)
+            m = _DEVICE_PATTERN.search(urlsplit(url).path)
             if m:
                 identifier, id_type = m.group(1), "device"
             else:
