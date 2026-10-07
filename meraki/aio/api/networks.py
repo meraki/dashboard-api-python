@@ -3050,9 +3050,10 @@ class AsyncNetworks:
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
+        - activeVlans (string): The active VLANs for the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3063,6 +3064,7 @@ class AsyncNetworks:
 
         body_params = [
             "name",
+            "activeVlans",
             "vlanNames",
             "vlanGroups",
             "iname",
@@ -3198,9 +3200,10 @@ class AsyncNetworks:
         - name (string): Name of the profile, string length must be from 1 to 255 characters
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
+        - activeVlans (string): The active VLANs for the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3212,6 +3215,7 @@ class AsyncNetworks:
 
         body_params = [
             "name",
+            "activeVlans",
             "vlanNames",
             "vlanGroups",
         ]

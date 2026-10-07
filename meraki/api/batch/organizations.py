@@ -550,6 +550,7 @@ class ActionBatchOrganizations(object):
                - organizationId (string): Organization ID
                - name (string): Name of the Dashboard branding policy.
                - enabled (boolean): Boolean indicating whether this policy is enabled.
+               - appearance (object): Dashboard appearance settings.
                - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
                - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
              'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -567,6 +568,7 @@ class ActionBatchOrganizations(object):
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -614,6 +616,7 @@ class ActionBatchOrganizations(object):
           - brandingPolicyId (string): Branding policy ID
           - name (string): Name of the Dashboard branding policy.
           - enabled (boolean): Boolean indicating whether this policy is enabled.
+          - appearance (object): Dashboard appearance settings.
           - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
           - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
         'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
@@ -632,6 +635,7 @@ class ActionBatchOrganizations(object):
         body_params = [
             "name",
             "enabled",
+            "appearance",
             "adminSettings",
             "helpSettings",
             "customLogo",
@@ -1838,6 +1842,7 @@ class ActionBatchOrganizations(object):
         - rulesetId (string): ID of the ruleset to assign
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        - staged (boolean): Stage an assignment without applying it immediately to the policy
         """
 
         kwargs.update(locals())
@@ -1849,11 +1854,39 @@ class ActionBatchOrganizations(object):
             "rulesetId",
             "policyId",
             "priority",
+            "staged",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments(
+        self, organizationId: str, policy: dict, **kwargs
+    ):
+        """
+        **Commit staged Organization-Wide Policy Ruleset Assignments**
+        https://developer.cisco.com/meraki/api-v1/#!commit-organization-policies-global-group-policies-firewall-rulesets-assignments
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy in which all staged rulesets will be committed
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/commit"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "commit",
             "body": payload,
         }
         return action
@@ -1911,6 +1944,64 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsAssign(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Assign Network Enforcement Targets to an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-assign
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to assign network enforcement targets to
+        - targets (array): Network enforcement targets to assign to the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkAssign"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_create",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationPoliciesGlobalGroupPoliciesNetworksAssignmentsDelete(
+        self, organizationId: str, policy: dict, targets: list, **kwargs
+    ):
+        """
+        **Remove Network Enforcement Targets from an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-policies-global-group-policies-networks-assignments-delete
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to remove network enforcement targets from
+        - targets (array): Network enforcement targets to remove for the specified policy. Maximum 1000 per request.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/networks/assignments/bulkDelete"
+
+        body_params = [
+            "policy",
+            "targets",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_delete",
+            "body": payload,
         }
         return action
 
@@ -2217,31 +2308,6 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
-        """
-        **Create a new Secure Access integration**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
-
-        - organizationId (string): Organization ID
-        - api (object): API credentials
-        """
-
-        kwargs = locals()
-
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/sase/integrations"
-
-        body_params = [
-            "api",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "create",
-            "body": payload,
-        }
-        return action
-
     def deleteOrganizationSaseIntegration(self, organizationId: str, integrationId: str):
         """
         **Remove a Secure Access integration**
@@ -2297,7 +2363,7 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
         - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
-        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be either 'MD5' or 'SHA'.
+        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be one of 'SHA', 'MD5', 'SHA256', 'SHA384', or 'SHA512'. MD5 is not supported in the Cisco Meraki US Government Region.
         - v3AuthPass (string): The SNMP version 3 authentication password. Must be at least 8 characters if specified.
         - v3PrivMode (string): The SNMP version 3 privacy mode. Can be either 'DES' or 'AES128'.
         - v3PrivPass (string): The SNMP version 3 privacy password. Must be at least 8 characters if specified.
@@ -2307,7 +2373,7 @@ class ActionBatchOrganizations(object):
         kwargs.update(locals())
 
         if "v3AuthMode" in kwargs:
-            options = ["MD5", "SHA"]
+            options = ["MD5", "SHA", "SHA256", "SHA384", "SHA512"]
             assert kwargs["v3AuthMode"] in options, (
                 f'''"v3AuthMode" cannot be "{kwargs["v3AuthMode"]}", & must be set to one of: {options}'''
             )

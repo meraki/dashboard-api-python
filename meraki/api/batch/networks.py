@@ -957,15 +957,17 @@ class ActionBatchNetworks(object):
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
+        - activeVlans (string): The active VLANs for the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
 
         body_params = [
             "name",
+            "activeVlans",
             "vlanNames",
             "vlanGroups",
             "iname",
