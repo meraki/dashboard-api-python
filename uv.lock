@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 
 [[package]]
@@ -549,7 +549,7 @@ wheels = [
 
 [[package]]
 name = "meraki"
-version = "4.5.0b4"
+version = "4.6.0b0"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },

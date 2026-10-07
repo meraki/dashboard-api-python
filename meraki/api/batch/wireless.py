@@ -70,7 +70,7 @@ class ActionBatchWireless:
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-electronic-shelf-label
 
         - serial (string): Serial
-        - channel (string): Desired ESL channel for the device, or 'Auto' (case insensitive) to use the recommended channel
+        - channel (string): Desired ESL channel for the device. Only configurable for devices assigned the High frequency ESL or sepioo IIoT role. Use 'Auto' (case insensitive) to use the recommended channel
         - enabled (boolean): Turn ESL features on and off for this device
         """
 
@@ -587,6 +587,108 @@ class ActionBatchWireless:
         action = {
             "resource": resource,
             "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessLocationAssetTrackingFloorPlan(self, networkId: str, floorPlanId: str, enabled: bool, **kwargs):
+        """
+        **Update asset tracking settings for a specific floor plan.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-asset-tracking-floor-plan
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        - enabled (boolean): Enable or disable asset tracking for this floor plan
+        - webhook (object): Webhook configuration for asset tracking events
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}"
+
+        body_params = [
+            "enabled",
+            "webhook",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkWirelessLocationAssetTrackingFloorPlanGroups(self, networkId: str, floorPlanId: str):
+        """
+        **Delete all the asset tracking groups for a floor plan in a network. It also deletes the asset tracking group nodes for all the nodes assigned to that floor plan at the moment of deletion.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-location-asset-tracking-floor-plan-groups
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}/groups"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def createNetworkWirelessLocationAssetTrackingFloorPlanGroupsBatchCreate(
+        self, networkId: str, floorPlanId: str, groups: list, **kwargs
+    ):
+        """
+        **Create asset tracking groups for a floor plan in a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-location-asset-tracking-floor-plan-groups-batch-create
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        - groups (array): List of groups to create. Up to 1000 groups can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}/groups/batchCreate"
+
+        body_params = [
+            "groups",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkWirelessLocationRangingJobsBatch(self, networkId: str, jobs: list, **kwargs):
+        """
+        **Schedule ranging jobs for one or more floor plans in a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-location-ranging-jobs-batch
+
+        - networkId (string): Network ID
+        - jobs (array): List of ranging jobs to create. Up to 100 jobs can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/wireless/location/ranging/jobs/batch"
+
+        body_params = [
+            "jobs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
             "body": payload,
         }
         return action

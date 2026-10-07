@@ -1027,31 +1027,6 @@ class ActionBatchAppliance:
         }
         return action
 
-    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict, **kwargs):
-        """
-        **Connect a Cisco Umbrella account to this network**
-        https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
-
-        - networkId (string): Network ID
-        - api (object): Umbrella API credentials
-        """
-
-        kwargs = locals()
-
-        networkId = urllib.parse.quote(networkId, safe="")
-        resource = f"/networks/{networkId}/appliance/umbrella/account/connect"
-
-        body_params = [
-            "api",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "action",
-            "body": payload,
-        }
-        return action
-
     def disconnectNetworkApplianceUmbrellaAccount(self, networkId: str):
         """
         **Disconnect Umbrella account from this network**
@@ -1223,7 +1198,7 @@ class ActionBatchAppliance:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "action",
+            "operation": "update",
             "body": payload,
         }
         return action
