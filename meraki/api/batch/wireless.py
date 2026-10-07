@@ -68,7 +68,7 @@ class ActionBatchWireless(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-electronic-shelf-label
 
         - serial (string): Serial
-        - channel (string): Desired ESL channel for the device, or 'Auto' (case insensitive) to use the recommended channel
+        - channel (string): Desired ESL channel for the device. Only configurable for devices assigned the High frequency ESL or sepioo IIoT role. Use 'Auto' (case insensitive) to use the recommended channel
         - enabled (boolean): Turn ESL features on and off for this device
         """
 
@@ -725,6 +725,31 @@ class ActionBatchWireless(object):
         }
         return action
 
+    def updateNetworkWirelessSsidsOwe(self, networkId: str, transitions: list, **kwargs):
+        """
+        **Update the OWE transition pairs for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssids-owe
+
+        - networkId (string): Network ID
+        - transitions (array): Array of OWE transition pairs
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/owe"
+
+        body_params = [
+            "transitions",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
         **Update the attributes of an MR SSID**
@@ -1269,6 +1294,33 @@ class ActionBatchWireless(object):
         body_params = [
             "enabled",
             "tenantId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessSsidOverrides(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the overrides for this SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-overrides
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - ccxNameIeEnabled (boolean): When true, enables CCX name IE, which allows the AP to broadcast its device name as part of its beacon (as defined by the network admin in the Dashboard).
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/overrides"
+
+        body_params = [
+            "ccxNameIeEnabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

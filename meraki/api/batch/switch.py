@@ -39,7 +39,7 @@ class ActionBatchSwitch(object):
 
         - serial (string): Serial
         - portId (string): Port ID
-        - name (string): The name of the switch port.
+        - name (string): The name of the switch port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
@@ -156,6 +156,7 @@ class ActionBatchSwitch(object):
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -186,6 +187,7 @@ class ActionBatchSwitch(object):
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -214,6 +216,7 @@ class ActionBatchSwitch(object):
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -241,6 +244,7 @@ class ActionBatchSwitch(object):
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -292,6 +296,8 @@ class ActionBatchSwitch(object):
          - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
          - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
          - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
+         - dhcpDefaultRouterIps (string): The DHCP default router IPs for the DHCP server running on the switch interface
+         - dhcpDomainName (string): The DHCP domain name for the DHCP server running on the switch interface
         """
 
         kwargs.update(locals())
@@ -328,6 +334,8 @@ class ActionBatchSwitch(object):
             "dhcpOptions",
             "reservedIpRanges",
             "fixedIpAssignments",
+            "dhcpDefaultRouterIps",
+            "dhcpDomainName",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -932,6 +940,25 @@ class ActionBatchSwitch(object):
         }
         return action
 
+    def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
+        """
+        **Delete a switch port schedule**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
+
+        - networkId (string): Network ID
+        - portScheduleId (string): Port schedule ID
+        """
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        portScheduleId = urllib.parse.quote(str(portScheduleId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
             **Update a switch port schedule**
@@ -1118,7 +1145,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "ms/multicast/actions/update",
+            "operation": "update",
             "body": payload,
         }
         return action
@@ -1338,6 +1365,7 @@ class ActionBatchSwitch(object):
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -1369,6 +1397,7 @@ class ActionBatchSwitch(object):
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1398,6 +1427,7 @@ class ActionBatchSwitch(object):
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
+        - bidirectionalForwardingDetection (object): BFD configuration for the L3 interface.
         """
 
         kwargs.update(locals())
@@ -1426,6 +1456,7 @@ class ActionBatchSwitch(object):
             "ipv6",
             "vrf",
             "loopback",
+            "bidirectionalForwardingDetection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1481,6 +1512,8 @@ class ActionBatchSwitch(object):
         switch stack interface
         - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
+        - dhcpDefaultRouterIps (string): The DHCP default router IPs for the DHCP server running on the switch stack interface
+        - dhcpDomainName (string): The DHCP domain name for the DHCP server running on the switch stack interface
         """
 
         kwargs.update(locals())
@@ -1518,6 +1551,8 @@ class ActionBatchSwitch(object):
             "dhcpOptions",
             "reservedIpRanges",
             "fixedIpAssignments",
+            "dhcpDefaultRouterIps",
+            "dhcpDomainName",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1697,10 +1732,12 @@ class ActionBatchSwitch(object):
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch template port.
+        - name (string): The name of the switch template port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
+        - perpetualPoe (object): Perpetual PoE settings for the switch template port.
+        - fastPoe (object): Fast PoE settings for the switch template port.
         - type (string): The type of the switch template port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
@@ -1759,6 +1796,8 @@ class ActionBatchSwitch(object):
             "tags",
             "enabled",
             "poeEnabled",
+            "perpetualPoe",
+            "fastPoe",
             "type",
             "vlan",
             "voiceVlan",
