@@ -71,7 +71,7 @@ class ActionBatchSwitch:
 
         - serial (string): Serial
         - portId (string): Port ID
-        - name (string): The name of the switch port. For IOS XE Catalyst switches, this value is the interface description.
+        - name (string): The name of the switch port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
@@ -2070,7 +2070,7 @@ class ActionBatchSwitch:
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch template port. For IOS XE Catalyst switches, this value is the interface description.
+        - name (string): The name of the switch template port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
@@ -2222,6 +2222,37 @@ class ActionBatchSwitch:
         action = {
             "resource": resource,
             "operation": "settings/actions/clone",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationSwitchDevicesSoftwareUpdateBatch(
+        self, organizationId: str, serials: list, toVersion: dict, **kwargs
+    ):
+        """
+        **Create a device-scoped software update batch for up to 50 selected Cloud Monitoring for Catalyst switches. A batch groups one or more selected switches that receive the same destination software version at the same execution time; a one-switch batch is valid. Cloud Monitoring for Catalyst means Dashboard monitors each switch while its configuration remains device-managed. Eligible switches use a supported model and Dashboard connection, remain device-configured (including in a template-bound child network), are not assigned a template switch profile, and have no overlapping pending or in-progress update. The destination version must be compatible with every selected switch and must appear as items[].targets[].id for each serial in the software versions search response. One request applies the same toVersion.id to every serial; send separate requests for serial groups selecting different target IDs. The complete selection is validated atomically: if any switch or the destination is ineligible, no update batch is created. Poll the byDevice operation with the returned serials and match items[].update.batchId to the returned batch.id. The batch ID identifies the persistent software update batch, not a transient asynchronous job. Retrying a successful request is not idempotent and can create another batch.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-devices-software-update-batch
+
+        - organizationId (string): Organization ID
+        - serials (array): Switch serials receiving the same update. Values are trimmed and uppercased; duplicates after normalization are rejected. At least one and at most 50 are accepted.
+        - toVersion (object): Destination software version compatible with every selected device. The id field is required.
+        - scheduledAt (string): UTC instant at which update execution should begin. Omit to schedule as soon as allowed.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/software/updates/batches"
+
+        body_params = [
+            "serials",
+            "toVersion",
+            "scheduledAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
             "body": payload,
         }
         return action
@@ -2796,16 +2827,7 @@ class ActionBatchSwitch:
         return action
 
     def createOrganizationSwitchRoutingBgpPeersGroupsDeploy(
-        self,
-        organizationId: str,
-        addressFamily: dict,
-        network: dict,
-        peerGroup: dict,
-        peerGroupAddressFamilyBindingProfile: dict,
-        peerGroupProfile: dict,
-        policies: list,
-        router: dict,
-        **kwargs,
+        self, organizationId: str, addressFamily: dict, network: dict, policies: list, router: dict, **kwargs
     ):
         """
         **Create or update a peer group, in addition to an associated peer group profile, peer group address family binding, peer group address family binding profile and routing policies associated with the peer group. Border Gateway Protocol requires IOS XE 17.18 or higher**
@@ -2814,12 +2836,23 @@ class ActionBatchSwitch:
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family the peer group address family binding belongs to
         - network (object): Information regarding the network the peer group profile belongs to
-        - peerGroup (object): Information regarding the peer group
-        - peerGroupAddressFamilyBindingProfile (object): Information regarding the peer group address family binding profile
-        - peerGroupProfile (object): Information regarding the peer group profile
         - policies (array): Information regarding the routing policies
         - router (object): Information regarding the router this peer group belongs to
-        - peerGroupAddressFamilyBinding (object): Information regarding the peer group address family binding. Only required when updating.
+        - peerGroupId (string): Object ID for the peer group. Only required when updating.
+        - name (string): Name of the peer group (CLI: 'neighbor <name> peer-group')
+        - description (string): Text description of the peer group (CLI: 'neighbor <name> description <description>')
+        - ebgp (object): Options related to eBGP configuration
+        - password (string): BGP password used to authenticate BGP peers and prevent unauthorized access (CLI: 'neighbor <name> password <password>')
+        - timers (object): Options related to timers used to maintain connectivity between BGP peers
+        - autonomousSystem (object): Information regarding the autonomous system for the BGP neighbors in the peer group
+        - interfaces (object): Options related to BGP interfaces
+        - advertisement (object): Options related to route advertisement
+        - communityAttribute (object): Information regarding the community attribute for peer groups for a given address family
+        - nextHop (object): Information regarding next hop for peer groups for a given address family
+        - removePrivateAs (object): Information regarding removal of private AS number from outbound updates
+        - routeReflector (object): Information regarding route reflectors
+        - softReconfiguration (object): Options related to soft reconfiguration
+        - weight (integer): Set default weight for routes from this peer group (CLI: 'neighbor IBGP weight <weight>')
         """
 
         kwargs.update(locals())
@@ -2828,14 +2861,25 @@ class ActionBatchSwitch:
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/deploy"
 
         body_params = [
+            "peerGroupId",
             "addressFamily",
             "network",
-            "peerGroup",
-            "peerGroupAddressFamilyBinding",
-            "peerGroupAddressFamilyBindingProfile",
-            "peerGroupProfile",
             "policies",
             "router",
+            "name",
+            "description",
+            "ebgp",
+            "password",
+            "timers",
+            "autonomousSystem",
+            "interfaces",
+            "advertisement",
+            "communityAttribute",
+            "nextHop",
+            "removePrivateAs",
+            "routeReflector",
+            "softReconfiguration",
+            "weight",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -2846,15 +2890,7 @@ class ActionBatchSwitch:
         return action
 
     def createOrganizationSwitchRoutingBgpPeersNeighborsDeploy(
-        self,
-        organizationId: str,
-        addressFamily: dict,
-        neighbor: dict,
-        neighborAddressFamilyBinding: dict,
-        peerGroup: dict,
-        policies: list,
-        router: dict,
-        **kwargs,
+        self, organizationId: str, addressFamily: dict, peerGroup: dict, policies: list, router: dict, **kwargs
     ):
         """
         **Create or update a neighor, in addition to an associated neighbor address family binding and routing policies associated with the neighbor. Border Gateway Protocol requires IOS XE 17.18 or higher**
@@ -2862,25 +2898,41 @@ class ActionBatchSwitch:
 
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family this binding is bound to
-        - neighbor (object): Information regarding the BPG neighbor
-        - neighborAddressFamilyBinding (object): Information regarding the neighbor address family binding
         - peerGroup (object): Information regarding the peer group this neighbor belongs to
         - policies (array): Information regarding the routing policies related to the neighbor
         - router (object): Information regarding the router this neighbor peers with
+        - neighborId (string): The neighbor object ID. Only required for updating a neighbor
+        - description (string): Text description of the neighbor (CLI: 'neighbor 10.0.42.1 description <description>')
+        - address (string): The IP address of the neighbor (CLI: 'neighbor <address>')
+        - ebgp (object): Options related to eBGP configuration
+        - password (string): BGP password used to authenticate BGP peers and prevent unauthorized access (CLI: 'neighbor 10.0.42.1 password <password>')
+        - interfaces (object): Options related to BGP interfaces
+        - peering (object): Options related to enabling peering for this address family and neighbor
+        - weight (integer): Set default weight for routes from this neighbor (CLI: 'neighbor 10.0.42.1 weight <weight>')
+        - advertisement (object): Options related to route advertisement
+        - softReconfiguration (object): Options related to soft reconfiguration
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors/deploy"
 
         body_params = [
+            "neighborId",
             "addressFamily",
-            "neighbor",
-            "neighborAddressFamilyBinding",
             "peerGroup",
             "policies",
             "router",
+            "description",
+            "address",
+            "ebgp",
+            "password",
+            "interfaces",
+            "peering",
+            "weight",
+            "advertisement",
+            "softReconfiguration",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -2895,7 +2947,6 @@ class ActionBatchSwitch:
         organizationId: str,
         addressFamily: dict,
         addressFamilyPrefixes: list,
-        addressFamilyProfile: dict,
         autonomousSystem: dict,
         router: dict,
         switch: dict,
@@ -2908,7 +2959,6 @@ class ActionBatchSwitch:
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family
         - addressFamilyPrefixes (array): The list of network prefixes to which the address family applies
-        - addressFamilyProfile (object): Information regarding the profile applied to the address family
         - autonomousSystem (object): Information regarding the router's autonomous system
         - router (object): Information regarding the BPG router
         - switch (object): The router's switch node. When the router is part of a switch stack, this is the switch stack's active node
@@ -2922,7 +2972,6 @@ class ActionBatchSwitch:
         body_params = [
             "addressFamily",
             "addressFamilyPrefixes",
-            "addressFamilyProfile",
             "autonomousSystem",
             "router",
             "switch",

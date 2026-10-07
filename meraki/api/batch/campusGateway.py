@@ -217,7 +217,7 @@ class ActionBatchCampusGateway:
 
         - organizationId (string): Organization ID
         - name (string): Display name of the custom mDNS service.
-        - types (array): One to ten DNS-SD service types. Accepted shorthand is normalized by the API.
+        - types (array): DNS-SD service types. Accepted shorthand is normalized by the API.
         """
 
         kwargs = locals()
@@ -245,7 +245,7 @@ class ActionBatchCampusGateway:
         - organizationId (string): Organization ID
         - key (string): Key
         - name (string): Updated display name of the custom mDNS service.
-        - types (array): Replacement ordered list of one to ten DNS-SD service types.
+        - types (array): Replacement ordered list of DNS-SD service types.
         """
 
         kwargs.update(locals())

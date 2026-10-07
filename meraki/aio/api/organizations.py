@@ -10940,11 +10940,10 @@ class AsyncOrganizations:
 
     def getSummary(self, organizationId: str):
         """
-                **Returns the aggregate values required to populate organization summary
-        cards**
-                https://developer.cisco.com/meraki/api-v1/#!get-summary
+        **Returns organization connection, VPC, Site, and region counts derived from Zero Trust Routing and tunnel health.**
+        https://developer.cisco.com/meraki/api-v1/#!get-summary
 
-                - organizationId (string): Organization ID
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -14753,6 +14752,226 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"createOrganizationSplashThemeAsset: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSummarySustainabilityDailyConsumerMetricsNetworks(self, organizationId: str, **kwargs):
+        """
+        **Lists daily consumer metrics for networks.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-daily-consumer-metrics-networks
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 32 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 32 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "summary", "sustainability", "dailyConsumerMetrics", "networks"],
+            "operation": "getOrganizationSummarySustainabilityDailyConsumerMetricsNetworks",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/dailyConsumerMetrics/networks"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySustainabilityDailyConsumerMetricsNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSummarySustainabilitySummaryConsumerMetricsDeviceCategories(self, organizationId: str):
+        """
+        **Lists available device categories for sustainability metrics with their corresponding device types.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-summary-consumer-metrics-device-categories
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "summary", "sustainability", "summaryConsumerMetrics", "deviceCategories"],
+            "operation": "getOrganizationSummarySustainabilitySummaryConsumerMetricsDeviceCategories",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/summaryConsumerMetrics/deviceCategories"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSummarySustainabilitySummaryConsumerMetricsDeviceCategoriesAggregated(
+        self, organizationId: str, **kwargs
+    ):
+        """
+        **Lists summary consumer metrics aggregated by device category.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-summary-consumer-metrics-device-categories-aggregated
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 32 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 32 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": [
+                "organizations",
+                "configure",
+                "summary",
+                "sustainability",
+                "summaryConsumerMetrics",
+                "deviceCategories",
+                "aggregated",
+            ],
+            "operation": "getOrganizationSummarySustainabilitySummaryConsumerMetricsDeviceCategoriesAggregated",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/summaryConsumerMetrics/deviceCategories/aggregated"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySustainabilitySummaryConsumerMetricsDeviceCategoriesAggregated: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSummarySustainabilitySummaryConsumerMetricsDevices(self, organizationId: str, **kwargs):
+        """
+        **Lists summary consumer metrics for devices.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-summary-consumer-metrics-devices
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 32 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 32 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "summary", "sustainability", "summaryConsumerMetrics", "devices"],
+            "operation": "getOrganizationSummarySustainabilitySummaryConsumerMetricsDevices",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/summaryConsumerMetrics/devices"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySustainabilitySummaryConsumerMetricsDevices: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworks(self, organizationId: str, **kwargs):
+        """
+        **Lists summary consumer metrics for networks.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-summary-consumer-metrics-networks
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 32 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 32 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "summary", "sustainability", "summaryConsumerMetrics", "networks"],
+            "operation": "getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworks",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/summaryConsumerMetrics/networks"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworksAggregated(self, organizationId: str, **kwargs):
+        """
+        **Returns aggregated consumer metrics for all networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-sustainability-summary-consumer-metrics-networks-aggregated
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 32 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 32 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": [
+                "organizations",
+                "configure",
+                "summary",
+                "sustainability",
+                "summaryConsumerMetrics",
+                "networks",
+                "aggregated",
+            ],
+            "operation": "getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworksAggregated",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/sustainability/summaryConsumerMetrics/networks/aggregated"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySustainabilitySummaryConsumerMetricsNetworksAggregated: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopAppliancesByUtilization(self, organizationId: str, **kwargs):
         """

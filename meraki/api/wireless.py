@@ -169,7 +169,7 @@ class Wireless:
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-electronic-shelf-label
 
         - serial (string): Serial
-        - channel (string): Desired ESL channel for the device, or 'Auto' (case insensitive) to use the recommended channel
+        - channel (string): Desired ESL channel for the device. Only configurable for devices assigned the High frequency ESL or sepioo IIoT role. Use 'Auto' (case insensitive) to use the recommended channel
         - enabled (boolean): Turn ESL features on and off for this device
         """
 
@@ -2180,6 +2180,132 @@ class Wireless:
                 self._session._logger.warning(f"getNetworkWirelessLatencyStats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
+
+    def updateNetworkWirelessLocationAssetTrackingFloorPlan(self, networkId: str, floorPlanId: str, enabled: bool, **kwargs):
+        """
+        **Update asset tracking settings for a specific floor plan.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-asset-tracking-floor-plan
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        - enabled (boolean): Enable or disable asset tracking for this floor plan
+        - webhook (object): Webhook configuration for asset tracking events
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "assetTracking", "floorPlans"],
+            "operation": "updateNetworkWirelessLocationAssetTrackingFloorPlan",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        floorPlanId = urllib.parse.quote(str(floorPlanId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}"
+
+        body_params = [
+            "enabled",
+            "webhook",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessLocationAssetTrackingFloorPlan: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkWirelessLocationAssetTrackingFloorPlanGroups(self, networkId: str, floorPlanId: str):
+        """
+        **Delete all the asset tracking groups for a floor plan in a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-location-asset-tracking-floor-plan-groups
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "assetTracking", "floorPlans", "groups"],
+            "operation": "deleteNetworkWirelessLocationAssetTrackingFloorPlanGroups",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        floorPlanId = urllib.parse.quote(str(floorPlanId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}/groups"
+
+        return self._session.delete(metadata, resource)
+
+    def createNetworkWirelessLocationAssetTrackingFloorPlanGroupsBatchCreate(
+        self, networkId: str, floorPlanId: str, groups: list, **kwargs
+    ):
+        """
+        **Create asset tracking groups for a floor plan in a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-location-asset-tracking-floor-plan-groups-batch-create
+
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
+        - groups (array): List of groups to create. Up to 1000 groups can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "assetTracking", "floorPlans", "groups", "batchCreate"],
+            "operation": "createNetworkWirelessLocationAssetTrackingFloorPlanGroupsBatchCreate",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        floorPlanId = urllib.parse.quote(str(floorPlanId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/assetTracking/floorPlans/{floorPlanId}/groups/batchCreate"
+
+        body_params = [
+            "groups",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessLocationAssetTrackingFloorPlanGroupsBatchCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def createNetworkWirelessLocationRangingJobsBatch(self, networkId: str, jobs: list, **kwargs):
+        """
+        **Schedule ranging jobs for one or more floor plans in a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-location-ranging-jobs-batch
+
+        - networkId (string): Network ID
+        - jobs (array): List of ranging jobs to create. Up to 100 jobs can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "ranging", "jobs", "batch"],
+            "operation": "createNetworkWirelessLocationRangingJobsBatch",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/ranging/jobs/batch"
+
+        body_params = [
+            "jobs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessLocationRangingJobsBatch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def updateNetworkWirelessLocationScanning(self, networkId: str, **kwargs):
         """
@@ -4823,7 +4949,7 @@ class Wireless:
         kwargs.update(locals())
 
         if "insights" in kwargs:
-            options = ["dashboard", "rca"]
+            options = ["dashboard", "rca", "rca_v2"]
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
@@ -5518,7 +5644,7 @@ class Wireless:
         kwargs.update(locals())
 
         if "insights" in kwargs:
-            options = ["dashboard", "rca"]
+            options = ["dashboard", "rca", "rca_v2"]
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
@@ -6383,7 +6509,7 @@ class Wireless:
         kwargs.update(locals())
 
         if "insights" in kwargs:
-            options = ["dashboard", "rca"]
+            options = ["dashboard", "rca", "rca_v2"]
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
@@ -7062,7 +7188,7 @@ class Wireless:
         kwargs.update(locals())
 
         if "insights" in kwargs:
-            options = ["dashboard", "rca"]
+            options = ["dashboard", "rca", "rca_v2"]
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
@@ -9747,6 +9873,223 @@ class Wireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessIotRolesByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessLocationAssetTrackingFloorPlans(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Retrieve a list of asset tracking settings per floor plan.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-asset-tracking-floor-plans
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - floorPlanIds (array): Optional parameter to filter settings by one or more floor plan IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "assetTracking", "floorPlans"],
+            "operation": "getOrganizationWirelessLocationAssetTrackingFloorPlans",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/assetTracking/floorPlans"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "floorPlanIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "floorPlanIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationAssetTrackingFloorPlans: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessLocationAssetTrackingGroups(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Retrieve a list of asset tracking groups used in asset tracking.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-asset-tracking-groups
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter asset tracking groups by one or more network IDs
+        - floorPlanIds (array): Optional parameter to filter asset tracking groups by one or more floor plan IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "assetTracking", "groups"],
+            "operation": "getOrganizationWirelessLocationAssetTrackingGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/assetTracking/groups"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "floorPlanIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "floorPlanIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationAssetTrackingGroups: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessLocationRangingJobs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Retrieve a list of ranging jobs that measure the distances between APs by performing ranging operations.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-ranging-jobs
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter ranging jobs by one or more network IDs
+        - jobIds (array): Optional parameter to filter ranging jobs by one or more job IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "ranging", "jobs"],
+            "operation": "getOrganizationWirelessLocationRangingJobs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/ranging/jobs"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "jobIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "jobIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationRangingJobs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessLocationRangingMeasurements(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the ranging measurements**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-ranging-measurements
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter ranging measurements by one or more network IDs
+        - floorPlanIds (array): Optional parameter to filter ranging measurements by one or more floor plan IDs
+        - type (string): Optional parameter to filter the type of ranging measurements returned. By default, only 'uwb' measurements are returned.
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["all", "ftm", "uwb"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "ranging", "measurements"],
+            "operation": "getOrganizationWirelessLocationRangingMeasurements",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/ranging/measurements"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "floorPlanIds",
+            "type",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "floorPlanIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationRangingMeasurements: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

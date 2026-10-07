@@ -200,7 +200,7 @@ class AsyncSwitch:
 
         - serial (string): Serial
         - portId (string): Port ID
-        - name (string): The name of the switch port. For IOS XE Catalyst switches, this value is the interface description.
+        - name (string): The name of the switch port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
@@ -3609,7 +3609,7 @@ class AsyncSwitch:
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch template port. For IOS XE Catalyst switches, this value is the interface description.
+        - name (string): The name of the switch template port. Dashboard displays this value as the port description. For Cisco Catalyst switches running IOS XE, it corresponds to the configured interface description.
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
@@ -4169,6 +4169,219 @@ class AsyncSwitch:
                 self._session._logger.warning(f"cloneOrganizationSwitchDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def createOrganizationSwitchDevicesSoftwareUpdateBatch(
+        self, organizationId: str, serials: list, toVersion: dict, **kwargs
+    ):
+        """
+        **Create a device-scoped software update batch for up to 50 selected Cloud Monitoring for Catalyst switches**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-devices-software-update-batch
+
+        - organizationId (string): Organization ID
+        - serials (array): Switch serials receiving the same update. Values are trimmed and uppercased; duplicates after normalization are rejected. At least one and at most 50 are accepted.
+        - toVersion (object): Destination software version compatible with every selected device. The id field is required.
+        - scheduledAt (string): UTC instant at which update execution should begin. Omit to schedule as soon as allowed.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "devices", "software", "updates", "batches"],
+            "operation": "createOrganizationSwitchDevicesSoftwareUpdateBatch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/software/updates/batches"
+
+        body_params = [
+            "serials",
+            "toVersion",
+            "scheduledAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchDevicesSoftwareUpdateBatch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def cancelOrganizationSwitchDevicesSoftwareUpdateBatches(self, organizationId: str, **kwargs):
+        """
+        **Cancel pending device-scoped software updates within one or more batches before execution begins**
+        https://developer.cisco.com/meraki/api-v1/#!cancel-organization-switch-devices-software-update-batches
+
+        - organizationId (string): Organization ID
+        - batch (object): Optional device-scoped software update batch selector. Required when serials is omitted; when provided, the id field is required.
+        - serials (array): Optional switch serials to cancel. Values are trimmed and uppercased; duplicates after normalization are rejected. Required when batch is omitted; when provided, at least one and at most 50 serials are accepted. The selection may span at most 20 device-scoped software update batches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "devices", "software", "updates", "batches"],
+            "operation": "cancelOrganizationSwitchDevicesSoftwareUpdateBatches",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/software/updates/batches/cancel"
+
+        body_params = [
+            "batch",
+            "serials",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"cancelOrganizationSwitchDevicesSoftwareUpdateBatches: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchDevicesSoftwareUpdateStatusesByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List software update statuses for Cloud Monitoring for Catalyst switches in one paginated device table**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-devices-software-update-statuses-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 30.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - networkIds (array): Exact network.id filters using inclusive OR. Omit for no network restriction; maximum 100.
+        - serials (array): Exact, case-sensitive device.serial filters using inclusive OR. Omit for no serial restriction; maximum 100.
+        - search (string): Case-insensitive partial substring match against device.name or device.serial. Serial punctuation is matched as supplied, and whitespace-separated text is treated as one substring rather than tokenized. If this scalar is repeated, only the last value is used.
+        - isUpdateAvailable (boolean): Exact filter for items[].isUpdateAvailable. Omit for no availability restriction; no default is applied.
+        - updateStatuses (array): Exact items[].update.status.value filters using inclusive OR, normalized case-insensitively to the canonical enum value. Omit for no detailed-status restriction. Detailed status values match the existing firmware-upgrade by-device API. Idle means no active or retained update. Execution progress and terminal outcomes use their existing canonical values and labels. Terminal success or failure is also reported in status.result. No default is implied.
+        - updateStages (array): Exact items[].update.status.stage.value filters using inclusive OR, normalized case-insensitively to the canonical enum value. Omit for no execution-stage restriction. Execution-stage values: check-in, download, installation, or verification. The value is null before execution begins and after no stage can be identified. No default is implied.
+        - updateResults (array): Exact items[].update.status.result.value filters using inclusive OR, normalized case-insensitively to the canonical enum value. Omit for no terminal-result restriction. Terminal-result values: succeeded, skipped, canceled, or failed. The value is null until the update completes. No default is implied.
+        - currentVersionShortNames (array): Exact, case-sensitive currentVersion.shortName filters using inclusive OR. Omit for no current-version name restriction; maximum 100.
+        - models (array): Exact, case-sensitive device.model filters using inclusive OR. Omit for no model restriction; maximum 100.
+        - sortKey (string): Sort key: currentVersion orders currentVersion.shortName; device orders device.name with serial fallback; isUpdateAvailable orders false before true when ascending; model orders device.model; network orders network.name; updateStatus uses this semantic order when ascending: idle, upgrade-scheduled, upgrade-retry-scheduled, checking-in, download-started, download-complete, install-started, verification-started, upgrade-complete, upgrade-skipped, upgrade-canceled, upgrade-failed. Terminal items are then ordered by result: succeeded, skipped, canceled, then failed. Ties are resolved by device.serial. Defaults to device.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "sortKey" in kwargs:
+            options = ["currentVersion", "device", "isUpdateAvailable", "model", "network", "updateStatus"]
+            assert kwargs["sortKey"] in options, (
+                f'''"sortKey" cannot be "{kwargs["sortKey"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["switch", "monitor", "devices", "software", "updates", "statuses", "byDevice"],
+            "operation": "getOrganizationSwitchDevicesSoftwareUpdateStatusesByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/software/updates/statuses/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "networkIds",
+            "serials",
+            "search",
+            "isUpdateAvailable",
+            "updateStatuses",
+            "updateStages",
+            "updateResults",
+            "currentVersionShortNames",
+            "models",
+            "sortKey",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "updateStatuses",
+            "updateStages",
+            "updateResults",
+            "currentVersionShortNames",
+            "models",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchDevicesSoftwareUpdateStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchDevicesSoftwareVersionsTargetsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns a paginated list of accessible Cloud Monitoring for Catalyst switches and the complete list of destination software versions for each switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-devices-software-versions-targets-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Optional switch serials used to filter the result set. Values are trimmed and uppercased. Supports up to 50 serials when provided. Matching switches that are not accessible to the caller or are not eligible for this operation are omitted.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "devices", "software", "versions", "targets", "byDevice"],
+            "operation": "getOrganizationSwitchDevicesSoftwareVersionsTargetsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/software/versions/targets/byDevice"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchDevicesSoftwareVersionsTargetsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSwitchDevicesSystemQueuesHistoryBySwitchByInterval(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -6590,16 +6803,7 @@ class AsyncSwitch:
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationSwitchRoutingBgpPeersGroupsDeploy(
-        self,
-        organizationId: str,
-        addressFamily: dict,
-        network: dict,
-        peerGroup: dict,
-        peerGroupAddressFamilyBindingProfile: dict,
-        peerGroupProfile: dict,
-        policies: list,
-        router: dict,
-        **kwargs,
+        self, organizationId: str, addressFamily: dict, network: dict, policies: list, router: dict, **kwargs
     ):
         """
         **Create or update a peer group, in addition to an associated peer group profile, peer group address family binding, peer group address family binding profile and routing policies associated with the peer group**
@@ -6608,12 +6812,23 @@ class AsyncSwitch:
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family the peer group address family binding belongs to
         - network (object): Information regarding the network the peer group profile belongs to
-        - peerGroup (object): Information regarding the peer group
-        - peerGroupAddressFamilyBindingProfile (object): Information regarding the peer group address family binding profile
-        - peerGroupProfile (object): Information regarding the peer group profile
         - policies (array): Information regarding the routing policies
         - router (object): Information regarding the router this peer group belongs to
-        - peerGroupAddressFamilyBinding (object): Information regarding the peer group address family binding. Only required when updating.
+        - peerGroupId (string): Object ID for the peer group. Only required when updating.
+        - name (string): Name of the peer group (CLI: 'neighbor <name> peer-group')
+        - description (string): Text description of the peer group (CLI: 'neighbor <name> description <description>')
+        - ebgp (object): Options related to eBGP configuration
+        - password (string): BGP password used to authenticate BGP peers and prevent unauthorized access (CLI: 'neighbor <name> password <password>')
+        - timers (object): Options related to timers used to maintain connectivity between BGP peers
+        - autonomousSystem (object): Information regarding the autonomous system for the BGP neighbors in the peer group
+        - interfaces (object): Options related to BGP interfaces
+        - advertisement (object): Options related to route advertisement
+        - communityAttribute (object): Information regarding the community attribute for peer groups for a given address family
+        - nextHop (object): Information regarding next hop for peer groups for a given address family
+        - removePrivateAs (object): Information regarding removal of private AS number from outbound updates
+        - routeReflector (object): Information regarding route reflectors
+        - softReconfiguration (object): Options related to soft reconfiguration
+        - weight (integer): Set default weight for routes from this peer group (CLI: 'neighbor IBGP weight <weight>')
         """
 
         kwargs.update(locals())
@@ -6626,14 +6841,25 @@ class AsyncSwitch:
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/deploy"
 
         body_params = [
+            "peerGroupId",
             "addressFamily",
             "network",
-            "peerGroup",
-            "peerGroupAddressFamilyBinding",
-            "peerGroupAddressFamilyBindingProfile",
-            "peerGroupProfile",
             "policies",
             "router",
+            "name",
+            "description",
+            "ebgp",
+            "password",
+            "timers",
+            "autonomousSystem",
+            "interfaces",
+            "advertisement",
+            "communityAttribute",
+            "nextHop",
+            "removePrivateAs",
+            "routeReflector",
+            "softReconfiguration",
+            "weight",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -6895,15 +7121,7 @@ class AsyncSwitch:
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationSwitchRoutingBgpPeersNeighborsDeploy(
-        self,
-        organizationId: str,
-        addressFamily: dict,
-        neighbor: dict,
-        neighborAddressFamilyBinding: dict,
-        peerGroup: dict,
-        policies: list,
-        router: dict,
-        **kwargs,
+        self, organizationId: str, addressFamily: dict, peerGroup: dict, policies: list, router: dict, **kwargs
     ):
         """
         **Create or update a neighor, in addition to an associated neighbor address family binding and routing policies associated with the neighbor**
@@ -6911,14 +7129,22 @@ class AsyncSwitch:
 
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family this binding is bound to
-        - neighbor (object): Information regarding the BPG neighbor
-        - neighborAddressFamilyBinding (object): Information regarding the neighbor address family binding
         - peerGroup (object): Information regarding the peer group this neighbor belongs to
         - policies (array): Information regarding the routing policies related to the neighbor
         - router (object): Information regarding the router this neighbor peers with
+        - neighborId (string): The neighbor object ID. Only required for updating a neighbor
+        - description (string): Text description of the neighbor (CLI: 'neighbor 10.0.42.1 description <description>')
+        - address (string): The IP address of the neighbor (CLI: 'neighbor <address>')
+        - ebgp (object): Options related to eBGP configuration
+        - password (string): BGP password used to authenticate BGP peers and prevent unauthorized access (CLI: 'neighbor 10.0.42.1 password <password>')
+        - interfaces (object): Options related to BGP interfaces
+        - peering (object): Options related to enabling peering for this address family and neighbor
+        - weight (integer): Set default weight for routes from this neighbor (CLI: 'neighbor 10.0.42.1 weight <weight>')
+        - advertisement (object): Options related to route advertisement
+        - softReconfiguration (object): Options related to soft reconfiguration
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "routing", "bgp", "peers", "neighbors", "deploy"],
@@ -6928,12 +7154,20 @@ class AsyncSwitch:
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors/deploy"
 
         body_params = [
+            "neighborId",
             "addressFamily",
-            "neighbor",
-            "neighborAddressFamilyBinding",
             "peerGroup",
             "policies",
             "router",
+            "description",
+            "address",
+            "ebgp",
+            "password",
+            "interfaces",
+            "peering",
+            "weight",
+            "advertisement",
+            "softReconfiguration",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -7087,7 +7321,6 @@ class AsyncSwitch:
         organizationId: str,
         addressFamily: dict,
         addressFamilyPrefixes: list,
-        addressFamilyProfile: dict,
         autonomousSystem: dict,
         router: dict,
         switch: dict,
@@ -7100,7 +7333,6 @@ class AsyncSwitch:
         - organizationId (string): Organization ID
         - addressFamily (object): Information regarding the address family
         - addressFamilyPrefixes (array): The list of network prefixes to which the address family applies
-        - addressFamilyProfile (object): Information regarding the profile applied to the address family
         - autonomousSystem (object): Information regarding the router's autonomous system
         - router (object): Information regarding the BPG router
         - switch (object): The router's switch node. When the router is part of a switch stack, this is the switch stack's active node
@@ -7118,7 +7350,6 @@ class AsyncSwitch:
         body_params = [
             "addressFamily",
             "addressFamilyPrefixes",
-            "addressFamilyProfile",
             "autonomousSystem",
             "router",
             "switch",

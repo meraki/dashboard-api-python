@@ -759,6 +759,7 @@ class CampusGateway:
         - campusGatewaySerials (array): Optional parameter to filter connections(APs) by MCG serials. This filter uses multiple exact matches.
         - campusGatewayClusterIds (array): Optional parameter to filter connections(APs) by MCG cluster IDs. This filter uses multiple exact matches.
         - campusGatewayTunnelStatuses (array): Optional parameter to filter connections(APs) by tunnel statuses. This filter uses multiple exact matches.
+        - campusGatewayPriorities (array): Optional parameter to filter connections(APs) by Campus Gateway tunnel priority. Use 0 for primary or 1 for backup. This filter uses multiple exact matches.
         - search (string): Optional parameter to filter connections(APs) on AP name, serial, MAC address, network name, or interface IP address. This filter uses partial string matching (ILIKE).
         - models (array): Optional parameter to filter connections(APs) by device model names. This filter uses multiple exact matches.
         - dataEncryptionStatuses (array): Optional parameter to filter connections(APs) by data encryption status. This filter uses multiple exact matches.
@@ -795,6 +796,7 @@ class CampusGateway:
             "campusGatewaySerials",
             "campusGatewayClusterIds",
             "campusGatewayTunnelStatuses",
+            "campusGatewayPriorities",
             "search",
             "models",
             "dataEncryptionStatuses",
@@ -812,6 +814,7 @@ class CampusGateway:
             "campusGatewaySerials",
             "campusGatewayClusterIds",
             "campusGatewayTunnelStatuses",
+            "campusGatewayPriorities",
             "models",
             "dataEncryptionStatuses",
         ]
@@ -841,6 +844,7 @@ class CampusGateway:
         - campusGatewaySerials (array): Optional parameter to filter connections(APs) by Campus Gateway serials. This filter uses multiple exact matches.
         - campusGatewayClusterIds (array): Optional parameter to filter connections(APs) by Campus Gateway cluster IDs. This filter uses multiple exact matches.
         - campusGatewayTunnelStatuses (array): Optional parameter to filter connections(APs) by tunnel statuses. This filter uses multiple exact matches.
+        - campusGatewayPriorities (array): Optional parameter to filter connections(APs) by Campus Gateway tunnel priority. Use 0 for primary or 1 for backup. This filter uses multiple exact matches.
         - search (string): Optional setting that lets you filter access points (APs) by name, serial number, MAC address, network name, or interface IP address. The filter matches partial text, not just exact values (uses ILIKE matching).
         - models (array): Optional parameter to filter connections(APs) by device model names. This filter uses multiple exact matches.
         - dataEncryptionStatuses (array): Optional parameter to filter connections(APs) by data encryption status. This filter uses multiple exact matches.
@@ -861,6 +865,7 @@ class CampusGateway:
             "campusGatewaySerials",
             "campusGatewayClusterIds",
             "campusGatewayTunnelStatuses",
+            "campusGatewayPriorities",
             "search",
             "models",
             "dataEncryptionStatuses",
@@ -873,6 +878,7 @@ class CampusGateway:
             "campusGatewaySerials",
             "campusGatewayClusterIds",
             "campusGatewayTunnelStatuses",
+            "campusGatewayPriorities",
             "models",
             "dataEncryptionStatuses",
         ]
@@ -890,6 +896,58 @@ class CampusGateway:
                 )
 
         return self._session.get(metadata, resource, params)
+
+    def getOrganizationCampusGatewayDevicesSystemCpuLoad(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return the latest CPU load averages reported by Campus Gateway devices.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-devices-system-cpu-load
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional exact-match network filters. Accepts both node group (N_) and locale (L_) network IDs.
+        - serials (array): Optional exact-match Campus Gateway serial filters.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "monitor", "devices", "system", "cpu", "load"],
+            "operation": "getOrganizationCampusGatewayDevicesSystemCpuLoad",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/devices/system/cpu/load"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCampusGatewayDevicesSystemCpuLoad: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -1060,7 +1118,7 @@ class CampusGateway:
 
         - organizationId (string): Organization ID
         - name (string): Display name of the custom mDNS service.
-        - types (array): One to ten DNS-SD service types. Accepted shorthand is normalized by the API.
+        - types (array): DNS-SD service types. Accepted shorthand is normalized by the API.
         """
 
         kwargs = locals()
@@ -1096,7 +1154,7 @@ class CampusGateway:
         - organizationId (string): Organization ID
         - key (string): Key
         - name (string): Updated display name of the custom mDNS service.
-        - types (array): Replacement ordered list of one to ten DNS-SD service types.
+        - types (array): Replacement ordered list of DNS-SD service types.
         """
 
         kwargs.update(locals())
