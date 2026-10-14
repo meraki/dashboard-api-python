@@ -216,7 +216,7 @@ class ActionBatchCampusGateway:
         https://developer.cisco.com/meraki/api-v1/#!create-organization-campus-gateway-mdns-services-custom
 
         - organizationId (string): Organization ID
-        - name (string): Display name of the custom mDNS service.
+        - name (string): Display name; unique ignoring case across the organization and its networks.
         - types (array): DNS-SD service types. Accepted shorthand is normalized by the API.
         """
 
@@ -244,7 +244,7 @@ class ActionBatchCampusGateway:
 
         - organizationId (string): Organization ID
         - key (string): Key
-        - name (string): Updated display name of the custom mDNS service.
+        - name (string): Display name; unique ignoring case across the organization and its networks.
         - types (array): Replacement ordered list of DNS-SD service types.
         """
 

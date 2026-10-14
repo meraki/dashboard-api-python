@@ -1155,6 +1155,7 @@ class AsyncAppliance:
 
         - networkId (string): Network ID
         - ipv4 (object): IPv4 configuration
+        - name (string): User-friendly name for the L3 interface
         - port (object): Port configuration
         - vrf (object): VRF assignment for the L3 interface
         """
@@ -1169,6 +1170,7 @@ class AsyncAppliance:
         resource = f"/networks/{networkId}/appliance/interfaces/l3"
 
         body_params = [
+            "name",
             "port",
             "ipv4",
             "vrf",
@@ -1190,6 +1192,7 @@ class AsyncAppliance:
 
         - networkId (string): Network ID
         - interfaceId (string): Interface ID
+        - name (string): User-friendly name for the L3 interface
         - port (object): Port configuration. Set to null to remove the port association.
         - ipv4 (object): IPv4 configuration
         - vrf (object): VRF assignment for the L3 interface
@@ -1206,6 +1209,7 @@ class AsyncAppliance:
         resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
 
         body_params = [
+            "name",
             "port",
             "ipv4",
             "vrf",
@@ -1764,6 +1768,41 @@ class AsyncAppliance:
                 self._session._logger.warning(f"getNetworkApplianceSecurityEvents: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateNetworkApplianceSecurityHttpsInspection(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update HTTPS inspection configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-https-inspection
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether HTTPS inspection is enabled.
+        - allowLists (object): Allow lists for HTTPS inspection exclusions.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsInspection"],
+            "operation": "updateNetworkApplianceSecurityHttpsInspection",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/security/httpsInspection"
+
+        body_params = [
+            "enabled",
+            "allowLists",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceSecurityHttpsInspection: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
 
     def getNetworkApplianceSecurityIntrusion(self, networkId: str):
         """
@@ -4738,6 +4777,57 @@ class AsyncAppliance:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationApplianceSecurityHttpsInspectionByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List HTTPS inspection status and configuration for appliances in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-https-inspection-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned list will be filtered to only include these networks.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsInspection", "byNetwork"],
+            "operation": "getOrganizationApplianceSecurityHttpsInspectionByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsInspection/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceSecurityHttpsInspectionByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def httpsiOrganizationApplianceSecurity(self, organizationId: str):
         """
         **Retrieve the HTTPS Inspection state for all security appliances in an organization.**
@@ -6222,6 +6312,74 @@ class AsyncAppliance:
                 )
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApplianceVpnSiteToSiteVpnPerformanceByTunnelByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns Site-to-site VPN stats (loss, latency, jitter, MOS) for all VPN connections in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-site-to-site-vpn-performance-by-tunnel-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 600, 3600, 7200, 14400, 21600, 43200, 86400. The default is 3600. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 1000 - 10000. Default is 5000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filter results by network
+        - peerNetworkIds (array): Filter results by peer network
+        - interfaces (array): Filter results by uplink interface
+        - peerInterfaces (array): Filter results by peer uplink interface
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "vpn", "siteToSiteVpn", "performance", "byTunnel", "byInterval"],
+            "operation": "getOrganizationApplianceVpnSiteToSiteVpnPerformanceByTunnelByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/siteToSiteVpn/performance/byTunnel/byInterval"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "peerNetworkIds",
+            "interfaces",
+            "peerInterfaces",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "peerNetworkIds",
+            "interfaces",
+            "peerInterfaces",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnSiteToSiteVpnPerformanceByTunnelByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnStats(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

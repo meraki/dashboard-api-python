@@ -253,6 +253,43 @@ class ActionBatchDevices:
         }
         return action
 
+    def createDeviceLiveToolsRouteDetail(self, serial: str, type: str, vrf: dict, destination: dict, nextHop: dict, **kwargs):
+        """
+        **Enqueue a live tool job to fetch route details from a device.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-route-detail
+
+        - serial (string): Serial
+        - type (string): The type of the route provided. The only supported value for now is 'BGP'.
+        - vrf (object): The route VRF to inspect.
+        - destination (object): The destination of the route provided
+        - nextHop (object): The next-hop-IP of the route provided.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["BGP"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/route/details"
+
+        body_params = [
+            "type",
+            "vrf",
+            "destination",
+            "nextHop",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "details",
+            "body": payload,
+        }
+        return action
+
     def createDeviceLiveToolsRoutingTableLookup(self, serial: str, **kwargs):
         """
         **Enqueue a job to perform a routing table lookup request for a device. The routing table lookup request fetches a specific set of routes based on filters. Any combination of search filters can be applied. Only Cisco Secure Routers are supported.**
