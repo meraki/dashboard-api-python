@@ -1052,6 +1052,68 @@ class Devices:
 
         return self._session.get(metadata, resource)
 
+    def createDeviceLiveToolsRouteDetail(self, serial: str, type: str, vrf: dict, destination: dict, nextHop: dict, **kwargs):
+        """
+        **Enqueue a live tool job to fetch route details from a device.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-route-detail
+
+        - serial (string): Serial
+        - type (string): The type of the route provided. The only supported value for now is 'BGP'.
+        - vrf (object): The route VRF to inspect.
+        - destination (object): The destination of the route provided
+        - nextHop (object): The next-hop-IP of the route provided.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["BGP"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["devices", "liveTools", "route", "details"],
+            "operation": "createDeviceLiveToolsRouteDetail",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/route/details"
+
+        body_params = [
+            "type",
+            "vrf",
+            "destination",
+            "nextHop",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsRouteDetail: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsRouteDetail(self, serial: str, jobId: str):
+        """
+        **Return a route details live tool job for a device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-route-detail
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "route", "details"],
+            "operation": "getDeviceLiveToolsRouteDetail",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/route/details/{jobId}"
+
+        return self._session.get(metadata, resource)
+
     def createDeviceLiveToolsRoutingTable(self, serial: str, **kwargs):
         """
         **Enqueue a job to perform a routing table request for the device**

@@ -306,6 +306,7 @@ class ActionBatchAppliance:
 
         - networkId (string): Network ID
         - ipv4 (object): IPv4 configuration
+        - name (string): User-friendly name for the L3 interface
         - port (object): Port configuration
         - vrf (object): VRF assignment for the L3 interface
         """
@@ -316,6 +317,7 @@ class ActionBatchAppliance:
         resource = f"/networks/{networkId}/appliance/interfaces/l3"
 
         body_params = [
+            "name",
             "port",
             "ipv4",
             "vrf",
@@ -335,6 +337,7 @@ class ActionBatchAppliance:
 
         - networkId (string): Network ID
         - interfaceId (string): Interface ID
+        - name (string): User-friendly name for the L3 interface
         - port (object): Port configuration. Set to null to remove the port association.
         - ipv4 (object): IPv4 configuration
         - vrf (object): VRF assignment for the L3 interface
@@ -347,6 +350,7 @@ class ActionBatchAppliance:
         resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
 
         body_params = [
+            "name",
             "port",
             "ipv4",
             "vrf",
@@ -678,6 +682,33 @@ class ActionBatchAppliance:
 
         body_params = [
             "wanTrafficUplinkPreferences",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceSecurityHttpsInspection(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update HTTPS inspection configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-https-inspection
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether HTTPS inspection is enabled.
+        - allowLists (object): Allow lists for HTTPS inspection exclusions.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/security/httpsInspection"
+
+        body_params = [
+            "enabled",
+            "allowLists",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

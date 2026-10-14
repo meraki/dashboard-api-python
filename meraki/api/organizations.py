@@ -12294,6 +12294,7 @@ class Organizations:
         - enabled (boolean): Whether the rule is enabled
         - priority (integer): Rule priority (lower numbers = higher priority)
         - description (string): Description of the firewall rule
+        - logging (object): Logging settings for the rule
         """
 
         kwargs.update(locals())
@@ -12318,6 +12319,7 @@ class Organizations:
             "enabled",
             "priority",
             "description",
+            "logging",
             "sources",
             "destinations",
         ]
@@ -12419,6 +12421,7 @@ class Organizations:
         - enabled (boolean): Whether the rule is enabled
         - priority (integer): Rule priority (lower numbers = higher priority)
         - description (string): Description of the firewall rule
+        - logging (object): Logging settings for the rule
         - sources (object): Source traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
         - destinations (object): Destination traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
         """
@@ -12446,6 +12449,7 @@ class Organizations:
             "enabled",
             "priority",
             "description",
+            "logging",
             "sources",
             "destinations",
         ]
