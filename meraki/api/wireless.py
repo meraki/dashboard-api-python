@@ -2355,7 +2355,7 @@ class Wireless(object):
         - radiusProxyEnabled (boolean): If true, Meraki devices will proxy RADIUS messages through the Meraki cloud to the configured RADIUS auth and accounting servers.
         - radiusTestingEnabled (boolean): If true, Meraki devices will periodically send Access-Request messages to configured RADIUS servers using identity 'meraki_8021x_test' to ensure that the RADIUS servers are reachable.
         - radiusCalledStationId (string): The template of the called station identifier to be used for RADIUS (ex. $NODE_MAC$:$VAP_NUM$).
-        - radiusAuthenticationNasId (string): The template of the NAS identifier to be used for RADIUS authentication (ex. $NODE_MAC$:$VAP_NUM$).
+        - radiusAuthenticationNasId (string): The NAS identifier to use for RADIUS authentication. With 802.11r enabled or adaptive, custom text is available only to organizations enabled for this feature; otherwise, use only $NODE_MAC$, $VAP_NUM$, and $VAP_NAME$. When this feature is enabled, the complete rendered NAS identifier must be 1–48 bytes.
         - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
         - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
         - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
@@ -4257,7 +4257,7 @@ class Wireless(object):
 
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
+        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-ethernet-statuses
 
         - organizationId (string): Organization ID

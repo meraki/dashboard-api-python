@@ -1636,6 +1636,41 @@ class AsyncAppliance:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def updateNetworkApplianceSecurityHttpsInspection(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update HTTPS inspection configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-https-inspection
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether HTTPS inspection is enabled.
+        - allowLists (object): Allow lists for HTTPS inspection exclusions.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsInspection"],
+            "operation": "updateNetworkApplianceSecurityHttpsInspection",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/security/httpsInspection"
+
+        body_params = [
+            "enabled",
+            "allowLists",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceSecurityHttpsInspection: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceSecurityIntrusion(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
@@ -4337,6 +4372,109 @@ class AsyncAppliance:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceSecurityHttpsInspectionByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List HTTPS inspection status and configuration for appliances in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-https-inspection-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned list will be filtered to only include these networks.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsInspection", "byNetwork"],
+            "operation": "getOrganizationApplianceSecurityHttpsInspectionByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsInspection/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceSecurityHttpsInspectionByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def httpsiOrganizationApplianceSecurity(self, organizationId: str):
+        """
+        **Retrieve the HTTPS Inspection state for all security appliances in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!httpsi-organization-appliance-security
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "security"],
+            "operation": "httpsiOrganizationApplianceSecurity",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsi"
+
+        return self._session.get(metadata, resource)
+
+    def certificatesOrganizationApplianceSecurityHttpsi(self, organizationId: str, contents: str, serials: list, **kwargs):
+        """
+        **Upload an HTTPS Inspection certificate to MX devices in the same organization**
+        https://developer.cisco.com/meraki/api-v1/#!certificates-organization-appliance-security-httpsi
+
+        - organizationId (string): Organization ID
+        - contents (string): The private key and certificate used to inspect HTTPS traffic. The certificate must be in .pem format.
+        - serials (array): Serial numbers of the security appliances that will receive the new HTTPS certificate for HTTPS Inspection
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsi"],
+            "operation": "certificatesOrganizationApplianceSecurityHttpsi",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsi/certificates"
+
+        body_params = [
+            "contents",
+            "serials",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"certificatesOrganizationApplianceSecurityHttpsi: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
         """
