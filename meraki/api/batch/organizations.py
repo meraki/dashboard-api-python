@@ -2072,6 +2072,111 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def syncAutovpnConnectors(self, organizationId: str):
+        """
+        **Starts asynchronous reconciliation of MCN AutoVPN connectors and available regions.**
+        https://developer.cisco.com/meraki/api-v1/#!sync-autovpn-connectors
+
+        - organizationId (string): Organization ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/connectors/sync"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def disableAutovpnSiteToCloud(self, organizationId: str):
+        """
+        **Starts asynchronous organization-wide AutoVPN site-to-cloud offboarding.**
+        https://developer.cisco.com/meraki/api-v1/#!disable-autovpn-site-to-cloud
+
+        - organizationId (string): Organization ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/siteToCloud"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def onboardAutovpnSites(self, organizationId: str, **kwargs):
+        """
+        **Starts asynchronous AutoVPN site-to-cloud onboarding for the requested spoke networks.**
+        https://developer.cisco.com/meraki/api-v1/#!onboard-autovpn-sites
+
+        - organizationId (string): Organization ID
+        - spokes (array): Optional spoke networks and their desired MCN regions. Omit this field to perform hub-only onboarding.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites/onboard"
+
+        body_params = [
+            "spokes",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def offboardAutovpnSpoke(self, organizationId: str, networkId: str):
+        """
+        **Detaches a Meraki AutoVPN spoke from its MCN regions.**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-autovpn-spoke
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/spokes/{networkId}"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
+    def replaceAutovpnSpokeRegions(self, organizationId: str, networkId: str, regionIds: list, **kwargs):
+        """
+        **Replaces the complete desired MCN region set for a Meraki AutoVPN spoke.**
+        https://developer.cisco.com/meraki/api-v1/#!replace-autovpn-spoke-regions
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        - regionIds (array): Complete desired set of MCN region identifiers.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/spokes/{networkId}/regions"
+
+        body_params = [
+            "regionIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
     def createIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
         """
                 **Creates an AWS, Microsoft Azure, or Google Cloud integration for the specified Meraki Dashboard organization and starts initial cloud-resource discovery. The `provider` value selects the matching credential object; credential objects for other providers are ignored. The `201` response confirms that the integration was created and discovery was accepted for separate processing, not that discovery completed.**

@@ -9755,6 +9755,193 @@ class Organizations:
 
         return self._session.get(metadata, resource)
 
+    def listAutovpnConnectors(self, organizationId: str):
+        """
+        **Lists the organization's MCN AutoVPN connectors.**
+        https://developer.cisco.com/meraki/api-v1/#!list-autovpn-connectors
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "connectors"],
+            "operation": "listAutovpnConnectors",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/connectors"
+
+        return self._session.get(metadata, resource)
+
+    def syncAutovpnConnectors(self, organizationId: str):
+        """
+        **Starts asynchronous reconciliation of MCN AutoVPN connectors and available regions.**
+        https://developer.cisco.com/meraki/api-v1/#!sync-autovpn-connectors
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "connectors"],
+            "operation": "syncAutovpnConnectors",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/connectors/sync"
+
+        return self._session.post(metadata, resource)
+
+    def disableAutovpnSiteToCloud(self, organizationId: str):
+        """
+        **Starts asynchronous organization-wide AutoVPN site-to-cloud offboarding.**
+        https://developer.cisco.com/meraki/api-v1/#!disable-autovpn-site-to-cloud
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn"],
+            "operation": "disableAutovpnSiteToCloud",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/siteToCloud"
+
+        return self._session.delete(metadata, resource)
+
+    def listAutovpnSites(self, organizationId: str):
+        """
+        **Lists Meraki networks discoverable for AutoVPN site-to-cloud connectivity.**
+        https://developer.cisco.com/meraki/api-v1/#!list-autovpn-sites
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "sites"],
+            "operation": "listAutovpnSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites"
+
+        return self._session.get(metadata, resource)
+
+    def listAutovpnEnrollableSites(self, organizationId: str):
+        """
+        **Lists Meraki networks eligible for AutoVPN site-to-cloud onboarding.**
+        https://developer.cisco.com/meraki/api-v1/#!list-autovpn-enrollable-sites
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "sites", "enrollable"],
+            "operation": "listAutovpnEnrollableSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites/enrollable"
+
+        return self._session.get(metadata, resource)
+
+    def onboardAutovpnSites(self, organizationId: str, **kwargs):
+        """
+        **Starts asynchronous AutoVPN site-to-cloud onboarding for the requested spoke networks.**
+        https://developer.cisco.com/meraki/api-v1/#!onboard-autovpn-sites
+
+        - organizationId (string): Organization ID
+        - spokes (array): Optional spoke networks and their desired MCN regions. Omit this field to perform hub-only onboarding.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "sites"],
+            "operation": "onboardAutovpnSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites/onboard"
+
+        body_params = [
+            "spokes",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"onboardAutovpnSites: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def offboardAutovpnSpoke(self, organizationId: str, networkId: str):
+        """
+        **Detaches a Meraki AutoVPN spoke from its MCN regions.**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-autovpn-spoke
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "spokes"],
+            "operation": "offboardAutovpnSpoke",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/spokes/{networkId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getAutovpnSpokeHubBudget(self, organizationId: str, networkId: str):
+        """
+        **Returns the AutoVPN hub budget for a Meraki spoke network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-autovpn-spoke-hub-budget
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "spokes", "hubBudget"],
+            "operation": "getAutovpnSpokeHubBudget",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/spokes/{networkId}/hubBudget"
+
+        return self._session.get(metadata, resource)
+
+    def replaceAutovpnSpokeRegions(self, organizationId: str, networkId: str, regionIds: list, **kwargs):
+        """
+        **Replaces the complete desired MCN region set for a Meraki AutoVPN spoke.**
+        https://developer.cisco.com/meraki/api-v1/#!replace-autovpn-spoke-regions
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        - regionIds (array): Complete desired set of MCN region identifiers.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "spokes", "regions"],
+            "operation": "replaceAutovpnSpokeRegions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/spokes/{networkId}/regions"
+
+        body_params = [
+            "regionIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"replaceAutovpnSpokeRegions: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getBgpSessionStatus(self, organizationId: str, **kwargs):
         """
                 **Returns aligned aggregate and member BGP-session-health series for
@@ -9879,13 +10066,17 @@ class Organizations:
         - `integration` — Cloud integration subject.
         - `account` — Discovered cloud-account subject.
         - `subnet` — Discovered subnet or VLAN subject.
+        - `organization` — Organization or action spanning multiple resources.
+        - `tag` — Canonical network tag subject.
+        - `ztr_intent` — ZTR connection rule subject.
+        - `sites` — Organization-owned Manual IPsec Site subject with no account or integration parent.
         - `vpc` — Request alias for a public-cloud `network` subject.
         - `site` — Request alias for a Meraki `network` subject.
         - `network` — Deprecated legacy subject spanning VPCs and Sites.
 
         The `vpc` and `site` aliases constrain provider family only when this
         filter contains family aliases exclusively. Mixing either alias with
-        `integration`, `account`, or `subnet` drops that constraint
+        another subject type drops that constraint
         and can broaden matching `network` events. Unknown values return HTTP 400.
                 - entityId (array): Restricts results to exact primary-subject identifiers across all entity
         types. Repeat the parameter to OR identifiers.
@@ -10026,13 +10217,17 @@ class Organizations:
         - `integration` — Cloud integration subject.
         - `account` — Discovered cloud-account subject.
         - `subnet` — Discovered subnet or VLAN subject.
+        - `organization` — Organization or action spanning multiple resources.
+        - `tag` — Canonical network tag subject.
+        - `ztr_intent` — ZTR connection rule subject.
+        - `sites` — Organization-owned Manual IPsec Site subject with no account or integration parent.
         - `vpc` — Request alias for a public-cloud `network` subject.
         - `site` — Request alias for a Meraki `network` subject.
         - `network` — Deprecated legacy subject spanning VPCs and Sites.
 
         The `vpc` and `site` aliases constrain provider family only when this
         filter contains family aliases exclusively. Mixing either alias with
-        `integration`, `account`, or `subnet` drops that constraint
+        another subject type drops that constraint
         and can broaden matching `network` events. Unknown values return HTTP 400.
                 - entityId (array): Restricts results to exact primary-subject identifiers across all entity
         types. Repeat the parameter to OR identifiers.
@@ -10168,13 +10363,17 @@ class Organizations:
         - `integration` — Cloud integration subject.
         - `account` — Discovered cloud-account subject.
         - `subnet` — Discovered subnet or VLAN subject.
+        - `organization` — Organization or action spanning multiple resources.
+        - `tag` — Canonical network tag subject.
+        - `ztr_intent` — ZTR connection rule subject.
+        - `sites` — Organization-owned Manual IPsec Site subject with no account or integration parent.
         - `vpc` — Request alias for a public-cloud `network` subject.
         - `site` — Request alias for a Meraki `network` subject.
         - `network` — Deprecated legacy subject spanning VPCs and Sites.
 
         The `vpc` and `site` aliases constrain provider family only when this
         filter contains family aliases exclusively. Mixing either alias with
-        `integration`, `account`, or `subnet` drops that constraint
+        another subject type drops that constraint
         and can broaden matching `network` events. Unknown values return HTTP 400.
                 - entityId (array): Restricts results to exact primary-subject identifiers across all entity
         types. Repeat the parameter to OR identifiers.
@@ -10604,8 +10803,9 @@ class Organizations:
         - `ipsec` — The region has an eligible IPsec vPOP address.
 
         This value selects a connection type and does not identify the cloud-integration provider. If omitted, regions are not restricted by connection type.
-                - hasOnboardedNetworks (boolean): Deprecated: Use `hasOnboardedVpcs`. When `true`, returns only regions associated with at least one successfully onboarded legacy Network for the organization; when `false`, it adds no filter. If both parameters are supplied, `hasOnboardedVpcs` takes precedence.
-                - hasOnboardedVpcs (boolean): When `true`, returns only regions associated with at least one successfully onboarded VPC for the organization; when `false` or omitted, it adds no filter. This condition is evaluated independently of the `type` filter. This preferred field takes precedence over `hasOnboardedNetworks` when both are supplied.
+                - active (boolean): When `true`, returns only regions associated with at least one successfully onboarded VPC for the organization; when `false` or omitted, it adds no filter. This condition is evaluated independently of the `type` filter. If supplied, this parameter takes precedence over the deprecated `hasOnboardedVpcs` and `hasOnboardedNetworks` aliases, including when its value is `false`. If omitted, the aliases remain available for compatibility.
+                - hasOnboardedNetworks (boolean): Deprecated: Use `active`. When `true`, returns only regions associated with at least one successfully onboarded VPC for the organization; when `false`, it adds no filter. This alias is applied only when both `active` and `hasOnboardedVpcs` are omitted.
+                - hasOnboardedVpcs (boolean): Deprecated: Use `active`. When `true`, returns only regions associated with at least one successfully onboarded VPC for the organization; when `false` or omitted, it adds no filter. This condition is evaluated independently of the `type` filter. This alias is applied only when `active` is omitted and takes precedence over `hasOnboardedNetworks`, including when its value is `false`.
                 - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
                 - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
                 - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
@@ -10627,6 +10827,7 @@ class Organizations:
         query_params = [
             "provider",
             "type",
+            "active",
             "hasOnboardedNetworks",
             "hasOnboardedVpcs",
             "perPage",
@@ -10820,15 +11021,15 @@ class Organizations:
 
     def listSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **Returns Meraki network records represented as MCN Sites for site-to-cloud connectivity in the specified organization**
+        **Returns Meraki and Manual IPsec records represented as MCN Sites for site-to-cloud connectivity in the specified organization**
         https://developer.cisco.com/meraki/api-v1/#!list-sites
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - onboarded (boolean): When `true`, return only Sites currently marked as onboarded. When `false`, return only Sites not currently marked as onboarded. Omit to include both.
-        - accountId (string): MCN-assigned UUID of the MCN-managed Meraki account whose Sites are returned.
-        - integrationId (string): MCN-assigned UUID of the MCN-managed Meraki integration whose Sites are returned.
+        - onboarded (boolean): When `true`, return only Sites currently marked as onboarded. When `false`, return only Sites not currently marked as onboarded, including a Manual IPsec Site whose lifecycle record does not yet exist. Omit to include both.
+        - accountId (string): MCN-assigned UUID of the MCN-managed Meraki account whose Sites are returned. Because Manual IPsec Sites are accountless, supplying this filter excludes them.
+        - integrationId (string): MCN-assigned UUID of the MCN-managed Meraki integration whose Sites are returned. Because Manual IPsec Sites have no integration, supplying this filter excludes them.
         - perPage (integer): Requested maximum number of matching resources to return. The default and maximum, and whether this parameter is applied, are defined by the operation. A response can contain fewer resources than requested.
         - startingAfter (string): Forward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
         - endingBefore (string): Backward page boundary accepted by an operation. Its source, format, and interpretation are defined by that operation; do not reuse it across operations unless their documentation permits it. Cursor validation and interaction with other pagination parameters are operation-specific.
@@ -10921,7 +11122,7 @@ class Organizations:
 
     def getSite(self, organizationId: str, siteId: str):
         """
-        **Returns one organization-owned Meraki network represented as an MCN Site, including subnet and tag associations stored by MCN**
+        **Returns one organization-owned Meraki or Manual IPsec record represented as an MCN Site**
         https://developer.cisco.com/meraki/api-v1/#!get-site
 
         - organizationId (string): Organization ID
