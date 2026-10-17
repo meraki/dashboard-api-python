@@ -641,7 +641,9 @@ class Assistant:
 
         return self._session.get(metadata, resource)
 
-    def getOrganizationAssistantChatThreadMessageArtifacts(self, organizationId: str, threadId: str, messageId: str):
+    def getOrganizationAssistantChatThreadMessageArtifacts(
+        self, organizationId: str, threadId: str, messageId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List artifacts attached to a specific message**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assistant-chat-thread-message-artifacts
@@ -649,7 +651,13 @@ class Assistant:
         - organizationId (string): Organization ID
         - threadId (string): Thread ID
         - messageId (string): Message ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): Number of entries per page. Defaults to 100.
+        - offset (integer): Number of artifacts to skip before returning results. Defaults to 0.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["assistant", "configure", "chat", "threads", "messages", "artifacts"],
@@ -660,7 +668,21 @@ class Assistant:
         messageId = urllib.parse.quote(str(messageId), safe="")
         resource = f"/organizations/{organizationId}/assistant/chat/threads/{threadId}/messages/{messageId}/artifacts"
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "perPage",
+            "offset",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssistantChatThreadMessageArtifacts: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssistantChatThreadMessageArtifact(
         self, organizationId: str, threadId: str, messageId: str, artifactId: str, total_pages=1, direction="next", **kwargs

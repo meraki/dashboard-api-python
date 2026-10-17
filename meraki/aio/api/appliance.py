@@ -319,6 +319,45 @@ class AsyncAppliance:
 
         return self._session.post(metadata, resource)
 
+    def updateNetworkApplianceAlternateManagementInterface(self, networkId: str, **kwargs):
+        """
+        **Update Secure Router alternate management interface settings for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-alternate-management-interface
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether the alternate management interface is enabled
+        - primary (object): Primary alternate management interface addresses
+        - addressPool (object): Address pool reserved for alternate management interface addresses
+        - vrf (object): VRF assignment for the alternate management interface. This beta operation currently ignores the requested VRF ID and always uses the default VRF.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "alternateManagementInterface"],
+            "operation": "updateNetworkApplianceAlternateManagementInterface",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/alternateManagementInterface"
+
+        body_params = [
+            "enabled",
+            "primary",
+            "addressPool",
+            "vrf",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceAlternateManagementInterface: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceClientSecurityEvents(
         self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -3522,6 +3561,57 @@ class AsyncAppliance:
         resource = f"/networks/{networkId}/appliance/warmSpare/swap"
 
         return self._session.post(metadata, resource)
+
+    def getOrganizationApplianceAlternateManagementInterfacesByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Secure Router alternate management interface settings by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-alternate-management-interfaces-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter the results by network IDs. Matches are exact. Maximum array size is 100
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "alternateManagementInterfaces", "byNetwork"],
+            "operation": "getOrganizationApplianceAlternateManagementInterfacesByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/alternateManagementInterfaces/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceAlternateManagementInterfacesByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceDevicesInterfacesL3(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

@@ -554,6 +554,7 @@ class Nac:
         - groupIds (array): List of group ids for client retrieval by group
         - lastNetworkName (array): List of network names for client retrieval by last login network name
         - ssid (array): List of SSID's to filter
+        - excludeGroups (boolean): When true, omit the items array from each client's groups association while preserving totalCount and nextLink metadata.
         - classification (object): Classification filters for client retrieval
         - ipskConfigured (boolean): Filter clients by Identity Pre-Shared Key (iPSK) configuration status. true returns only clients with a per-client iPSK passphrase set; false returns only clients without one. Omit to return all clients regardless of iPSK status. When combined with other filters (clientIds, groupIds, search, classification, ssid, lastNetworkName), all conditions are applied together (logical AND).
         """
@@ -589,6 +590,7 @@ class Nac:
             "groupIds",
             "lastNetworkName",
             "ssid",
+            "excludeGroups",
             "classification",
             "ipskConfigured",
         ]
@@ -786,6 +788,7 @@ class Nac:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - search (string): Optional parameter to fuzzy search on client groups.
         - groupIds (array): List of ids for specific group retrieval
+        - excludeMembers (boolean): When true, omit the items array from each client group's members association while preserving totalCount and nextLink metadata.
         """
 
         kwargs.update(locals())
@@ -816,6 +819,7 @@ class Nac:
             "endingBefore",
             "search",
             "groupIds",
+            "excludeMembers",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 

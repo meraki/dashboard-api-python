@@ -8450,7 +8450,7 @@ class Wireless:
 
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
+        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-ethernet-statuses
 
         - organizationId (string): Organization ID

@@ -172,6 +172,37 @@ class ActionBatchAppliance:
         }
         return action
 
+    def updateNetworkApplianceAlternateManagementInterface(self, networkId: str, **kwargs):
+        """
+        **Update Secure Router alternate management interface settings for a network. Omitted properties remain unchanged. The request contains only editable properties; the response includes network identity and resolved VRF name. This beta operation is available only to organizations with beta API access and may change before GA.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-alternate-management-interface
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether the alternate management interface is enabled
+        - primary (object): Primary alternate management interface addresses
+        - addressPool (object): Address pool reserved for alternate management interface addresses
+        - vrf (object): VRF assignment for the alternate management interface. This beta operation currently ignores the requested VRF ID and always uses the default VRF.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/alternateManagementInterface"
+
+        body_params = [
+            "enabled",
+            "primary",
+            "addressPool",
+            "vrf",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
         **Update the connectivity testing destinations for an MX network**
