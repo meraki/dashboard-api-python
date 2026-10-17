@@ -574,6 +574,33 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def updateNetworkApplianceSecurityHttpsInspection(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update HTTPS inspection configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-https-inspection
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether HTTPS inspection is enabled.
+        - allowLists (object): Allow lists for HTTPS inspection exclusions.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/security/httpsInspection"
+
+        body_params = [
+            "enabled",
+            "allowLists",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceSettings(self, networkId: str, **kwargs):
         """
         **Update the appliance settings for a network**
