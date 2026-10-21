@@ -8,6 +8,13 @@ add a news fragment under `changelog.d/` for every user-facing change. See
 
 <!-- towncrier release notes start -->
 
+## 4.6.1b1 (2026-10-21)
+
+### Fixed
+
+- Extended `test_all_api_sections_initialized` to cover all 22 registered categories (previously only 10), closing the test-coverage gap intentionally left open by #485. ([#497](https://github.com/meraki/dashboard-api-python/issues/497))
+
+
 ## 4.5.0b4 (2026-09-30)
 
 ### Fixed

@@ -415,7 +415,7 @@ class ActionBatchAppliance:
 
     def createNetworkAppliancePortsRadiusServer(self, networkId: str, **kwargs):
         """
-        **Create a shared MX port RADIUS server for a network. These network-owned servers are shared by all MX ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (802.1X authentication with MAC-based RADIUS fallback) access policies. A network can have at most 3 shared servers. This beta operation is available only to organizations with beta API access and may change before GA.**
+        **Create a shared Security Appliance or Secure Router port RADIUS server for a network. These network-owned servers are shared by all eligible Security Appliance or Secure Router ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (combined 802.1X and MAC-based RADIUS authentication) access policies. A network can have at most 3 shared servers. Servers are returned in priority order, using the server ID as a deterministic tie-breaker. Newly created servers are appended to the end of the pool. Explicit reordering is not supported. This beta operation is available only to organizations with beta API access and may change before GA.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -444,7 +444,7 @@ class ActionBatchAppliance:
 
     def updateNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str, **kwargs):
         """
-        **Update a shared MX port RADIUS server for a network. These network-owned servers are shared by all MX ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (802.1X authentication with MAC-based RADIUS fallback) access policies. Omitted attributes are left unchanged. This beta operation is available only to organizations with beta API access and may change before GA.**
+        **Update a shared Security Appliance or Secure Router port RADIUS server for a network. These network-owned servers are shared by all eligible Security Appliance or Secure Router ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (combined 802.1X and MAC-based RADIUS authentication) access policies. Omitted attributes are left unchanged. This beta operation is available only to organizations with beta API access and may change before GA.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -475,7 +475,7 @@ class ActionBatchAppliance:
 
     def deleteNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str):
         """
-        **Delete a network-owned shared MX port RADIUS server. This beta operation is available only to organizations with beta API access and may change before GA.**
+        **Delete a network-owned shared Security Appliance or Secure Router port RADIUS server. Remaining server priorities are compacted after deletion. Deleting the final server is allowed. This beta operation is available only to organizations with beta API access and may change before GA.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -1285,7 +1285,7 @@ class ActionBatchAppliance:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "settings",
+            "operation": "update",
             "body": payload,
         }
         return action

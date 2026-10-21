@@ -30,7 +30,7 @@ class ActionBatchSpaces:
         }
         return action
 
-    def createNetworkSpacesSitesBuilding(self, networkId: str, name: str, **kwargs):
+    def createNetworkSpacesSitesBuilding(self, networkId: str, name: str, bounds: dict, **kwargs):
         """
         **Create a new building**
         https://developer.cisco.com/meraki/api-v1/#!create-network-spaces-sites-building
@@ -40,7 +40,7 @@ class ActionBatchSpaces:
         - bounds (object): Geographic bounding box for the building, expressed as north-east and south-west corner coordinates.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/spaces/sites/buildings"

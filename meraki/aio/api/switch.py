@@ -2507,6 +2507,7 @@ class AsyncSwitch:
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
         - macBlocklist (object): MAC blocklist
+        - clientTracking (object): Client tracking settings.
         - portChannelFallback (boolean): Port channel fallback
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
@@ -2526,6 +2527,7 @@ class AsyncSwitch:
             "powerExceptions",
             "uplinkClientSampling",
             "macBlocklist",
+            "clientTracking",
             "portChannelFallback",
             "uplinkSelection",
         ]
@@ -4267,7 +4269,7 @@ class AsyncSwitch:
         - updateResults (array): Exact items[].update.status.result.value filters using inclusive OR, normalized case-insensitively to the canonical enum value. Omit for no terminal-result restriction. Terminal-result values: succeeded, skipped, canceled, or failed. The value is null until the update completes. No default is implied.
         - currentVersionShortNames (array): Exact, case-sensitive currentVersion.shortName filters using inclusive OR. Omit for no current-version name restriction; maximum 100.
         - models (array): Exact, case-sensitive device.model filters using inclusive OR. Omit for no model restriction; maximum 100.
-        - sortKey (string): Sort key: currentVersion orders currentVersion.shortName; device orders device.name with serial fallback; isUpdateAvailable orders false before true when ascending; model orders device.model; network orders network.name; updateStatus uses this semantic order when ascending: idle, upgrade-scheduled, upgrade-retry-scheduled, checking-in, download-started, download-complete, install-started, verification-started, upgrade-complete, upgrade-skipped, upgrade-canceled, upgrade-failed. Terminal items are then ordered by result: succeeded, skipped, canceled, then failed. Ties are resolved by device.serial. Defaults to device.
+        - sortKey (string): Sort key: currentVersion orders currentVersion.shortName; device orders device.name with serial fallback; isUpdateAvailable orders false before true when ascending; model orders device.model; network orders network.name; updateStatus uses this semantic order when ascending: idle, upgrade-scheduled, upgrade-retry-scheduled, checking-in, checked-in, download-started, download-complete, install-started, verification-started, upgrade-complete, upgrade-skipped, upgrade-canceled, upgrade-failed. Terminal items are then ordered by result: succeeded, skipped, canceled, then failed. Ties are resolved by device.serial. Defaults to device.
         """
 
         kwargs.update(locals())

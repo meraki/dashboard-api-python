@@ -2942,7 +2942,7 @@ class AsyncWireless:
         - radiusProxyEnabled (boolean): If true, Meraki devices will proxy RADIUS messages through the Meraki cloud to the configured RADIUS auth and accounting servers.
         - radiusTestingEnabled (boolean): If true, Meraki devices will periodically send Access-Request messages to configured RADIUS servers using identity 'meraki_8021x_test' to ensure that the RADIUS servers are reachable.
         - radiusCalledStationId (string): The template of the called station identifier to be used for RADIUS (ex. $NODE_MAC$:$VAP_NUM$).
-        - radiusAuthenticationNasId (string): The NAS identifier to use for RADIUS authentication. With 802.11r enabled or adaptive, custom text is available only to organizations enabled for this feature; otherwise, use only $NODE_MAC$, $VAP_NUM$, and $VAP_NAME$. When this feature is enabled, the complete rendered NAS identifier must be 1–48 bytes.
+        - radiusAuthenticationNasId (string): The NAS identifier to use for RADIUS authentication. With 802.11r enabled or adaptive, use $NODE_MAC$, $VAP_NUM$, $VAP_NAME$, and/or custom text. The complete rendered NAS identifier must be 1–48 bytes.
         - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
         - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
         - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
@@ -5889,7 +5889,7 @@ class AsyncWireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Summarizes wireless connection successes and failures by network.**
+        **Summarize wireless connection counts by network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network
 
         - organizationId (string): Organization ID
@@ -5902,7 +5902,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -5910,7 +5910,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnects", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
