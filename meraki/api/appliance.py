@@ -1301,7 +1301,7 @@ class Appliance:
 
     def createNetworkAppliancePortsRadiusServer(self, networkId: str, **kwargs):
         """
-        **Create a shared MX port RADIUS server for a network**
+        **Create a shared Security Appliance or Secure Router port RADIUS server for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -1338,7 +1338,7 @@ class Appliance:
 
     def updateNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str, **kwargs):
         """
-        **Update a shared MX port RADIUS server for a network**
+        **Update a shared Security Appliance or Secure Router port RADIUS server for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -1377,7 +1377,7 @@ class Appliance:
 
     def deleteNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str):
         """
-        **Delete a network-owned shared MX port RADIUS server**
+        **Delete a network-owned shared Security Appliance or Secure Router port RADIUS server**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-ports-radius-server
 
         - networkId (string): Network ID
@@ -4665,7 +4665,7 @@ class Appliance:
 
     def getOrganizationAppliancePortsRadiusByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List MX appliance port RADIUS settings by network**
+        **List Security Appliance and Secure Router port RADIUS settings by network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-ports-radius-by-network
 
         - organizationId (string): Organization ID

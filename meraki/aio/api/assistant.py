@@ -14,7 +14,7 @@ class AsyncAssistant:
         - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
         - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
         - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         - language (string): Optional language override. Defaults to the user's preferred language.
         - country (string): Optional country override. Defaults to the user's country.
         """
@@ -22,7 +22,7 @@ class AsyncAssistant:
         kwargs.update(locals())
 
         if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
             assert kwargs["platform"] in options, (
                 f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
             )
@@ -61,7 +61,7 @@ class AsyncAssistant:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): Number of entries per page. Defaults to 100. Maximum 1000.
-        - sort (string): Field to sort results by. Defaults to dateModified.
+        - sort (string): Field to sort results by. Defaults to updatedAt.
         - sortOrder (string): Sort direction for results. Defaults to desc.
         - from (string): Filter threads modified after this timestamp.
         - to (string): Filter threads modified before this timestamp.
@@ -70,7 +70,7 @@ class AsyncAssistant:
         kwargs.update(locals())
 
         if "sort" in kwargs:
-            options = ["dateModified", "id", "name"]
+            options = ["id", "name", "updatedAt"]
             assert kwargs["sort"] in options, f'''"sort" cannot be "{kwargs["sort"]}", & must be set to one of: {options}'''
         if "sortOrder" in kwargs:
             options = ["asc", "desc"]
@@ -248,14 +248,14 @@ class AsyncAssistant:
         https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-thread-message
 
         - threadId (string): Thread ID
-        - content (array): List of message content parts. Supports text, image, audio, and file types. Maximum 8 parts.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
+        - content (array): List of message content parts. A 'text' part sets 'text'; 'image', 'audio' and 'file' parts set 'source'. Maximum 8 parts.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         """
 
         kwargs.update(locals())
 
         if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
             assert kwargs["platform"] in options, (
                 f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
             )
@@ -329,7 +329,7 @@ class AsyncAssistant:
         - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
         - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
         - networkId (string): Optional network ID to scope the query to a specific network. Defaults to the user's last visited network.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         - language (string): Optional language override. Defaults to the user's preferred language.
         - country (string): Optional country override. Defaults to the user's country.
         """
@@ -337,7 +337,7 @@ class AsyncAssistant:
         kwargs.update(locals())
 
         if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
             assert kwargs["platform"] in options, (
                 f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
             )
@@ -379,7 +379,7 @@ class AsyncAssistant:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): Number of entries per page. Defaults to 100. Maximum 1000.
-        - sort (string): Field to sort results by. Defaults to dateModified.
+        - sort (string): Field to sort results by. Defaults to updatedAt.
         - sortOrder (string): Sort direction for results. Defaults to desc.
         - from (string): Filter threads modified after this timestamp.
         - to (string): Filter threads modified before this timestamp.
@@ -388,7 +388,7 @@ class AsyncAssistant:
         kwargs.update(locals())
 
         if "sort" in kwargs:
-            options = ["dateModified", "id", "name"]
+            options = ["id", "name", "updatedAt"]
             assert kwargs["sort"] in options, f'''"sort" cannot be "{kwargs["sort"]}", & must be set to one of: {options}'''
         if "sortOrder" in kwargs:
             options = ["asc", "desc"]
@@ -580,16 +580,16 @@ class AsyncAssistant:
 
         - organizationId (string): Organization ID
         - threadId (string): Thread ID
-        - content (array): List of message content parts. Supports text, image, audio, and file types. Maximum 8 parts.
+        - content (array): List of message content parts. A 'text' part sets 'text'; 'image', 'audio' and 'file' parts set 'source'. Maximum 8 parts.
         - networkName (string): Name of the target network.
         - networkId (string): Optional Meraki network ID for thread context.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         """
 
         kwargs.update(locals())
 
         if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
             assert kwargs["platform"] in options, (
                 f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
             )
@@ -653,7 +653,7 @@ class AsyncAssistant:
         - messageId (string): Message ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): Number of entries per page. Defaults to 100.
+        - perPage (integer): Number of entries per page. Defaults to 100. Maximum 100.
         - offset (integer): Number of artifacts to skip before returning results. Defaults to 0.
         """
 
@@ -756,7 +756,7 @@ class AsyncAssistant:
         self, organizationId: str, threadId: str, messageId: str, vote: bool, **kwargs
     ):
         """
-        **Submit or replace feedback for a specific assistant message.**
+        **Record a feedback entry for a specific assistant message**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-assistant-chat-thread-message-feedback
 
         - organizationId (string): Organization ID

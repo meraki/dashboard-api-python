@@ -3539,8 +3539,9 @@ class ActionBatchOrganizations:
         - organizationId (string): Organization ID
         - name (string): The name of the VRF (Virtual Routing and Forwarding)
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - autoRd (boolean): Whether the VRF is auto RD
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
-        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - routeTargets (object): Import and export route targets for the VRF
         - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
@@ -3552,8 +3553,9 @@ class ActionBatchOrganizations:
         body_params = [
             "name",
             "description",
+            "autoRd",
             "routeDistinguisher",
-            "routeTarget",
+            "routeTargets",
             "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -3573,8 +3575,9 @@ class ActionBatchOrganizations:
         - vrfId (string): Vrf ID
         - name (string): The name of the VRF (Virtual Routing and Forwarding)
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - autoRd (boolean): Whether the VRF is auto RD
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
-        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - routeTargets (object): Import and export route targets for the VRF
         - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
@@ -3587,8 +3590,9 @@ class ActionBatchOrganizations:
         body_params = [
             "name",
             "description",
+            "autoRd",
             "routeDistinguisher",
-            "routeTarget",
+            "routeTargets",
             "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
