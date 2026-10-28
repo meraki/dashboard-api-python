@@ -201,7 +201,7 @@ class ActionBatchWireless:
 
     def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict, **kwargs):
         """
-        **Creates a new rule**
+        **Creates a new rule. In an action batch, mutations execute in the submitted order and commit atomically; a failure rolls back every mutation and configuration update in that batch. Completed or failed batches cannot be executed again. Air Marshal settings updates may be included in the same batch. The created rule ID is returned in the action batch createdResources list. A later action in the same batch cannot reference that generated ID.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
 
         - networkId (string): Network ID
@@ -232,7 +232,7 @@ class ActionBatchWireless:
 
     def updateNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str, **kwargs):
         """
-        **Update a rule**
+        **Update a rule. In an action batch, mutations execute in the submitted order and commit atomically; a failure rolls back every mutation and configuration update in that batch. Completed or failed batches cannot be executed again. Air Marshal settings updates may be included in the same batch.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-rule
 
         - networkId (string): Network ID
@@ -265,7 +265,7 @@ class ActionBatchWireless:
 
     def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
         """
-        **Delete an Air Marshal rule.**
+        **Delete an Air Marshal rule. In an action batch, mutations execute in the submitted order and commit atomically; a failure rolls back every mutation and configuration update in that batch. Completed or failed batches cannot be executed again. Air Marshal settings updates may be included in the same batch.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-air-marshal-rule
 
         - networkId (string): Network ID
@@ -1063,6 +1063,7 @@ class ActionBatchWireless:
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
+        - dot11k (object): The current setting for 802.11k
         - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
@@ -1212,6 +1213,7 @@ class ActionBatchWireless:
             "wpaEncryptionMode",
             "dot11w",
             "dot11r",
+            "dot11k",
             "splashPage",
             "splashGuestSponsorDomains",
             "oauth",

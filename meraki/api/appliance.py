@@ -3447,6 +3447,8 @@ class Appliance:
 
         - networkId (string): Network ID
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
+        - changesConfirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to false.
+        - natTraversal (object): NAT traversal settings. Omit to leave the existing setting unchanged.
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
         - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
@@ -3469,7 +3471,9 @@ class Appliance:
         resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
         body_params = [
+            "changesConfirmed",
             "mode",
+            "natTraversal",
             "hubs",
             "subnets",
             "peerSgtCapable",
@@ -6573,7 +6577,7 @@ class Appliance:
 
     def getOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str):
         """
-        **Return the third party VPN peers for an organization**
+        **Return the configured third-party VPN peers for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-third-party-v-p-n-peers
 
         - organizationId (string): Organization ID

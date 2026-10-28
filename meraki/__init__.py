@@ -57,7 +57,7 @@ from meraki.config import (
 from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIError
 from meraki.rest_session import RestSession
 
-__api_version__ = "1.75.1-beta.1"
+__api_version__ = "1.75.1-beta.2"
 
 __all__ = [
     "APIError",

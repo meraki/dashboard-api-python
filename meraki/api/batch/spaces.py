@@ -88,7 +88,7 @@ class ActionBatchSpaces:
 
     def deleteNetworkSpacesSitesBuilding(self, networkId: str, buildingId: str):
         """
-        **Delete a building**
+        **Delete a building and all floors assigned to it.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-spaces-sites-building
 
         - networkId (string): Network ID

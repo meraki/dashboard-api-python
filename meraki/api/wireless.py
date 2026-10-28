@@ -650,7 +650,7 @@ class Wireless:
 
     def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
         """
-        **Delete an Air Marshal rule.**
+        **Delete an Air Marshal rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-air-marshal-rule
 
         - networkId (string): Network ID
@@ -842,6 +842,7 @@ class Wireless:
         - major (integer): The major number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
         - minor (integer): The minor number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
         - transmit (object): Transmit settings.
+        - sensorConnect (object): Sensor Connect related settings.
         """
 
         kwargs.update(locals())
@@ -867,6 +868,7 @@ class Wireless:
             "major",
             "minor",
             "transmit",
+            "sensorConnect",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2932,6 +2934,7 @@ class Wireless:
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
+        - dot11k (object): The current setting for 802.11k
         - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
@@ -3085,6 +3088,7 @@ class Wireless:
             "wpaEncryptionMode",
             "dot11w",
             "dot11r",
+            "dot11k",
             "splashPage",
             "splashGuestSponsorDomains",
             "oauth",
@@ -5885,12 +5889,12 @@ class Wireless:
 
         return self._session.get(metadata, resource, params)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarize wireless connection counts by network**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -5910,11 +5914,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "monitor", "experience", "successfulConnects", "byNetwork"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork",
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork"
 
         query_params = [
             "networkIds",
@@ -5946,17 +5950,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByBand(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by band.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-band
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-band
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -5976,11 +5980,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byBand"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byBand"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByBand",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byBand"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byBand"
 
         query_params = [
             "networkIds",
@@ -6012,17 +6016,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClient(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by client.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-client
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6042,11 +6046,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClient"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClient",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClient"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byClient"
 
         query_params = [
             "networkIds",
@@ -6078,17 +6082,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientOs(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by client OS.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client-os
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-client-os
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6108,11 +6112,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientOs"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientOs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClientOs"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byClientOs"
 
         query_params = [
             "networkIds",
@@ -6144,17 +6148,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientType(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by client type.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client-type
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-client-type
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6174,11 +6178,13 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientType"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClientType"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientType",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClientType"
+        resource = (
+            f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byClientType"
+        )
 
         query_params = [
             "networkIds",
@@ -6210,17 +6216,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by device.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-device
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-device
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6240,11 +6246,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byDevice"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByDevice",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byDevice"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byDevice"
 
         query_params = [
             "networkIds",
@@ -6276,17 +6282,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByInterval(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Time-series of wireless connection successes and failures by network.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-interval
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-interval
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6307,11 +6313,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "monitor", "experience", "successfulConnects", "byNetwork", "byInterval"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval",
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByInterval",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byInterval"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byInterval"
 
         query_params = [
             "networkIds",
@@ -6344,17 +6350,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByServer(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by server.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-server
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-server
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6374,11 +6380,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byServer"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byServer"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByServer",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byServer"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/byServer"
 
         query_params = [
             "networkIds",
@@ -6410,17 +6416,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByServer: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkBySsid(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Summarizes wireless connection successes and failures by ssid.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-ssid
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-ssid
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6440,11 +6446,11 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "bySsid"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "bySsid"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkBySsid",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/bySsid"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork/bySsid"
 
         query_params = [
             "networkIds",
@@ -6476,17 +6482,17 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork(
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsInsightsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Provides insights into wireless successful connects experience by network.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-insights-by-network
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-insights-by-network
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -6520,11 +6526,11 @@ class Wireless:
             )
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnects", "insights", "byNetwork"],
-            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork",
+            "tags": ["wireless", "configure", "experience", "successfulConnections", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsInsightsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/insights/byNetwork"
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/insights/byNetwork"
 
         query_params = [
             "networkIds",
@@ -6559,7 +6565,7 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -8129,6 +8135,63 @@ class Wireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessDevicesAccelerometerStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesAntennasExternalByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List last-known external antenna detections by device and radio for outdoor CW9163E and CW9177E access points**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-antennas-external-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional exact-match network IDs. Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example networkIds[]=N_1234. Maximum 100 items.
+        - serials (array): Optional exact-match device serials. Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example serials[]=Q2XX-XXXX-XXXX. Maximum 100 items.
+        - models (array): Optional exact-match Dashboard model identifiers (CW9163E, CW9177E). Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example models[]=CW9163E. Maximum 100 items.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "antennas", "external", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesAntennasExternalByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/antennas/external/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "models",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "models",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesAntennasExternalByDevice: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

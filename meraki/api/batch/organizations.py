@@ -2074,7 +2074,7 @@ class ActionBatchOrganizations:
 
     def syncAutovpnConnectors(self, organizationId: str):
         """
-        **Starts asynchronous reconciliation of MCN AutoVPN connectors and available regions.**
+        **Starts asynchronous reconciliation of MCF AutoVPN connectors and available regions.**
         https://developer.cisco.com/meraki/api-v1/#!sync-autovpn-connectors
 
         - organizationId (string): Organization ID
@@ -2133,7 +2133,7 @@ class ActionBatchOrganizations:
 
     def offboardAutovpnSpoke(self, organizationId: str, networkId: str):
         """
-        **Detaches a Meraki AutoVPN spoke from its MCN regions.**
+        **Detaches a Meraki AutoVPN spoke from its MCF regions.**
         https://developer.cisco.com/meraki/api-v1/#!offboard-autovpn-spoke
 
         - organizationId (string): Organization ID
@@ -2152,12 +2152,12 @@ class ActionBatchOrganizations:
 
     def replaceAutovpnSpokeRegions(self, organizationId: str, networkId: str, regionIds: list, **kwargs):
         """
-        **Replaces the complete desired MCN region set for a Meraki AutoVPN spoke.**
+        **Replaces the complete desired MCF region set for a Meraki AutoVPN spoke.**
         https://developer.cisco.com/meraki/api-v1/#!replace-autovpn-spoke-regions
 
         - organizationId (string): Organization ID
         - networkId (string): Network ID
-        - regionIds (array): Complete desired set of MCN region identifiers.
+        - regionIds (array): Complete desired set of MCF region identifiers.
         """
 
         kwargs = locals()
@@ -2179,7 +2179,7 @@ class ActionBatchOrganizations:
 
     def createIntegration(self, organizationId: str, provider: str, accessRights: list, **kwargs):
         """
-                **Creates an AWS, Microsoft Azure, or Google Cloud integration for the specified Meraki Dashboard organization and starts initial cloud-resource discovery. The `provider` value selects the matching credential object; credential objects for other providers are ignored. The `201` response confirms that the integration was created and discovery was accepted for separate processing, not that discovery completed.**
+                **Creates an AWS, Microsoft Azure, or Google Cloud integration for the specified Meraki Dashboard organization and starts initial cloud-resource discovery. The `provider` value selects the matching credential object; credential objects for other providers are ignored. For Azure or Google Cloud, a supplied `acknowledgedAccountIds` array requires a fresh comparison against the currently accessible account ID set before creation. A changed set returns `409` with the current account scope, and the integration is not created. Omission or `null` preserves creation without this comparison. The `201` response confirms that the integration was created and discovery was accepted for separate processing, not that discovery completed.**
                 https://developer.cisco.com/meraki/api-v1/#!create-integration
 
                 - organizationId (string): Organization ID
@@ -2189,14 +2189,17 @@ class ActionBatchOrganizations:
         - `azure` — Microsoft Azure; requires `azure` service-principal credentials.
         - `gcp` — Google Cloud; requires `gcp` service-account credentials.
 
-        Public creation does not accept `meraki`; MCN manages that integration
+        Public creation does not accept `meraki`; Multicloud Fabric manages that integration
         for Site discovery. Credential objects for providers other than the
         selected value are ignored.
-                - accessRights (array): One or more requested provider capability bundles for the integration. MCN validates and stores these values, but they are not operation-time authorization switches.
+                - accessRights (array): One or more requested provider capability bundles for the integration. Multicloud Fabric validates and stores these values, but they are not operation-time authorization switches.
 
         - `discover` — Requests permissions used to inventory accounts or projects, networks, subnets, routing, and related metadata.
         - `create_onboarding_resources` — Requests permissions used to create supported provider-side gateway and VPN resources during onboarding.
         - `update_vpc` — Requests permissions associated with modifying supported cloud-network resources.
+                - acknowledgedAccountIds (array): Provider-native IDs presented when the customer acknowledged account scope: Azure subscription IDs for `azure`, or Google Cloud project IDs for `gcp`. When supplied, creation requires the current accessible account ID set to equal this set. Comparison ignores leading and trailing whitespace in both sets and ignores letter case for Azure subscription IDs. Google Cloud project IDs remain case-sensitive. IDs are deduplicated after these comparison rules are applied. Order and display-name changes do not affect comparison. A difference returns `409` with the current scope for review and renewed acknowledgement. The returned scope preserves the IDs from the preview.
+
+        Omission or `null` preserves creation without an acknowledged-scope check. An empty array acknowledges a scope with no accessible accounts and still requires a fresh comparison. IDs must contain a non-whitespace character. This field is ignored for `aws`.
                 - aws (object): AWS assumed-role details. Required when `provider` is `aws`; otherwise this object is not used.
                 - gcp (object): Google Cloud service-account credentials and optional parent scope. Required when `provider` is `gcp`; otherwise this object is not used.
                 - azure (object): Microsoft Azure service-principal credentials. Required when `provider` is `azure`; otherwise this object is not used.
@@ -2208,6 +2211,7 @@ class ActionBatchOrganizations:
         resource = f"/organizations/{organizationId}/mcf/integrations"
 
         body_params = [
+            "acknowledgedAccountIds",
             "provider",
             "accessRights",
             "aws",
@@ -2224,7 +2228,7 @@ class ActionBatchOrganizations:
 
     def previewAzureAccounts(self, organizationId: str, tenantId: str, clientId: str, clientSecret: str, **kwargs):
         """
-        **Validates proposed Microsoft Azure service-principal credentials and returns the Azure subscriptions accessible to them. The preview does not create an integration or modify existing MCN account and network state.**
+        **Validates proposed Microsoft Azure service-principal credentials and returns the Azure subscriptions accessible to them. The preview does not create an integration or modify existing Multicloud Fabric account and network state.**
         https://developer.cisco.com/meraki/api-v1/#!preview-azure-accounts
 
         - organizationId (string): Organization ID
@@ -2253,7 +2257,7 @@ class ActionBatchOrganizations:
 
     def previewGcpAccounts(self, organizationId: str, keyJson: str, **kwargs):
         """
-                **Validates proposed Google Cloud service-account credentials and returns the Google Cloud projects accessible to them. The optional parent scope expands the preview to projects beneath one organization or folder; the preview does not create an integration or modify existing MCN account and network state.**
+                **Validates proposed Google Cloud service-account credentials and returns the Google Cloud projects accessible to them. The optional parent scope expands the preview to projects beneath one organization or folder; the preview does not create an integration or modify existing Multicloud Fabric account and network state.**
                 https://developer.cisco.com/meraki/api-v1/#!preview-gcp-accounts
 
                 - organizationId (string): Organization ID
@@ -2401,7 +2405,7 @@ class ActionBatchOrganizations:
                 https://developer.cisco.com/meraki/api-v1/#!confirm-removed-resources-bulk
 
                 - organizationId (string): Organization ID
-                - resourceIds (object): Explicit MCN UUIDs keyed by `account`, `network`, or `subnet`. Duplicate
+                - resourceIds (object): Explicit Multicloud Fabric UUIDs keyed by `account`, `network`, or `subnet`. Duplicate
         type/UUID pairs are processed once. The request can contain at most 100
         IDs across all keys. After duplicates are removed, request-size
         validation also counts the missing child networks of selected accounts; child
@@ -2517,7 +2521,7 @@ class ActionBatchOrganizations:
 
     def offboardVpcs(self, organizationId: str, vpcs: list, **kwargs):
         """
-        **Validates 1–50 distinct organization-owned VPC IDs and attempts to offboard each VPC. The entire request is rejected before batch creation when its shape or identifiers are invalid, a VPC is missing, or any requested VPC belongs to an active onboarding or offboarding batch. An existing VPC with no onboarding record is instead returned as a response-only rejection; it is not added to the batch tracker and does not prevent other VPCs from being processed. A successful item means MCN either completed immediate cleanup for a failed onboarding with no recorded provider resources or started asynchronous teardown. The batch reports terminal outcomes only for accepted VPCs; onboarding state history reports asynchronous teardown.**
+        **Validates 1–50 distinct organization-owned VPC IDs and attempts to offboard each VPC. The entire request is rejected before batch creation when its shape or identifiers are invalid, a VPC is missing, or any requested VPC belongs to an active onboarding or offboarding batch. An existing VPC with no onboarding record is instead returned as a response-only rejection; it is not added to the batch tracker and does not prevent other VPCs from being processed. A successful item means Multicloud Fabric either completed immediate cleanup for a failed onboarding with no recorded provider resources or started asynchronous teardown. The batch reports terminal outcomes only for accepted VPCs; onboarding state history reports asynchronous teardown.**
         https://developer.cisco.com/meraki/api-v1/#!offboard-vpcs
 
         - organizationId (string): Organization ID
@@ -2605,6 +2609,68 @@ class ActionBatchOrganizations:
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/mcf/ztrIntents"
+
+        body_params = [
+            "name",
+            "description",
+            "enabled",
+            "rule",
+            "endpointsA",
+            "endpointsB",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def updateZtrIntent(
+        self,
+        organizationId: str,
+        ztrIntentId: str,
+        name: str,
+        enabled: bool,
+        rule: str,
+        endpointsA: list,
+        endpointsB: list,
+        **kwargs,
+    ):
+        """
+                **Replaces an organization-scoped intent's mutable fields. Routing changes
+        set enabled intents to `PENDING` or disabled intents to `DISABLED` and
+        request asynchronous reconciliation, including routing cleanup on disable.
+        Metadata-only edits preserve lifecycle status. Unchanged selections,
+        reordered endpoints, and equivalent VPC/Site aliases do not trigger
+        reconciliation. Acceptance does not confirm reconciliation has begun or
+        routing cleanup is complete; track status with get or list. Intents in
+        `PENDING_DELETE` or `DELETED_FAILED` cannot be updated.**
+                https://developer.cisco.com/meraki/api-v1/#!update-ztr-intent
+
+                - organizationId (string): Organization ID
+                - ztrIntentId (string): Ztr intent ID
+                - name (string): Non-empty display name of the intent.
+                - enabled (boolean): Required enabled state. `true` includes the intent in routing;
+        `false` excludes it and routing changes request cleanup.
+                - rule (string): Required routing rule.
+
+        - `ALLOW` — Allows selected endpoint prefixes.
+        - `DENY` — Currently produces the same routing output as `ALLOW`.
+                - endpointsA (array): Non-empty replacement of side A; at most one tag selector. Ordering does not affect routing.
+                - endpointsB (array): Non-empty replacement of side B; at most one tag selector. Ordering does not affect routing.
+                - description (string): Intent explanation; omission or null clears it, while an empty string is stored as given.
+        """
+
+        kwargs.update(locals())
+
+        if "rule" in kwargs:
+            options = ["ALLOW", "DENY"]
+            assert kwargs["rule"] in options, f'''"rule" cannot be "{kwargs["rule"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        ztrIntentId = urllib.parse.quote(ztrIntentId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/ztrIntents/{ztrIntentId}"
 
         body_params = [
             "name",
@@ -3717,33 +3783,6 @@ class ActionBatchOrganizations:
         action = {
             "resource": resource,
             "operation": "destroy",
-        }
-        return action
-
-    def bulkOrganizationSaseSitesRegionsUpdate(self, organizationId: str, sites: list, region: dict, **kwargs):
-        """
-        **Create a provisioning pipeline that bulk updates multiple already attached Secure Access sites to one selected region.**
-        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-sase-sites-regions-update
-
-        - organizationId (string): Organization ID
-        - sites (array): Non-empty list of Secure Access sites to bulk update. One to 20 sites can be updated in a single request.
-        - region (object): Destination region applied uniformly to all listed Secure Access sites.
-        """
-
-        kwargs = locals()
-
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        resource = f"/organizations/{organizationId}/sase/sites/regions/bulkUpdate"
-
-        body_params = [
-            "sites",
-            "region",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "update",
-            "body": payload,
         }
         return action
 

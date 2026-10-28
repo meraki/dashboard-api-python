@@ -1120,7 +1120,7 @@ class AsyncDevices:
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table
 
         - serial (string): Serial
-        - destination (object): Optional destination filter used to return routes containing the supplied destination.
+        - destination (object): Optional destination filter used to return routes with an exact destination prefix match.
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
