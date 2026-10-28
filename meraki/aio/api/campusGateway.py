@@ -115,6 +115,97 @@ class AsyncCampusGateway:
 
         return self._session.delete(metadata, resource)
 
+    def createNetworkCampusGatewayMdnsServicesCustom(self, networkId: str, name: str, types: list, **kwargs):
+        """
+        **Create a network-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-campus-gateway-mdns-services-custom
+
+        - networkId (string): Network ID
+        - name (string): Display name of the custom mDNS service.
+        - types (array): DNS-SD service types. Accepted shorthand is normalized by the API.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "createNetworkCampusGatewayMdnsServicesCustom",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/campusGateway/mdns/services/custom"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkCampusGatewayMdnsServicesCustom: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateNetworkCampusGatewayMdnsServicesCustom(self, networkId: str, key: str, **kwargs):
+        """
+        **Update a network-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-campus-gateway-mdns-services-custom
+
+        - networkId (string): Network ID
+        - key (string): Key
+        - name (string): Updated display name of the custom mDNS service.
+        - types (array): Replacement ordered list of DNS-SD service types.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "updateNetworkCampusGatewayMdnsServicesCustom",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        key = urllib.parse.quote(str(key), safe="")
+        resource = f"/networks/{networkId}/campusGateway/mdns/services/custom/{key}"
+
+        body_params = [
+            "name",
+            "types",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkCampusGatewayMdnsServicesCustom: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkCampusGatewayMdnsServicesCustom(self, networkId: str, key: str):
+        """
+        **Delete a network-scoped custom mDNS service definition.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-campus-gateway-mdns-services-custom
+
+        - networkId (string): Network ID
+        - key (string): Key
+        """
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "mdns", "services", "custom"],
+            "operation": "deleteNetworkCampusGatewayMdnsServicesCustom",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        key = urllib.parse.quote(str(key), safe="")
+        resource = f"/networks/{networkId}/campusGateway/mdns/services/custom/{key}"
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkCampusGatewaySsidMdns(self, networkId: str, number: str):
         """
         **List the currently configured mDNS settings for the SSID**
