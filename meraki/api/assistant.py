@@ -12,7 +12,7 @@ class Assistant:
         https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-completion
 
         - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
-        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
+        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Maximum 8 parts and 4 total images. Each image must be at most 10 MiB decoded.
         - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
         - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         - language (string): Optional language override. Defaults to the user's preferred language.
@@ -248,7 +248,7 @@ class Assistant:
         https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-thread-message
 
         - threadId (string): Thread ID
-        - content (array): List of message content parts. A 'text' part sets 'text'; 'image', 'audio' and 'file' parts set 'source'. Maximum 8 parts.
+        - content (array): List of message content parts. A 'text' part sets 'text'; an 'image' part sets 'source'. Maximum 8 parts; each image must be at most 10 MiB decoded. There is no separate four-image limit.
         - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
         """
 
@@ -326,7 +326,7 @@ class Assistant:
 
         - organizationId (string): Organization ID
         - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
-        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
+        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Maximum 8 parts and 4 total images. Each image must be at most 10 MiB decoded.
         - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
         - networkId (string): Optional network ID to scope the query to a specific network. Defaults to the user's last visited network.
         - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
@@ -580,7 +580,7 @@ class Assistant:
 
         - organizationId (string): Organization ID
         - threadId (string): Thread ID
-        - content (array): List of message content parts. A 'text' part sets 'text'; 'image', 'audio' and 'file' parts set 'source'. Maximum 8 parts.
+        - content (array): List of message content parts. A 'text' part sets 'text'; an 'image' part sets 'source'. Maximum 8 parts; each image must be at most 10 MiB decoded. There is no separate four-image limit.
         - networkName (string): Name of the target network.
         - networkId (string): Optional Meraki network ID for thread context.
         - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.

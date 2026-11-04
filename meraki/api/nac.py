@@ -788,6 +788,7 @@ class Nac:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - search (string): Optional parameter to fuzzy search on client groups.
         - groupIds (array): List of ids for specific group retrieval
+        - clientMac (string): MAC address of a client whose associated groups should be returned
         - excludeMembers (boolean): When true, omit the items array from each client group's members association while preserving totalCount and nextLink metadata.
         """
 
@@ -819,6 +820,7 @@ class Nac:
             "endingBefore",
             "search",
             "groupIds",
+            "clientMac",
             "excludeMembers",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}

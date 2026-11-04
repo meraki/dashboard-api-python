@@ -328,7 +328,7 @@ class Appliance:
         - enabled (boolean): Whether the alternate management interface is enabled
         - primary (object): Primary alternate management interface addresses
         - addressPool (object): Address pool reserved for alternate management interface addresses
-        - vrf (object): VRF assignment for the alternate management interface. This beta operation currently ignores the requested VRF ID and always uses the default VRF.
+        - vrf (object): VRF assignment for the alternate management interface. Omit this field to preserve an existing assignment; when enabling AMI without an existing assignment, omission uses the default. Send null or ID 0 to use the default. Non-default VRFs must be supported for this Catalyst Router network.
         """
 
         kwargs.update(locals())
@@ -2692,6 +2692,7 @@ class Appliance:
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
         - applications (array): NBAR application-based VPN exclusion rules. The documented example is a Secure Router NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable. Available for networks on firmware >= 19.2.
+        - applicationCategoryMapping (object): Options for mapping configured majorApplications to application categories.
         """
 
         kwargs.update(locals())
@@ -2707,6 +2708,7 @@ class Appliance:
             "custom",
             "majorApplications",
             "applications",
+            "applicationCategoryMapping",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -3388,14 +3390,14 @@ class Appliance:
 
         return self._session.put(metadata, resource, payload)
 
-    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, vrfs: list, **kwargs):
         """
-        **Update the VRF mappings for a source network and hub pair.**
+        **Replace the complete VRF mapping for a source network and hub pair**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
 
         - networkId (string): Network ID
         - hubNetworkId (string): Hub network ID
-        - _json (array): The list of VRFs for this source and hub mapping.
+        - vrfs (array): The list of VRFs for this source and hub mapping.
         """
 
         kwargs = locals()
@@ -3409,7 +3411,7 @@ class Appliance:
         resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
 
         body_params = [
-            "_json",
+            "vrfs",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -3425,7 +3427,7 @@ class Appliance:
 
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
-        **Return the site-to-site VPN settings of a network**
+        **Return the site-to-site VPN settings of an MX network or configuration template.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
@@ -3442,15 +3444,15 @@ class Appliance:
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network**
+        **Update the site-to-site VPN settings of an MX network or configuration template in NAT mode**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
-        - changesConfirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to false.
+        - confirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to true, which accepts confirmation warnings and preserves the existing update behavior. Set to false to opt in to confirmation warnings. Review the warnings returned in confirmations, then retry with confirmed: true to accept them. Fatal errors must be corrected before retrying.
         - natTraversal (object): NAT traversal settings. Omit to leave the existing setting unchanged.
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
-        - subnets (array): The list of subnets and their VPN presence.
+        - subnets (array): The list of local VPN subnets and their VPN presence. VLAN entries include vlanId and subnetting where applicable. When the corresponding NFO is enabled, NAT settings are returned for every VLAN; non-VLAN entries omit vlanId, subnetting, and nat.legacy.
         - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
         - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
@@ -3471,7 +3473,7 @@ class Appliance:
         resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
         body_params = [
-            "changesConfirmed",
+            "confirmed",
             "mode",
             "natTraversal",
             "hubs",

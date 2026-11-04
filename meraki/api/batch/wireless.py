@@ -282,16 +282,16 @@ class ActionBatchWireless:
         }
         return action
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, **kwargs):
         """
-        **Updates Air Marshal settings.**
+        **Updates Air Marshal settings. Omitting an optional setting leaves its saved value unchanged.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
 
         - networkId (string): Network ID
         - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]

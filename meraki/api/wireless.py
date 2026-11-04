@@ -667,16 +667,16 @@ class Wireless:
 
         return self._session.delete(metadata, resource)
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, **kwargs):
         """
-        **Updates Air Marshal settings.**
+        **Updates Air Marshal settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
 
         - networkId (string): Network ID
         - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]
@@ -5901,8 +5901,8 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -8143,7 +8143,7 @@ class Wireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **List last-known external antenna detections by device and radio for outdoor CW9163E and CW9177E access points**
+        **List detected and Dashboard-configured external antennas by device and radio for applicable outdoor access points**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-antennas-external-by-device
 
         - organizationId (string): Organization ID
@@ -8151,7 +8151,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Optional exact-match network IDs. Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example networkIds[]=N_1234. Maximum 100 items.
         - serials (array): Optional exact-match device serials. Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example serials[]=Q2XX-XXXX-XXXX. Maximum 100 items.
-        - models (array): Optional exact-match Dashboard model identifiers (CW9163E, CW9177E). Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example models[]=CW9163E. Maximum 100 items.
+        - models (array): Optional exact-match Dashboard model identifiers, such as MR76, MR86, CW9163E or CW9177E; omit hardware suffixes such as -HW. Values match with OR; different filters combine with AND. An omitted or empty array does not restrict results. Applied before pagination and counts; inaccessible devices and networks are excluded. Use repeated bracket keys, for example models[]=CW9163E. Maximum 100 items.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -8513,7 +8513,7 @@ class Wireless:
 
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices**
+        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-ethernet-statuses
 
         - organizationId (string): Organization ID
@@ -9936,6 +9936,243 @@ class Wireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessIotRolesByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationWirelessLiveToolsRebootBatch(self, organizationId: str, serials: list, mode: str, **kwargs):
+        """
+        **Create an asynchronous reboot batch for selected access points in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-live-tools-reboot-batch
+
+        - organizationId (string): Organization ID
+        - serials (array): AP serials to reboot. All must belong to one network. Maximum 5000.
+        - mode (string): 'now' dispatches as soon as possible; 'scheduled' waits for scheduledAt.
+        - scheduledAt (string): ISO 8601 UTC timestamp. Required when mode is 'scheduled'; must be within 30 days.
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["now", "scheduled"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "reboot", "batches"],
+            "operation": "createOrganizationWirelessLiveToolsRebootBatch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/liveTools/reboot/batches"
+
+        body_params = [
+            "serials",
+            "mode",
+            "scheduledAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessLiveToolsRebootBatch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWirelessLiveToolsRebootBatches(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List reboot batches for an organization, newest first**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-live-tools-reboot-batches
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - status (string): Filter batches by lifecycle status.
+        - networkIds (array): Filter batches by network.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if "status" in kwargs:
+            options = ["cancelled", "complete", "failed", "new", "running", "scheduled"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "reboot", "batches"],
+            "operation": "getOrganizationWirelessLiveToolsRebootBatches",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/liveTools/reboot/batches"
+
+        query_params = [
+            "status",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLiveToolsRebootBatches: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessLiveToolsRebootBatch(self, organizationId: str, batchId: str):
+        """
+        **Return a batch overview: lifecycle status and per-status counts.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-live-tools-reboot-batch
+
+        - organizationId (string): Organization ID
+        - batchId (string): Batch ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "reboot", "batches"],
+            "operation": "getOrganizationWirelessLiveToolsRebootBatch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        batchId = urllib.parse.quote(str(batchId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/liveTools/reboot/batches/{batchId}"
+
+        return self._session.get(metadata, resource)
+
+    def cancelOrganizationWirelessLiveToolsRebootBatch(self, organizationId: str, batchId: str, **kwargs):
+        """
+        **Cancel scheduled reboots in a batch**
+        https://developer.cisco.com/meraki/api-v1/#!cancel-organization-wireless-live-tools-reboot-batch
+
+        - organizationId (string): Organization ID
+        - batchId (string): Batch ID
+        - serials (array): AP serials in this batch to cancel. Must be non-empty and unique. Omit to cancel the whole batch.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "reboot", "batches"],
+            "operation": "cancelOrganizationWirelessLiveToolsRebootBatch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        batchId = urllib.parse.quote(str(batchId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/liveTools/reboot/batches/{batchId}/cancel"
+
+        body_params = [
+            "serials",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"cancelOrganizationWirelessLiveToolsRebootBatch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWirelessLiveToolsRebootStatusesByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List per-device reboot statuses across the organization's wireless networks, newest first.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-live-tools-reboot-statuses-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - status (string): Filter by per-device reboot status.
+        - reason (string): Filter failed jobs by reason (e.g. offline). Use status=failed&reason=offline for unreachable APs.
+        - batchId (string): Filter to one reboot batch.
+        - networkIds (array): Filter by network.
+        - serials (array): Filter by device serial.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if "status" in kwargs:
+            options = ["cancelled", "complete", "failed", "new", "ready", "running", "scheduled"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+        if "reason" in kwargs:
+            options = ["offline", "other", "rejected", "timeout", "unsupported"]
+            assert kwargs["reason"] in options, (
+                f'''"reason" cannot be "{kwargs["reason"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "reboot", "statuses", "byDevice"],
+            "operation": "getOrganizationWirelessLiveToolsRebootStatusesByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/liveTools/reboot/statuses/byDevice"
+
+        query_params = [
+            "status",
+            "reason",
+            "batchId",
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLiveToolsRebootStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
