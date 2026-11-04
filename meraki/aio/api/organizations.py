@@ -5614,7 +5614,7 @@ class AsyncOrganizations:
 
         - organizationId (string): Organization ID
         - networkIds (array): Filter results by network.
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
+        - productTypes (array): Filter results by product type. Supported types: 'wireless'.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
@@ -9823,6 +9823,23 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
+    def deleteMcfOrganization(self, organizationId: str):
+        """
+        **Removes the associated Multicloud Fabric organization from active use while retaining its configuration and related resource records**
+        https://developer.cisco.com/meraki/api-v1/#!delete-mcf-organization
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf"],
+            "operation": "deleteMcfOrganization",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf"
+
+        return self._session.delete(metadata, resource)
+
     def getAccounts(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
                 **Returns account records discovered through cloud integrations for the
@@ -9966,6 +9983,37 @@ class AsyncOrganizations:
         resource = f"/organizations/{organizationId}/mcf/autovpn/sites/enrollable"
 
         return self._session.get(metadata, resource)
+
+    def offboardAutovpnSpokes(self, organizationId: str, spokes: list, **kwargs):
+        """
+        **Detaches the requested Meraki AutoVPN spokes from their MCF regions.**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-autovpn-spokes
+
+        - organizationId (string): Organization ID
+        - spokes (array): Spoke networks to detach. Must name at least one network.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "autovpn", "sites"],
+            "operation": "offboardAutovpnSpokes",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites/offboard"
+
+        body_params = [
+            "spokes",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"offboardAutovpnSpokes: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
 
     def onboardAutovpnSites(self, organizationId: str, **kwargs):
         """
@@ -11388,6 +11436,117 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource, params)
 
+    def listOrganizationSubscriptions(self, organizationId: str):
+        """
+                **Returns the organization's CCW and TRIAL subscriptions whose recorded status is ACTIVE,
+        ordered by the earliest known start date among each subscription's returned terms, then by
+        Multicloud Fabric subscription UUID, both ascending**
+                https://developer.cisco.com/meraki/api-v1/#!list-organization-subscriptions
+
+                - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "subscriptions"],
+            "operation": "listOrganizationSubscriptions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions"
+
+        return self._session.get(metadata, resource)
+
+    def claimOrganizationSubscription(
+        self, organizationId: str, type: str, ccwWebOrderSubscriptionRefIdPair: dict, termsAcceptance: dict, **kwargs
+    ):
+        """
+        **Claims a CCW subscription using its original Web Order ID and subscription reference ID**
+        https://developer.cisco.com/meraki/api-v1/#!claim-organization-subscription
+
+        - organizationId (string): Organization ID
+        - type (string): `ccw_web_order_subscription_ref_id_pair` selects a claim using the CCW Web Order ID and subscription reference ID.
+        - ccwWebOrderSubscriptionRefIdPair (object): Original identifiers for the same CCW purchase. Values must match exactly, including capitalization and spaces.
+        - termsAcceptance (object): Acceptance of a displayed agreement version.
+        """
+
+        kwargs = locals()
+
+        if "type" in kwargs:
+            options = ["ccw_web_order_subscription_ref_id_pair"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "subscriptions", "claim"],
+            "operation": "claimOrganizationSubscription",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions/claim"
+
+        body_params = [
+            "type",
+            "ccwWebOrderSubscriptionRefIdPair",
+            "termsAcceptance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimOrganizationSubscription: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def createOrganizationTrialSubscription(self, organizationId: str, termsAcceptance: dict, **kwargs):
+        """
+        **Starts a Multicloud Fabric trial for an organization that has not enabled Multicloud Fabric**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-trial-subscription
+
+        - organizationId (string): Organization ID
+        - termsAcceptance (object): Acceptance of a displayed agreement version.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "subscriptions", "trial"],
+            "operation": "createOrganizationTrialSubscription",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions/trial"
+
+        body_params = [
+            "termsAcceptance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationTrialSubscription: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSubscription(self, organizationId: str, subscriptionId: str):
+        """
+                **Returns the requested organization subscription and every current or future term, using the
+        same term-date and ordering rules as the subscription list**
+                https://developer.cisco.com/meraki/api-v1/#!get-organization-subscription
+
+                - organizationId (string): Organization ID
+                - subscriptionId (string): Subscription ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "subscriptions"],
+            "operation": "getOrganizationSubscription",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        subscriptionId = urllib.parse.quote(str(subscriptionId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions/{subscriptionId}"
+
+        return self._session.get(metadata, resource)
+
     def getSummary(self, organizationId: str):
         """
         **Returns organization connection, VPC, Site, and region counts derived from Zero Trust Routing and tunnel health.**
@@ -11538,6 +11697,88 @@ class AsyncOrganizations:
         resource = f"/organizations/{organizationId}/mcf/tags/{tagId}"
 
         return self._session.get(metadata, resource)
+
+    def acceptOrganizationTerms(self, organizationId: str, type: str, version: int, accepted: bool, **kwargs):
+        """
+                **Records acceptance of a terms type and version for an existing Multicloud Fabric organization**
+                https://developer.cisco.com/meraki/api-v1/#!accept-organization-terms
+
+                - organizationId (string): Organization ID
+                - type (string): Type of terms to review or accept.
+
+        - `CCW_SUBSCRIPTION`: Terms for a CCW subscription.
+        - `TRIAL_SUBSCRIPTION`: Terms for a free trial.
+
+        Each type has its own versions and acceptance records.
+                - version (integer): Latest published version shown to the user. Version `0` is valid.
+                - accepted (boolean): `true` confirms acceptance of this version. `false` is rejected.
+        """
+
+        kwargs = locals()
+
+        if "type" in kwargs:
+            options = ["CCW_SUBSCRIPTION", "TRIAL_SUBSCRIPTION"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "termsAndConditions", "accept"],
+            "operation": "acceptOrganizationTerms",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/termsAndConditions/accept"
+
+        body_params = [
+            "type",
+            "version",
+            "accepted",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"acceptOrganizationTerms: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationTermsFile(self, organizationId: str, type: str, **kwargs):
+        """
+        **Returns the PDF for the selected terms type and version**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-terms-file
+
+        - organizationId (string): Organization ID
+        - type (string): Type of terms to download. Supply one supported value; empty, unknown, or repeated values are rejected.
+        - accept (string): May specify `application/pdf`. A successful response is a PDF; errors are returned as JSON.
+        - version (integer): Version of the terms to download, from `0` through `2147483647`. Omit it to download the latest version. Supply at most one value; empty, `null`, noninteger, and out-of-range values are rejected.
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["CCW_SUBSCRIPTION", "TRIAL_SUBSCRIPTION"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["organizations", "configure", "mcf", "termsAndConditions", "file"],
+            "operation": "getOrganizationTermsFile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/mcf/termsAndConditions/file"
+
+        query_params = [
+            "type",
+            "version",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationTermsFile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def getTunnelStatus(self, organizationId: str, **kwargs):
         """

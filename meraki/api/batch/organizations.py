@@ -2072,6 +2072,23 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def deleteMcfOrganization(self, organizationId: str):
+        """
+        **Removes the associated Multicloud Fabric organization from active use while retaining its configuration and related resource records. All onboarded VPCs and Sites must be removed first. A successful removal allows the same Meraki Dashboard organization to onboard again as a new Multicloud Fabric organization. Repeating removal before onboarding again returns 404.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-mcf-organization
+
+        - organizationId (string): Organization ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf"
+
+        action = {
+            "resource": resource,
+            "operation": "batch",
+        }
+        return action
+
     def syncAutovpnConnectors(self, organizationId: str):
         """
         **Starts asynchronous reconciliation of MCF AutoVPN connectors and available regions.**
@@ -2103,6 +2120,31 @@ class ActionBatchOrganizations:
         action = {
             "resource": resource,
             "operation": "batch",
+        }
+        return action
+
+    def offboardAutovpnSpokes(self, organizationId: str, spokes: list, **kwargs):
+        """
+        **Detaches the requested Meraki AutoVPN spokes from their MCF regions.**
+        https://developer.cisco.com/meraki/api-v1/#!offboard-autovpn-spokes
+
+        - organizationId (string): Organization ID
+        - spokes (array): Spoke networks to detach. Must name at least one network.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/autovpn/sites/offboard"
+
+        body_params = [
+            "spokes",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
         }
         return action
 
@@ -2479,6 +2521,66 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def claimOrganizationSubscription(
+        self, organizationId: str, type: str, ccwWebOrderSubscriptionRefIdPair: dict, termsAcceptance: dict, **kwargs
+    ):
+        """
+        **Claims a CCW subscription using its original Web Order ID and subscription reference ID. Creates the Multicloud Fabric organization if needed and records acceptance of the current commercial terms. An already claimed purchase returns a conflict, including when requested by its owner. When the organization has no `ACTIVE` CCW subscriptions, the purchase's coverage must have started by the current UTC day. Otherwise, it must start on the UTC day immediately after the latest term of the organization's `ACTIVE` CCW subscriptions ends; that start may be in the future. Only `ACTIVE` CCW subscriptions establish this coverage boundary; `PENDING`, `CANCELLED`, and `EXPIRED` purchases do not. Gaps and overlaps with active coverage are rejected. An organization can claim only one future paid subscription at a time: another claim is rejected when it already has two or more `ACTIVE` CCW subscriptions. Each subscription counts once regardless of its number of terms. When one `ACTIVE` CCW subscription exists, turn off its auto-renewal in Cisco Commerce Workspace (CCW) before claiming another purchase. Trial, cancelled, and expired subscriptions do not count toward this limit. Claiming a CCW purchase cancels an existing active trial and closes its open term at the claim time, preserving trial history and usage. When the claim creates an organization, the optional `MCF-Shell` header records its creation source: `meraki` (Meraki Dashboard) or `ccc` (Cisco Cloud Control). Only one exact, case-sensitive value is recognized. Missing or invalid values, including repeated headers, leave the source unknown without causing a request error. The source is not returned in the response. Existing organizations retain their original source, including an unknown source.**
+        https://developer.cisco.com/meraki/api-v1/#!claim-organization-subscription
+
+        - organizationId (string): Organization ID
+        - type (string): `ccw_web_order_subscription_ref_id_pair` selects a claim using the CCW Web Order ID and subscription reference ID.
+        - ccwWebOrderSubscriptionRefIdPair (object): Original identifiers for the same CCW purchase. Values must match exactly, including capitalization and spaces.
+        - termsAcceptance (object): Acceptance of a displayed agreement version.
+        """
+
+        kwargs = locals()
+
+        if "type" in kwargs:
+            options = ["ccw_web_order_subscription_ref_id_pair"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions/claim"
+
+        body_params = [
+            "type",
+            "ccwWebOrderSubscriptionRefIdPair",
+            "termsAcceptance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationTrialSubscription(self, organizationId: str, termsAcceptance: dict, **kwargs):
+        """
+        **Starts a Multicloud Fabric trial for an organization that has not enabled Multicloud Fabric. An organization that already has Multicloud Fabric enabled cannot start a trial. The optional `MCF-Shell` header records the new organization's creation source: `meraki` (Meraki Dashboard) or `ccc` (Cisco Cloud Control). Only one exact, case-sensitive value is recognized. Missing or invalid values, including repeated headers, leave the source unknown without causing a request error. The source is not returned in the response.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-trial-subscription
+
+        - organizationId (string): Organization ID
+        - termsAcceptance (object): Acceptance of a displayed agreement version.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/subscriptions/trial"
+
+        body_params = [
+            "termsAcceptance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
     def createTag(self, organizationId: str, key: str, value: str, type: str, **kwargs):
         """
                 **Finds or creates the canonical tag identity for the exact organization,
@@ -2510,6 +2612,44 @@ class ActionBatchOrganizations:
             "key",
             "value",
             "type",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch",
+            "body": payload,
+        }
+        return action
+
+    def acceptOrganizationTerms(self, organizationId: str, type: str, version: int, accepted: bool, **kwargs):
+        """
+                **Records acceptance of a terms type and version for an existing Multicloud Fabric organization**
+                https://developer.cisco.com/meraki/api-v1/#!accept-organization-terms
+
+                - organizationId (string): Organization ID
+                - type (string): Type of terms to review or accept.
+
+        - `CCW_SUBSCRIPTION`: Terms for a CCW subscription.
+        - `TRIAL_SUBSCRIPTION`: Terms for a free trial.
+
+        Each type has its own versions and acceptance records.
+                - version (integer): Latest published version shown to the user. Version `0` is valid.
+                - accepted (boolean): `true` confirms acceptance of this version. `false` is rejected.
+        """
+
+        kwargs = locals()
+
+        if "type" in kwargs:
+            options = ["CCW_SUBSCRIPTION", "TRIAL_SUBSCRIPTION"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/mcf/termsAndConditions/accept"
+
+        body_params = [
+            "type",
+            "version",
+            "accepted",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

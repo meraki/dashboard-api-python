@@ -174,14 +174,14 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceAlternateManagementInterface(self, networkId: str, **kwargs):
         """
-        **Update Secure Router alternate management interface settings for a network. Omitted properties remain unchanged. The request contains only editable properties; the response includes network identity and resolved VRF name. This beta operation is available only to organizations with beta API access and may change before GA.**
+        **Update Secure Router alternate management interface settings for a network. Omitted properties remain unchanged. Omit VRF to preserve an existing assignment; send null or ID 0 to use the default. When enabling AMI without an existing assignment, an omitted VRF uses the default. Provided non-default VRFs must be supported for the Catalyst Router network. The request contains only editable properties; the response includes network identity and resolved VRF name. This beta operation is available only to organizations with beta API access and may change before GA.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-alternate-management-interface
 
         - networkId (string): Network ID
         - enabled (boolean): Whether the alternate management interface is enabled
         - primary (object): Primary alternate management interface addresses
         - addressPool (object): Address pool reserved for alternate management interface addresses
-        - vrf (object): VRF assignment for the alternate management interface. This beta operation currently ignores the requested VRF ID and always uses the default VRF.
+        - vrf (object): VRF assignment for the alternate management interface. Omit this field to preserve an existing assignment; when enabling AMI without an existing assignment, omission uses the default. Send null or ID 0 to use the default. Non-default VRFs must be supported for this Catalyst Router network.
         """
 
         kwargs.update(locals())
@@ -321,6 +321,31 @@ class ActionBatchAppliance:
 
         body_params = [
             "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceFirewallSettings(self, networkId: str, **kwargs):
+        """
+        **Update the firewall settings for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-settings
+
+        - networkId (string): Network ID
+        - spoofingProtection (object): Spoofing protection settings
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/firewall/settings"
+
+        body_params = [
+            "spoofingProtection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1069,6 +1094,7 @@ class ActionBatchAppliance:
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
         - applications (array): NBAR application-based VPN exclusion rules. The documented example is a Secure Router NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable. Available for networks on firmware >= 19.2.
+        - applicationCategoryMapping (object): Options for mapping configured majorApplications to application categories.
         """
 
         kwargs.update(locals())
@@ -1080,6 +1106,7 @@ class ActionBatchAppliance:
             "custom",
             "majorApplications",
             "applications",
+            "applicationCategoryMapping",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1551,14 +1578,14 @@ class ActionBatchAppliance:
         }
         return action
 
-    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, vrfs: list, **kwargs):
         """
-        **Update the VRF mappings for a source network and hub pair.**
+        **Replace the complete VRF mapping for a source network and hub pair. The required 'vrfs' array replaces the current VRF selection. An omitted array returns a 400 response and does not change the mapping. For a spoke source, an empty array selects only the default VRF. For a hub source, the array must contain at least one item. In a non-empty array, use VRF ID '0' to select the default VRF, either alone or alongside non-default VRFs.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
 
         - networkId (string): Network ID
         - hubNetworkId (string): Hub network ID
-        - _json (array): The list of VRFs for this source and hub mapping.
+        - vrfs (array): The list of VRFs for this source and hub mapping.
         """
 
         kwargs = locals()
@@ -1568,7 +1595,7 @@ class ActionBatchAppliance:
         resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
 
         body_params = [
-            "_json",
+            "vrfs",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1580,15 +1607,15 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
+        **Update the site-to-site VPN settings of an MX network or configuration template in NAT mode. Unacknowledged warnings return 400 Bad Request with retry guidance in errors and the warnings in confirmations. Review the warnings returned in confirmations, then retry with confirmed: true to accept them. Fatal errors must be corrected before retrying.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
-        - changesConfirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to false.
+        - confirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to true, which accepts confirmation warnings and preserves the existing update behavior. Set to false to opt in to confirmation warnings. Review the warnings returned in confirmations, then retry with confirmed: true to accept them. Fatal errors must be corrected before retrying.
         - natTraversal (object): NAT traversal settings. Omit to leave the existing setting unchanged.
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
-        - subnets (array): The list of subnets and their VPN presence.
+        - subnets (array): The list of local VPN subnets and their VPN presence. VLAN entries include vlanId and subnetting where applicable. When the corresponding NFO is enabled, NAT settings are returned for every VLAN; non-VLAN entries omit vlanId, subnetting, and nat.legacy.
         - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
         - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
@@ -1605,7 +1632,7 @@ class ActionBatchAppliance:
         resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
         body_params = [
-            "changesConfirmed",
+            "confirmed",
             "mode",
             "natTraversal",
             "hubs",
