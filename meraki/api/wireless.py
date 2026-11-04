@@ -514,7 +514,7 @@ class Wireless(object):
 
     def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
         """
-        **Delete an Air Marshal rule.**
+        **Delete an Air Marshal rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-air-marshal-rule
 
         - networkId (string): Network ID
@@ -531,16 +531,16 @@ class Wireless(object):
 
         return self._session.delete(metadata, resource)
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, **kwargs):
         """
-        **Updates Air Marshal settings.**
+        **Updates Air Marshal settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
 
         - networkId (string): Network ID
         - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]
@@ -2345,6 +2345,7 @@ class Wireless(object):
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
+        - dot11k (object): The current setting for 802.11k
         - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
@@ -2355,7 +2356,7 @@ class Wireless(object):
         - radiusProxyEnabled (boolean): If true, Meraki devices will proxy RADIUS messages through the Meraki cloud to the configured RADIUS auth and accounting servers.
         - radiusTestingEnabled (boolean): If true, Meraki devices will periodically send Access-Request messages to configured RADIUS servers using identity 'meraki_8021x_test' to ensure that the RADIUS servers are reachable.
         - radiusCalledStationId (string): The template of the called station identifier to be used for RADIUS (ex. $NODE_MAC$:$VAP_NUM$).
-        - radiusAuthenticationNasId (string): The NAS identifier to use for RADIUS authentication. With 802.11r enabled or adaptive, custom text is available only to organizations enabled for this feature; otherwise, use only $NODE_MAC$, $VAP_NUM$, and $VAP_NAME$. When this feature is enabled, the complete rendered NAS identifier must be 1–48 bytes.
+        - radiusAuthenticationNasId (string): The NAS identifier to use for RADIUS authentication. With 802.11r enabled or adaptive, use $NODE_MAC$, $VAP_NUM$, $VAP_NAME$, and/or custom text. The complete rendered NAS identifier must be 1–48 bytes.
         - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
         - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
         - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
@@ -2497,6 +2498,7 @@ class Wireless(object):
             "wpaEncryptionMode",
             "dot11w",
             "dot11r",
+            "dot11k",
             "splashPage",
             "splashGuestSponsorDomains",
             "oauth",
@@ -3574,6 +3576,72 @@ class Wireless(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarize wireless connection counts by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnections/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessAirMarshalRules(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns the current Air Marshal rules for this organization**
@@ -4257,7 +4325,7 @@ class Wireless(object):
 
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices**
+        **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-ethernet-statuses
 
         - organizationId (string): Organization ID

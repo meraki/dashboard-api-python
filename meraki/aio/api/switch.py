@@ -2160,6 +2160,7 @@ class AsyncSwitch:
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
         - macBlocklist (object): MAC blocklist
+        - clientTracking (object): Client tracking settings.
         - portChannelFallback (boolean): Port channel fallback
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
@@ -2179,6 +2180,7 @@ class AsyncSwitch:
             "powerExceptions",
             "uplinkClientSampling",
             "macBlocklist",
+            "clientTracking",
             "portChannelFallback",
             "uplinkSelection",
         ]
