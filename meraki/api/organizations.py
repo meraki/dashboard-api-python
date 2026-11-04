@@ -180,17 +180,28 @@ class Organizations(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def getOrganizationActionBatches(self, organizationId: str, **kwargs):
+    def getOrganizationActionBatches(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the list of action batches in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batches
 
         - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
         - status (string): Filter batches by status. Valid types are pending, completed, and failed.
         """
 
         kwargs.update(locals())
 
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
         if "status" in kwargs:
             options = ["completed", "failed", "pending"]
             assert kwargs["status"] in options, (
@@ -205,6 +216,10 @@ class Organizations(object):
         resource = f"/organizations/{organizationId}/actionBatches"
 
         query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
             "status",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
@@ -215,7 +230,7 @@ class Organizations(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getOrganizationActionBatches: ignoring unrecognized kwargs: {invalid}")
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
@@ -2286,6 +2301,245 @@ class Organizations(object):
 
         return self._session.delete(metadata, resource)
 
+    def getOrganizationCertificatesAuthorities(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List certificate authorities for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - authorityIds (array): Feature certificate authority IDs to filter by (exact match on each id; duplicates are ignored)
+        - sortBy (string): Field to sort by (default: authorityId)
+        - includeChain (boolean): When true, include the certification path from each certificate authority up to the self signed root. Required by validators that cannot anchor trust at a non self signed certificate authority. Defaults to false.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["authorityId", "featureType", "status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "getOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        query_params = [
+            "authorityIds",
+            "sortBy",
+            "includeChain",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "authorityIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationCertificatesAuthority(self, organizationId: str, featureType: str, **kwargs):
+        """
+        **Create a certificate authority for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-certificates-authority
+
+        - organizationId (string): Organization ID
+        - featureType (string): Feature this CA serves (e.g., radsec, openroaming, zigbee)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "createOrganizationCertificatesAuthority",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "featureType",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCertificatesAuthority: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Trust a newly created certificate authority (transition from untrusted to trusted).**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to trust. The CA must currently be untrusted.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "updateOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, name: str):
+        """
+        **Delete a certificate authority**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to delete
+        - name (string): Certificate authority name
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "deleteOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationCertificatesAuthoritiesJob(self, organizationId: str, jobId: str):
+        """
+        **Return the status and result of a certificate authority job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-authorities-job
+
+        - organizationId (string): Organization ID
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities", "jobs"],
+            "operation": "getOrganizationCertificatesAuthoritiesJob",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities/jobs/{jobId}"
+
+        return self._session.get(metadata, resource)
+
+    def revokeOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Revoke a trusted feature certificate authority.**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the feature certificate authority to revoke
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "revokeOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities/revoke"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"revokeOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationCertificatesRevocationLists(self, organizationId: str, **kwargs):
+        """
+        **Return full certificate revocation lists (CRLs) for the organization's certificate authorities**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-revocation-lists
+
+        - organizationId (string): Organization ID
+        - certificateAuthorityIds (array): Optional filter: feature certificate authority IDs (base-10 integers). Every value must exist for this organization; otherwise the request fails. Omit to return CRLs for all feature CAs in the organization.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "revocationLists"],
+            "operation": "getOrganizationCertificatesRevocationLists",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/revocationLists"
+
+        query_params = [
+            "certificateAuthorityIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "certificateAuthorityIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCertificatesRevocationLists: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization inventory**
@@ -3457,6 +3711,64 @@ class Organizations(object):
                 self._session._logger.warning(
                     f"getOrganizationDevicesCellularUplinksTowersByDevice: ignoring unrecognized kwargs: {invalid}"
                 )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCertificates(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List device certificates for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-certificates
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Device serial numbers to filter by (exact match; duplicates are ignored)
+        - featureTypes (array): Feature types these device certificates serve (exact match; e.g., radsec, openroaming, zigbee)
+        - sortBy (string): Field to sort by (default: authorityId)
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["authorityId", "featureType", "status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "certificates"],
+            "operation": "getOrganizationDevicesCertificates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/certificates"
+
+        query_params = [
+            "serials",
+            "featureTypes",
+            "sortBy",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+            "featureTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesCertificates: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

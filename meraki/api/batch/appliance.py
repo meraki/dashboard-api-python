@@ -273,6 +273,31 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def updateNetworkApplianceFirewallSettings(self, networkId: str, **kwargs):
+        """
+        **Update the firewall settings for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-settings
+
+        - networkId (string): Network ID
+        - spoofingProtection (object): Spoofing protection settings
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/firewall/settings"
+
+        body_params = [
+            "spoofingProtection",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createNetworkApplianceInterfacesL3(self, networkId: str, ipv4: dict, **kwargs):
         """
         **Create wired L3 interface**
@@ -920,6 +945,7 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
+        - applicationCategoryMapping (object): Options for mapping configured majorApplications to application categories.
         """
 
         kwargs.update(locals())
@@ -930,6 +956,7 @@ class ActionBatchAppliance(object):
         body_params = [
             "custom",
             "majorApplications",
+            "applicationCategoryMapping",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1076,7 +1103,7 @@ class ActionBatchAppliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "settings",
+            "operation": "update",
             "body": payload,
         }
         return action
@@ -1340,13 +1367,15 @@ class ActionBatchAppliance(object):
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
+        **Update the site-to-site VPN settings of an MX network or configuration template in NAT mode. Unacknowledged warnings return 400 Bad Request with retry guidance in errors and the warnings in confirmations. Review the warnings returned in confirmations, then retry with confirmed: true to accept them. Fatal errors must be corrected before retrying.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
+        - confirmed (boolean): Whether to accept the confirmation warnings for these changes. Defaults to true, which accepts confirmation warnings and preserves the existing update behavior. Set to false to opt in to confirmation warnings. Review the warnings returned in confirmations, then retry with confirmed: true to accept them. Fatal errors must be corrected before retrying.
+        - natTraversal (object): NAT traversal settings. Omit to leave the existing setting unchanged.
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
-        - subnets (array): The list of subnets and their VPN presence.
+        - subnets (array): The list of local VPN subnets and their VPN presence. VLAN entries include vlanId and subnetting where applicable. When the corresponding NFO is enabled, NAT settings are returned for every VLAN; non-VLAN entries omit vlanId, subnetting, and nat.legacy.
         - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
@@ -1362,7 +1391,9 @@ class ActionBatchAppliance(object):
         resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
         body_params = [
+            "confirmed",
             "mode",
+            "natTraversal",
             "hubs",
             "subnets",
             "sgt",
