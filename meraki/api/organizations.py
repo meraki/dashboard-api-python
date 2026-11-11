@@ -6313,6 +6313,714 @@ class Organizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationDevicesCliProfiles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List CLI profiles**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - profileIds (array): Optional parameter to filter CLI profiles by ID. This filter uses multiple exact matches. Maximum 100 profile IDs.
+        - name (string): Optional parameter to filter CLI profiles by name. Performs a case-insensitive partial match.
+        - networkIds (array): Optional parameter to filter CLI profiles by network ID. This filter uses multiple exact matches. Maximum 100 network IDs.
+        - sortBy (string): Field to sort results by. Defaults to 'name'.
+        - sortOrder (string): Sort order. Defaults to 'asc'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["name"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles"],
+            "operation": "getOrganizationDevicesCliProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "profileIds",
+            "name",
+            "networkIds",
+            "sortBy",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesCliProfiles: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationDevicesCliProfile(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a CLI profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the CLI profile
+        - cliTemplate (string): CLI template
+        - removalCliTemplate (string): CLI template used to remove the profile configuration
+        - description (string): The description of the CLI profile
+        - scheduledAt (string): Date time to deploy the profile at, or null for immediate deployment
+        - variables (array): CLI profile template variables. Maximum 100 variables per profile. Each variable supports up to 3 validation rules.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles"],
+            "operation": "createOrganizationDevicesCliProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles"
+
+        body_params = [
+            "name",
+            "cliTemplate",
+            "removalCliTemplate",
+            "description",
+            "scheduledAt",
+            "variables",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationDevicesCliProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesCliProfilesNetworksAssignments(self, organizationId: str, **kwargs):
+        """
+        **Fetch the CLI profile network assignments in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-networks-assignments
+
+        - organizationId (string): Organization ID
+        - profileIds (array): Optional parameter to filter the results by profile IDs
+        - networkIds (array): Optional parameter to filter the results by network IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "networks", "assignments"],
+            "operation": "getOrganizationDevicesCliProfilesNetworksAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/networks/assignments"
+
+        query_params = [
+            "profileIds",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesNetworksAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def createOrganizationDevicesCliProfilesNetworksAssignmentsBatchCreate(self, organizationId: str, items: list, **kwargs):
+        """
+        **Assign networks to CLI profiles in an organization in batch.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profiles-networks-assignments-batch-create
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID, device tag and Profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "networks", "assignments", "batchCreate"],
+            "operation": "createOrganizationDevicesCliProfilesNetworksAssignmentsBatchCreate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/networks/assignments/batchCreate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesCliProfilesNetworksAssignmentsBatchCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def createOrganizationDevicesCliProfilesNetworksAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
+        """
+        **Unassign networks from CLI profiles in an organization in batch.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profiles-networks-assignments-bulk-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID, device tag and Profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "networks", "assignments", "bulkDelete"],
+            "operation": "createOrganizationDevicesCliProfilesNetworksAssignmentsBulkDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/networks/assignments/bulkDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesCliProfilesNetworksAssignmentsBulkDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesCliProfilesOverviews(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List CLI profile overviews for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-overviews
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - profileIds (array): Optional parameter to filter CLI profiles by ID. This filter uses multiple exact matches. Maximum 100 profile IDs.
+        - search (string): Optional parameter to filter CLI profiles by name or assigned device tag. Case insensitive substring match.
+        - hasDraft (boolean): When true, only profiles with unpublished draft changes are returned. Omit or set false to return all profiles.
+        - sortBy (string): Column to sort results by. Defaults to 'name'.
+        - sortOrder (string): Sort direction. One of 'asc' or 'desc'. Defaults to 'asc'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["appliedToNetworks", "devicesAssigned", "name", "status", "variables"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "overviews"],
+            "operation": "getOrganizationDevicesCliProfilesOverviews",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/overviews"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "profileIds",
+            "search",
+            "hasDraft",
+            "sortBy",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesOverviews: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCliProfilesProvisioningHistory(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List terminal command-line interface (CLI) profile provisioning history for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-provisioning-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - serials (array): Optional parameter to filter by one device serial number using an exact match. Rather than deviceSerials[], this parameter intentionally follows the standard serials[] index-filter convention and matches the nested device.serial identity in each response item. If omitted, the response contains provisioning history events for all devices in the organization. An unknown serial or a serial outside the organization returns 200 OK with an empty items array; 404 indicates that the caller cannot access the organization-scoped operation. Maximum 1 serial.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "provisioning", "history"],
+            "operation": "getOrganizationDevicesCliProfilesProvisioningHistory",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/provisioning/history"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesProvisioningHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCliProfilesProvisioningStatusesByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the provisioning statuses of devices for CLI profiles in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-provisioning-statuses-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - profileIds (array): Optional parameter to filter by CLI profile IDs. This filter uses multiple exact matches. Maximum 100 profile IDs.
+        - networkIds (array): Optional parameter to filter by network IDs. This filter uses multiple exact matches. Maximum 100 network IDs.
+        - serials (array): Optional parameter to filter by device serial numbers. This filter uses multiple exact matches. Maximum 100 serials.
+        - statuses (array): Optional parameter to filter by provisioning statuses. This filter uses multiple exact matches. Maximum one value per supported status.
+        - name (string): Optional parameter to filter by device display name. If a device name is blank, its serial is used for matching. Performs a case-insensitive partial match.
+        - search (string): Optional parameter to search by device display name, serial, provisioning status, network name, or updatedAt timestamp. Performs a case-insensitive partial match.
+        - sortBy (string): Field to sort results by. Defaults to 'name'.
+        - sortOrder (string): Sort order. Defaults to 'asc'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["name", "network", "serial", "status", "updatedAt"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cli", "profiles", "provisioning", "statuses", "byDevice"],
+            "operation": "getOrganizationDevicesCliProfilesProvisioningStatusesByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/provisioning/statuses/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "profileIds",
+            "networkIds",
+            "serials",
+            "statuses",
+            "name",
+            "search",
+            "sortBy",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "networkIds",
+            "serials",
+            "statuses",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesProvisioningStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCliProfilesVariablesAssignments(self, organizationId: str, **kwargs):
+        """
+        **List CLI profile variable value assignments for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-variables-assignments
+
+        - organizationId (string): Organization ID
+        - profileIds (array): Filter by CLI profile IDs
+        - serials (array): Filter by device serials using multiple exact matches (OR). Different filters combine with AND. A switch stack matches any member serial and returns one item with all members.
+        - networkIds (array): Filter by network IDs
+        - deviceTags (array): Filter by device tags used in CLI profile assignments
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "variables", "assignments"],
+            "operation": "getOrganizationDevicesCliProfilesVariablesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/variables/assignments"
+
+        query_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+            "deviceTags",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+            "deviceTags",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesVariablesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def batchOrganizationDevicesCliProfilesVariablesAssign(self, organizationId: str, items: list, **kwargs):
+        """
+        **Synchronously assign or clear CLI profile variable values for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-devices-cli-profiles-variables-assign
+
+        - organizationId (string): Organization ID
+        - items (array): Variable assignment operations to apply. Maximum 100 items.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "variables"],
+            "operation": "batchOrganizationDevicesCliProfilesVariablesAssign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/variables/batchAssign"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationDevicesCliProfilesVariablesAssign: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesCliProfilesVersions(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns published CLI profile versions, ordered by version number from highest to lowest**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-profiles-versions
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'descending'. Default is 'descending'.
+        - profileIds (array): Optional parameter to filter by exact CLI profile IDs. Maximum 100 IDs.
+        - versionIds (array): Optional parameter to filter by exact CLI profile version IDs. Maximum 100 IDs.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "versions"],
+            "operation": "getOrganizationDevicesCliProfilesVersions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/versions"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "profileIds",
+            "versionIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "versionIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCliProfilesVersions: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateOrganizationDevicesCliProfilesVersion(self, organizationId: str, versionId: str, **kwargs):
+        """
+        **Favorite or unfavorite a published CLI profile version**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-cli-profiles-version
+
+        - organizationId (string): Organization ID
+        - versionId (string): Version ID
+        - favorite (object): Favorite state for the CLI profile version
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "versions"],
+            "operation": "updateOrganizationDevicesCliProfilesVersion",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        versionId = urllib.parse.quote(str(versionId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/versions/{versionId}"
+
+        body_params = [
+            "favorite",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesCliProfilesVersion: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateOrganizationDevicesCliProfile(self, organizationId: str, cliProfileId: str, name: str, **kwargs):
+        """
+        **Update a CLI profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        - name (string): The name of the CLI profile
+        - description (string): The description of the CLI profile
+        - cliTemplate (string): CLI template
+        - removalCliTemplate (string): CLI template used to remove the profile configuration
+        - scheduledAt (string): Date time to deploy the profile at, or null for immediate deployment
+        - variables (array): CLI profile template variables. Maximum 100 variables per profile. Each variable supports up to 3 validation rules.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles"],
+            "operation": "updateOrganizationDevicesCliProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        cliProfileId = urllib.parse.quote(str(cliProfileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}"
+
+        body_params = [
+            "name",
+            "description",
+            "cliTemplate",
+            "removalCliTemplate",
+            "scheduledAt",
+            "variables",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationDevicesCliProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationDevicesCliProfile(self, organizationId: str, cliProfileId: str, **kwargs):
+        """
+        **Delete a CLI profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        - force (boolean): If true, delete the profile even when its device configuration could not be removed. Residual device configuration must be removed manually.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles"],
+            "operation": "deleteOrganizationDevicesCliProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        cliProfileId = urllib.parse.quote(str(cliProfileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}"
+
+        query_params = [
+            "force",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"deleteOrganizationDevicesCliProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.delete(metadata, resource, params)
+
+    def discardOrganizationDevicesCliProfileDraft(self, organizationId: str, cliProfileId: str):
+        """
+        **Synchronously discard the current CLI profile draft**
+        https://developer.cisco.com/meraki/api-v1/#!discard-organization-devices-cli-profile-draft
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles"],
+            "operation": "discardOrganizationDevicesCliProfileDraft",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        cliProfileId = urllib.parse.quote(str(cliProfileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}/draft"
+
+        return self._session.delete(metadata, resource)
+
+    def publishOrganizationDevicesCliProfileDraft(self, organizationId: str, cliProfileId: str):
+        """
+        **Synchronously publish the current CLI profile draft**
+        https://developer.cisco.com/meraki/api-v1/#!publish-organization-devices-cli-profile-draft
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cli", "profiles", "draft"],
+            "operation": "publishOrganizationDevicesCliProfileDraft",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        cliProfileId = urllib.parse.quote(str(cliProfileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}/draft/publish"
+
+        return self._session.post(metadata, resource)
+
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
@@ -10021,7 +10729,7 @@ class Organizations:
         https://developer.cisco.com/meraki/api-v1/#!onboard-autovpn-sites
 
         - organizationId (string): Organization ID
-        - spokes (array): Optional spoke networks and their desired MCN regions. Omit this field to perform hub-only onboarding.
+        - spokes (array): Optional spoke networks and their desired MCF regions. Omit this field to perform hub-only onboarding.
         """
 
         kwargs.update(locals())
@@ -10279,8 +10987,10 @@ class Organizations:
                 - regionId (array): Restricts results to exact Multicloud Fabric region UUIDs; repeat to OR values.
                 - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
         to OR values.
-                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
-                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - userId (array): Restricts results to exact, case-sensitive recorded actor IDs. Repeat to
+        match any supplied ID; IDs remain strings, including leading zeros.
+        Use values from the `user` facet. Omission adds no user-ID restriction;
+        events without a recorded ID do not match a supplied ID.
                 - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
         IDs; repeat to OR values.
                 - search (string): Case-insensitive free-text search across event details. The input is
@@ -10317,7 +11027,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
             "search",
             "perPage",
@@ -10340,7 +11049,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
         ]
         for k, v in kwargs.items():
@@ -10430,8 +11138,10 @@ class Organizations:
                 - regionId (array): Restricts results to exact Multicloud Fabric region UUIDs; repeat to OR values.
                 - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
         to OR values.
-                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
-                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - userId (array): Restricts results to exact, case-sensitive recorded actor IDs. Repeat to
+        match any supplied ID; IDs remain strings, including leading zeros.
+        Use values from the `user` facet. Omission adds no user-ID restriction;
+        events without a recorded ID do not match a supplied ID.
                 - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
         IDs; repeat to OR values.
                 - search (string): Case-insensitive free-text search across event details. The input is
@@ -10466,7 +11176,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
             "search",
         ]
@@ -10487,7 +11196,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
         ]
         for k, v in kwargs.items():
@@ -10576,8 +11284,10 @@ class Organizations:
                 - regionId (array): Restricts results to exact Multicloud Fabric region UUIDs; repeat to OR values.
                 - regionName (array): Restricts results to exact, case-sensitive provider region names; repeat
         to OR values.
-                - userId (array): Restricts results to exact opaque identity-provider subject IDs; repeat to OR values.
-                - userEmail (array): Restricts results to exact, case-sensitive actor email snapshots; repeat to OR values.
+                - userId (array): Restricts results to exact, case-sensitive recorded actor IDs. Repeat to
+        match any supplied ID; IDs remain strings, including leading zeros.
+        Use values from the `user` facet. Omission adds no user-ID restriction;
+        events without a recorded ID do not match a supplied ID.
                 - groupId (array): Restricts results to exact event-source-supplied logical-action correlation
         IDs; repeat to OR values.
                 - search (string): Case-insensitive free-text search across event details. The input is
@@ -10612,7 +11322,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
             "search",
         ]
@@ -10633,7 +11342,6 @@ class Organizations:
             "regionId",
             "regionName",
             "userId",
-            "userEmail",
             "groupId",
         ]
         for k, v in kwargs.items():

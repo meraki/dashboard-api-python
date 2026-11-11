@@ -6,53 +6,6 @@ class Assistant:
         super().__init__()
         self._session = session
 
-    def createAdministeredAssistantChatCompletion(self, **kwargs):
-        """
-        **Create a synchronous AI assistant chat completion for user-wide threads**
-        https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-completion
-
-        - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
-        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Maximum 8 parts and 4 total images. Each image must be at most 10 MiB decoded.
-        - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
-        - language (string): Optional language override. Defaults to the user's preferred language.
-        - country (string): Optional country override. Defaults to the user's country.
-        """
-
-        kwargs.update(locals())
-
-        if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
-            assert kwargs["platform"] in options, (
-                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
-            )
-
-        metadata = {
-            "tags": ["assistant", "configure", "chat", "completions"],
-            "operation": "createAdministeredAssistantChatCompletion",
-        }
-        resource = "/administered/assistant/chat/completions"
-
-        body_params = [
-            "query",
-            "content",
-            "threadId",
-            "platform",
-            "language",
-            "country",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"createAdministeredAssistantChatCompletion: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
-
     def getAdministeredAssistantChatThreads(self, total_pages=1, direction="next", **kwargs):
         """
         **List all active user-wide conversation threads for the authenticated user.**
@@ -301,74 +254,6 @@ class Assistant:
         resource = f"/administered/assistant/chat/threads/{threadId}/messages/{messageId}"
 
         return self._session.get(metadata, resource)
-
-    def getOrganizationAssistantCapabilities(self, organizationId: str):
-        """
-        **List the AI assistant's available capabilities and agents for this organization.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assistant-capabilities
-
-        - organizationId (string): Organization ID
-        """
-
-        metadata = {
-            "tags": ["assistant", "configure", "capabilities"],
-            "operation": "getOrganizationAssistantCapabilities",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assistant/capabilities"
-
-        return self._session.get(metadata, resource)
-
-    def createOrganizationAssistantChatCompletion(self, organizationId: str, **kwargs):
-        """
-        **Create a synchronous AI assistant chat completion**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-assistant-chat-completion
-
-        - organizationId (string): Organization ID
-        - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
-        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Maximum 8 parts and 4 total images. Each image must be at most 10 MiB decoded.
-        - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
-        - networkId (string): Optional network ID to scope the query to a specific network. Defaults to the user's last visited network.
-        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Values are matched case-insensitively.
-        - language (string): Optional language override. Defaults to the user's preferred language.
-        - country (string): Optional country override. Defaults to the user's country.
-        """
-
-        kwargs.update(locals())
-
-        if "platform" in kwargs:
-            options = ["DIGITAL_TWIN", "DNAC", "MERAKI"]
-            assert kwargs["platform"] in options, (
-                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
-            )
-
-        metadata = {
-            "tags": ["assistant", "configure", "chat", "completions"],
-            "operation": "createOrganizationAssistantChatCompletion",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assistant/chat/completions"
-
-        body_params = [
-            "query",
-            "content",
-            "threadId",
-            "networkId",
-            "platform",
-            "language",
-            "country",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"createOrganizationAssistantChatCompletion: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
 
     def getOrganizationAssistantChatThreads(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

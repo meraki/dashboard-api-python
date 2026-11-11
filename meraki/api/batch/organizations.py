@@ -1309,6 +1309,204 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def createOrganizationDevicesCliProfile(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a CLI profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the CLI profile
+        - cliTemplate (string): CLI template
+        - removalCliTemplate (string): CLI template used to remove the profile configuration
+        - description (string): The description of the CLI profile
+        - scheduledAt (string): Date time to deploy the profile at, or null for immediate deployment
+        - variables (array): CLI profile template variables. Maximum 100 variables per profile. Each variable supports up to 3 validation rules.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles"
+
+        body_params = [
+            "name",
+            "cliTemplate",
+            "removalCliTemplate",
+            "description",
+            "scheduledAt",
+            "variables",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "profiles/actions/create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationDevicesCliProfilesNetworksAssignmentsBatchCreate(self, organizationId: str, items: list, **kwargs):
+        """
+        **Assign networks to CLI profiles in an organization in batch.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profiles-networks-assignments-batch-create
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID, device tag and Profile ID
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/networks/assignments/batchCreate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationDevicesCliProfilesNetworksAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
+        """
+        **Unassign networks from CLI profiles in an organization in batch.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cli-profiles-networks-assignments-bulk-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID, device tag and Profile ID
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/networks/assignments/bulkDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_delete",
+            "body": payload,
+        }
+        return action
+
+    def batchOrganizationDevicesCliProfilesVariablesAssign(self, organizationId: str, items: list, **kwargs):
+        """
+                **Synchronously assign or clear CLI profile variable values for devices in an organization. Identify each assignment by profile ID and device serial. Only submitted variables are updated; omitted variables remain unchanged. The request is atomic: validation errors reject the entire request without saving values. Identical duplicate assignments to the same variable are combined; conflicting values reject the request. Responses include all variables from the active profile version. Read-only response metadata is ignored in requests. Repeating the same assignment preserves stored values when the target devices remain unchanged.
+
+        For switch stacks, any current member serial identifies the stack. Submitted variables are saved to every current member. At least one member must match the profile's assignment tags. Membership is determined when the request is processed. Omitted variables can retain existing differences between members.**
+                https://developer.cisco.com/meraki/api-v1/#!batch-organization-devices-cli-profiles-variables-assign
+
+                - organizationId (string): Organization ID
+                - items (array): Variable assignment operations to apply. Maximum 100 items.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/variables/batchAssign"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_assign",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationDevicesCliProfilesVersion(self, organizationId: str, versionId: str, **kwargs):
+        """
+        **Favorite or unfavorite a published CLI profile version. This operation does not modify the version content or publication timestamp.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-cli-profiles-version
+
+        - organizationId (string): Organization ID
+        - versionId (string): Version ID
+        - favorite (object): Favorite state for the CLI profile version
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        versionId = urllib.parse.quote(versionId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/versions/{versionId}"
+
+        body_params = [
+            "favorite",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationDevicesCliProfile(self, organizationId: str, cliProfileId: str, name: str, **kwargs):
+        """
+        **Update a CLI profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        - name (string): The name of the CLI profile
+        - description (string): The description of the CLI profile
+        - cliTemplate (string): CLI template
+        - removalCliTemplate (string): CLI template used to remove the profile configuration
+        - scheduledAt (string): Date time to deploy the profile at, or null for immediate deployment
+        - variables (array): CLI profile template variables. Maximum 100 variables per profile. Each variable supports up to 3 validation rules.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        cliProfileId = urllib.parse.quote(cliProfileId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}"
+
+        body_params = [
+            "name",
+            "description",
+            "cliTemplate",
+            "removalCliTemplate",
+            "scheduledAt",
+            "variables",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "profiles/actions/update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationDevicesCliProfile(self, organizationId: str, cliProfileId: str, **kwargs):
+        """
+        **Delete a CLI profile. If the profile has assignments, this operation starts asynchronous removal of its device configuration. The profile is deleted automatically after all removals succeed.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cli-profile
+
+        - organizationId (string): Organization ID
+        - cliProfileId (string): Cli profile ID
+        - force (boolean): If true, delete the profile even when its device configuration could not be removed. Residual device configuration must be removed manually.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        cliProfileId = urllib.parse.quote(cliProfileId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cli/profiles/{cliProfileId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
@@ -2154,7 +2352,7 @@ class ActionBatchOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!onboard-autovpn-sites
 
         - organizationId (string): Organization ID
-        - spokes (array): Optional spoke networks and their desired MCN regions. Omit this field to perform hub-only onboarding.
+        - spokes (array): Optional spoke networks and their desired MCF regions. Omit this field to perform hub-only onboarding.
         """
 
         kwargs.update(locals())

@@ -199,6 +199,7 @@ class ActionBatchUsers:
         - email (string): An email address identified with the user.
         - password (string): The password for the user account.
         - sendPassword (boolean): If true, sends an email with the password to the user.
+        - attributes (object): Profile attributes for an 802.1X user.
         """
 
         kwargs.update(locals())
@@ -218,6 +219,7 @@ class ActionBatchUsers:
             "password",
             "sendPassword",
             "accountType",
+            "attributes",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

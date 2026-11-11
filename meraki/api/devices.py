@@ -1002,6 +1002,90 @@ class Devices:
 
         return self._session.get(metadata, resource)
 
+    def createDeviceLiveToolsReadFile(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to read a file from the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-read-file
+
+        - serial (string): Serial
+        - command (string): Allowlisted command to execute. Defaults to cat when filePath is provided.
+        - filePath (string): Allowlisted file or directory path used by cat, grep, head, ls, and wc -l.
+        - clickHandler (string): Allowlisted read-only Click handler used by click_read.
+        - args (string): Optional Click handler parameter used by click_read.
+        - filter (string): Optional case-insensitive literal output filter; required for grep.
+        - lines (integer): Maximum lines returned by head. Defaults to 10.
+        - flags (string): Optional flags for grep (-i) or ls (-ltrahs).
+        - operation (string): Compatibility read operation. Supported values are fileRead and clickRead.
+        - path (string): Compatibility file path or Click handler path.
+        - param (string): Optional Click handler parameter for clickRead operations.
+        - maxBytes (integer): Optional maximum response bytes to return.
+        - timeoutMs (integer): Optional device request timeout in milliseconds.
+        - allowRestricted (boolean): Must be true when requesting a restricted path such as /storage/config.
+        - purpose (string): Optional caller-supplied purpose for the read request.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "command" in kwargs:
+            options = ["cat", "click_read", "grep", "head", "ls", "wc -l"]
+            assert kwargs["command"] in options, (
+                f'''"command" cannot be "{kwargs["command"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["devices", "liveTools", "readFile"],
+            "operation": "createDeviceLiveToolsReadFile",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/readFile"
+
+        body_params = [
+            "command",
+            "filePath",
+            "clickHandler",
+            "args",
+            "filter",
+            "lines",
+            "flags",
+            "operation",
+            "path",
+            "param",
+            "maxBytes",
+            "timeoutMs",
+            "allowRestricted",
+            "purpose",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsReadFile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsReadFile(self, serial: str, readFileId: str):
+        """
+        **Return a read file live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-read-file
+
+        - serial (string): Serial
+        - readFileId (string): Read file ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "readFile"],
+            "operation": "getDeviceLiveToolsReadFile",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        readFileId = urllib.parse.quote(str(readFileId), safe="")
+        resource = f"/devices/{serial}/liveTools/readFile/{readFileId}"
+
+        return self._session.get(metadata, resource)
+
     def createDeviceLiveToolsReboot(self, serial: str, **kwargs):
         """
         **Enqueue a job to reboot a device**
