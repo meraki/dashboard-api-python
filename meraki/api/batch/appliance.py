@@ -228,6 +228,43 @@ class ActionBatchAppliance:
         }
         return action
 
+    def updateNetworkApplianceContentFiltering(self, networkId: str, **kwargs):
+        """
+        **Update the content filtering settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-content-filtering
+
+        - networkId (string): Network ID
+        - allowedUrlPatterns (array): A list of URL patterns that are allowed
+        - blockedUrlPatterns (array): A list of URL patterns that are blocked
+        - blockedUrlCategories (array): A list of URL categories to block
+        - urlCategoryListSize (string): URL category list size which is either 'topSites' or 'fullList'
+        """
+
+        kwargs.update(locals())
+
+        if "urlCategoryListSize" in kwargs:
+            options = ["fullList", "topSites"]
+            assert kwargs["urlCategoryListSize"] in options, (
+                f'''"urlCategoryListSize" cannot be "{kwargs["urlCategoryListSize"]}", & must be set to one of: {options}'''
+            )
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/contentFiltering"
+
+        body_params = [
+            "allowedUrlPatterns",
+            "blockedUrlPatterns",
+            "blockedUrlCategories",
+            "urlCategoryListSize",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceDevicesRedundancy(self, networkId: str, enabled: bool, **kwargs):
         """
         **Update MX warm spare settings**
@@ -774,6 +811,46 @@ class ActionBatchAppliance:
         }
         return action
 
+    def updateNetworkApplianceSecurityIntrusion(self, networkId: str, **kwargs):
+        """
+        **Set the supported intrusion settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-intrusion
+
+        - networkId (string): Network ID
+        - mode (string): Set mode to 'disabled'/'detection'/'prevention' (optional - omitting will leave current config unchanged)
+        - idsRulesets (string): Set the detection ruleset 'connectivity'/'balanced'/'security' (optional - omitting will leave current config unchanged). Default value is 'balanced' if none currently saved
+        - policy (object): Set a custom intrusion policy by id (optional - omitting will leave current config unchanged)
+        - protectedNetworks (object): Set the included/excluded networks from the intrusion engine (optional - omitting will leave current config unchanged). This is available only in 'passthrough' mode
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["detection", "disabled", "prevention"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "idsRulesets" in kwargs:
+            options = ["balanced", "connectivity", "security"]
+            assert kwargs["idsRulesets"] in options, (
+                f'''"idsRulesets" cannot be "{kwargs["idsRulesets"]}", & must be set to one of: {options}'''
+            )
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/security/intrusion"
+
+        body_params = [
+            "mode",
+            "idsRulesets",
+            "policy",
+            "protectedNetworks",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceSettings(self, networkId: str, **kwargs):
         """
         **Update the appliance settings for a network**
@@ -901,6 +978,31 @@ class ActionBatchAppliance:
             "visible",
             "dhcpEnforcedDeauthentication",
             "dot11w",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceTrafficShaping(self, networkId: str, globalBandwidthLimits: dict, **kwargs):
+        """
+        **Update the traffic shaping settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping
+
+        - networkId (string): Network ID
+        - globalBandwidthLimits (object): Global per-client bandwidth limit
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/trafficShaping"
+
+        body_params = [
+            "globalBandwidthLimits",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

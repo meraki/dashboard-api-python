@@ -546,6 +546,7 @@ class ActionBatchSwitch:
         - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
         - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
+        - authenticationMethod (string): Authentication method of the policy.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
         - dot1x (object): 802.1x Settings
@@ -568,6 +569,11 @@ class ActionBatchSwitch:
             assert kwargs["accessPolicyType"] in options, (
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
+        if "authenticationMethod" in kwargs and kwargs["authenticationMethod"] is not None:
+            options = ["Meraki authentication", "NAC", "my RADIUS server"]
+            assert kwargs["authenticationMethod"] in options, (
+                f'''"authenticationMethod" cannot be "{kwargs["authenticationMethod"]}", & must be set to one of: {options}'''
+            )
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/accessPolicies"
@@ -584,6 +590,7 @@ class ActionBatchSwitch:
             "radiusGroupAttribute",
             "hostMode",
             "accessPolicyType",
+            "authenticationMethod",
             "increaseAccessSpeed",
             "guestVlanId",
             "dot1x",
@@ -619,6 +626,7 @@ class ActionBatchSwitch:
         - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
         - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
+        - authenticationMethod (string): Authentication method of the policy.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
         - dot1x (object): 802.1x Settings
@@ -641,6 +649,11 @@ class ActionBatchSwitch:
             assert kwargs["accessPolicyType"] in options, (
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
+        if "authenticationMethod" in kwargs and kwargs["authenticationMethod"] is not None:
+            options = ["Meraki authentication", "NAC", "my RADIUS server"]
+            assert kwargs["authenticationMethod"] in options, (
+                f'''"authenticationMethod" cannot be "{kwargs["authenticationMethod"]}", & must be set to one of: {options}'''
+            )
 
         networkId = urllib.parse.quote(networkId, safe="")
         accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe="")
@@ -658,6 +671,7 @@ class ActionBatchSwitch:
             "radiusGroupAttribute",
             "hostMode",
             "accessPolicyType",
+            "authenticationMethod",
             "increaseAccessSpeed",
             "guestVlanId",
             "dot1x",

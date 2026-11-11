@@ -4407,8 +4407,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4420,7 +4420,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4473,8 +4473,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4486,7 +4486,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byBand"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byBand"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByBand",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4539,12 +4539,12 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 10000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -4552,7 +4552,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClient"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byClient"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClient",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4605,8 +4605,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4618,7 +4618,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClientOs"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byClientOs"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientOs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4671,8 +4671,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4684,7 +4684,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClientType"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byClientType"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientType",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4737,8 +4737,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4750,7 +4750,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byDevice"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byDevice"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByDevice",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4803,8 +4803,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
@@ -4871,8 +4871,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4884,7 +4884,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "bySsid"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "bySsid"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkBySsid",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -4937,8 +4937,8 @@ class AsyncWireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
@@ -4964,7 +4964,7 @@ class AsyncWireless:
             )
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "channelAvailability", "insights", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "insights", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityInsightsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5115,7 +5115,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5181,7 +5181,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byBand"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byBand"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByBand",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5239,7 +5239,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 10000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -5247,7 +5247,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClient"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byClient"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClient",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5313,7 +5313,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClientOs"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byClientOs"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientOs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5379,7 +5379,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClientType"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byClientType"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientType",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5445,7 +5445,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byDevice"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byDevice"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByDevice",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5579,7 +5579,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "bySsid"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "bySsid"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkBySsid",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5659,7 +5659,7 @@ class AsyncWireless:
             )
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "coverage", "insights", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "coverage", "insights", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceCoverageInsightsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -5968,7 +5968,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5980,7 +5980,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byBand"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byBand"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByBand",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6034,7 +6034,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6046,7 +6046,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClient"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byClient"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClient",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6100,7 +6100,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6112,7 +6112,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClientOs"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byClientOs"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientOs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6166,7 +6166,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6178,7 +6178,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byClientType"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byClientType"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByClientType",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6234,7 +6234,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6246,7 +6246,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byDevice"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byDevice"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByDevice",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6291,7 +6291,7 @@ class AsyncWireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Time-series of wireless connection successes and failures by network.**
+        **Returns successful and failed wireless connection counts by network for each time interval**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connections-by-network-by-interval
 
         - organizationId (string): Organization ID
@@ -6300,7 +6300,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
@@ -6368,7 +6368,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6380,7 +6380,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "byServer"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "byServer"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkByServer",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6434,7 +6434,7 @@ class AsyncWireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6446,7 +6446,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "successfulConnections", "byNetwork", "bySsid"],
+            "tags": ["wireless", "monitor", "experience", "successfulConnections", "byNetwork", "bySsid"],
             "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectionsByNetworkBySsid",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
