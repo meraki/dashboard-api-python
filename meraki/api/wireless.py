@@ -3156,6 +3156,43 @@ class Wireless:
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkWirelessSsidAddressingGuards(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the DHCP Guard and Router Advertisement (RA) Guard settings for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-addressing-guards
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - dhcp (object): DHCP Guard configuration for the SSID.
+        - ra (object): Router Advertisement (RA) Guard configuration for the SSID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "addressing", "guards"],
+            "operation": "updateNetworkWirelessSsidAddressingGuards",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/addressing/guards"
+
+        body_params = [
+            "dhcp",
+            "ra",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidAddressingGuards: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str):
         """
         **List the Bonjour forwarding setting and rules for the SSID**
@@ -3516,6 +3553,43 @@ class Wireless:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"updateNetworkWirelessSsidHotspot20: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateNetworkWirelessSsidHttpProxies(self, number: int, networkId: str, **kwargs):
+        """
+        **Update the HTTP force proxy settings for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-http-proxies
+
+        - number (integer): SSID number. Valid values are 0-14.
+        - networkId (string): Network ID
+        - enabled (boolean): Whether clients on the SSID are forced through the HTTP proxy.
+        - server (object): HTTP proxy server that intercepted traffic is forwarded to.
+        - exclusions (array): Destinations excluded from forced proxying. A supplied array replaces the list; an empty array clears it while the proxy is enabled.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "http", "proxies"],
+            "operation": "updateNetworkWirelessSsidHttpProxies",
+        }
+        number = urllib.parse.quote(str(number), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/http/proxies"
+
+        body_params = [
+            "enabled",
+            "server",
+            "exclusions",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidHttpProxies: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -4138,6 +4212,41 @@ class Wireless:
         resource = f"/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules"
 
         return self._session.get(metadata, resource)
+
+    def createNetworkWirelessSsidUmbrellaProtectionJob(self, networkId: str, number: str, request: dict, **kwargs):
+        """
+        **Apply Umbrella protection on an SSID of an MR network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-umbrella-protection-job
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - request (object): Umbrella protection configuration to apply.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "umbrella", "protection", "jobs"],
+            "operation": "createNetworkWirelessSsidUmbrellaProtectionJob",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/umbrella/protection/jobs"
+
+        body_params = [
+            "request",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessSsidUmbrellaProtectionJob: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getNetworkWirelessSsidVpn(self, networkId: str, number: str):
         """
@@ -6583,7 +6692,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6595,7 +6704,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6649,7 +6758,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6661,7 +6770,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byBand"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byBand"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByBand",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6715,7 +6824,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6727,7 +6836,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClient"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byClient"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClient",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6781,7 +6890,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6793,7 +6902,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientOs"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byClientOs"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientOs",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6847,7 +6956,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6859,7 +6968,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientType"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byClientType"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientType",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -6913,7 +7022,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6925,7 +7034,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byDevice"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byDevice"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByDevice",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -7047,7 +7156,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -7059,7 +7168,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byServer"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byServer"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByServer",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -7113,7 +7222,7 @@ class Wireless:
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -7125,7 +7234,7 @@ class Wireless:
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "bySsid"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "bySsid"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkBySsid",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -7177,9 +7286,9 @@ class Wireless:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
-        - serials (array): Filter results by device serial.
+        - serials (array): Filter results by SSID number. Valid values are 0-14.
         - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
@@ -7205,7 +7314,7 @@ class Wireless:
             )
 
         metadata = {
-            "tags": ["wireless", "configure", "experience", "timeToConnect", "insights", "byNetwork"],
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "insights", "byNetwork"],
             "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectInsightsByNetwork",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
@@ -10825,6 +10934,121 @@ class Wireless:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationWirelessPolicyApplications(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List wireless policy applications and their categories for eligible wireless sources (standalone networks and configuration templates) in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-policy-applications
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional inclusive-OR filter on standalone wireless network IDs. Mutually exclusive with configTemplateIds. Maximum 50 IDs.
+        - configTemplateIds (array): Optional inclusive-OR filter on wireless configuration-template IDs. Mutually exclusive with networkIds. Maximum 50 IDs.
+        - resourceIds (array): Optional inclusive-OR filter on returned applicationId values. Maximum 50 IDs.
+        - categoryIds (array): Optional inclusive-OR filter on category.id; returns only applications in the selected categories. Maximum 50 IDs.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "policy", "applications"],
+            "operation": "getOrganizationWirelessPolicyApplications",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/policy/applications"
+
+        query_params = [
+            "networkIds",
+            "configTemplateIds",
+            "resourceIds",
+            "categoryIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "configTemplateIds",
+            "resourceIds",
+            "categoryIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessPolicyApplications: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessPolicyApplicationsCategories(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List wireless policy application categories for eligible wireless sources (standalone networks and configuration templates) in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-policy-applications-categories
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional inclusive-OR filter on standalone wireless network IDs. Mutually exclusive with configTemplateIds. Maximum 50 IDs.
+        - configTemplateIds (array): Optional inclusive-OR filter on wireless configuration-template IDs. Mutually exclusive with networkIds. Maximum 50 IDs.
+        - resourceIds (array): Optional inclusive-OR filter on returned categoryId values. Maximum 50 IDs.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "policy", "applications", "categories"],
+            "operation": "getOrganizationWirelessPolicyApplicationsCategories",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/policy/applications/categories"
+
+        query_params = [
+            "networkIds",
+            "configTemplateIds",
+            "resourceIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "configTemplateIds",
+            "resourceIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessPolicyApplicationsCategories: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessRadioAfcPositionByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the AFC power limits of an organization by device**
@@ -11389,50 +11613,6 @@ class Wireless:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationWirelessRadioStatusByNetwork(self, organizationId: str, **kwargs):
-        """
-        **Show the status of this organization's radios, categorized by network and device**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-status-by-network
-
-        - organizationId (string): Organization ID
-        - networkIds (array): Networks for which radio status should be returned.
-        - serials (array): Serials for which radio status should be returned.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["wireless", "configure", "radio", "status", "byNetwork"],
-            "operation": "getOrganizationWirelessRadioStatusByNetwork",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/wireless/radio/status/byNetwork"
-
-        query_params = [
-            "networkIds",
-            "serials",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "networkIds",
-            "serials",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"getOrganizationWirelessRadioStatusByNetwork: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.get(metadata, resource, params)
-
     def getOrganizationWirelessRadioStatusesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List a paginated snapshot of current radio status for wireless devices in an organization**
@@ -11605,6 +11785,58 @@ class Wireless:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationWirelessSsidsAddressingGuards(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the DHCP Guard and Router Advertisement (RA) Guard settings for SSIDs in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-addressing-guards
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter results by network IDs. Maximum 100 network IDs.
+        - ssidNumbers (array): Optional parameter to filter results by SSID numbers. Valid values are 0-14. Maximum 15 SSID numbers.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "addressing", "guards"],
+            "operation": "getOrganizationWirelessSsidsAddressingGuards",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/addressing/guards"
+
+        query_params = [
+            "networkIds",
+            "ssidNumbers",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsAddressingGuards: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -11755,6 +11987,58 @@ class Wireless:
                 )
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationWirelessSsidsHttpProxies(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the HTTP force proxy settings for SSIDs in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-http-proxies
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter results by network IDs. Maximum 100 network IDs.
+        - ssidNumbers (array): Optional parameter to filter results by SSID numbers. Valid values are 0-14. Maximum 15 SSID numbers.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "http", "proxies"],
+            "operation": "getOrganizationWirelessSsidsHttpProxies",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/http/proxies"
+
+        query_params = [
+            "networkIds",
+            "ssidNumbers",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsHttpProxies: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessSsidsOpenRoamingByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -12444,6 +12728,171 @@ class Wireless:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessSsidsStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsUmbrellaProtectionBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Umbrella protection settings and lifecycle availability for SSIDs in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-umbrella-protection-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional filter by network IDs. Maximum 100 IDs.
+        - ssidNumbers (array): Optional filter by SSID numbers. Valid values are 0-14.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "umbrella", "protection", "bySsid"],
+            "operation": "getOrganizationWirelessSsidsUmbrellaProtectionBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/umbrella/protection/bySsid"
+
+        query_params = [
+            "networkIds",
+            "ssidNumbers",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsUmbrellaProtectionBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsUmbrellaProtectionJobs(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Umbrella protection jobs for SSIDs in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-umbrella-protection-jobs
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional filter by network IDs. Maximum 100 IDs.
+        - ssidNumbers (array): Optional filter by SSID numbers. Valid values are 0-14.
+        - jobIds (array): Optional filter by Umbrella protection job IDs. Maximum 100 IDs.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "umbrella", "protection", "jobs"],
+            "operation": "getOrganizationWirelessSsidsUmbrellaProtectionJobs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/umbrella/protection/jobs"
+
+        query_params = [
+            "networkIds",
+            "ssidNumbers",
+            "jobIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+            "jobIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsUmbrellaProtectionJobs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsUmbrellaProtectionPoliciesBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Umbrella policies applied to SSIDs in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-umbrella-protection-policies-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional filter by network IDs. Maximum 100 IDs.
+        - ssidNumbers (array): Optional filter by SSID numbers. Valid values are 0-14.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "umbrella", "protection", "policies", "bySsid"],
+            "operation": "getOrganizationWirelessSsidsUmbrellaProtectionPoliciesBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/umbrella/protection/policies/bySsid"
+
+        query_params = [
+            "networkIds",
+            "ssidNumbers",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsUmbrellaProtectionPoliciesBySsid: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

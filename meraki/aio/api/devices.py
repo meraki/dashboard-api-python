@@ -538,6 +538,68 @@ class AsyncDevices:
 
         return self._session.get(metadata, resource)
 
+    def createDeviceLiveToolsDnsLookup(self, serial: str, hostname: str, dnsServer: str, queryType: str, **kwargs):
+        """
+        **Enqueue a DNS lookup job from the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-dns-lookup
+
+        - serial (string): Serial
+        - hostname (string): Hostname for the device to resolve.
+        - dnsServer (string): IPv4 or IPv6 DNS server address.
+        - queryType (string): DNS record type to request.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "queryType" in kwargs:
+            options = ["A", "AAAA"]
+            assert kwargs["queryType"] in options, (
+                f'''"queryType" cannot be "{kwargs["queryType"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["devices", "liveTools", "dnsLookup"],
+            "operation": "createDeviceLiveToolsDnsLookup",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/dnsLookup"
+
+        body_params = [
+            "hostname",
+            "dnsServer",
+            "queryType",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsDnsLookup: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsDnsLookup(self, serial: str, id: str):
+        """
+        **Return a DNS lookup job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-dns-lookup
+
+        - serial (string): Serial
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "dnsLookup"],
+            "operation": "getDeviceLiveToolsDnsLookup",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/dnsLookup/{id}"
+
+        return self._session.get(metadata, resource)
+
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
         **Enqueue a job to blink LEDs on a device**

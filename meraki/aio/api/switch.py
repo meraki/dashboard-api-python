@@ -210,7 +210,6 @@ class AsyncSwitch:
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
-        - activeVlans (string): The VLANs that are active on the switch port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
@@ -273,7 +272,6 @@ class AsyncSwitch:
             "vlan",
             "voiceVlan",
             "allowedVlans",
-            "activeVlans",
             "isolationEnabled",
             "rstpEnabled",
             "stpGuard",
@@ -3635,7 +3633,6 @@ class AsyncSwitch:
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
-        - activeVlans (string): The VLANs that are active on the switch template port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch template port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
@@ -3700,7 +3697,6 @@ class AsyncSwitch:
             "vlan",
             "voiceVlan",
             "allowedVlans",
-            "activeVlans",
             "isolationEnabled",
             "rstpEnabled",
             "stpGuard",

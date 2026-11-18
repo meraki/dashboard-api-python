@@ -1279,6 +1279,35 @@ class ActionBatchWireless:
         }
         return action
 
+    def updateNetworkWirelessSsidAddressingGuards(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the DHCP Guard and Router Advertisement (RA) Guard settings for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-addressing-guards
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - dhcp (object): DHCP Guard configuration for the SSID.
+        - ra (object): Router Advertisement (RA) Guard configuration for the SSID.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        number = urllib.parse.quote(number, safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/addressing/guards"
+
+        body_params = [
+            "dhcp",
+            "ra",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str, **kwargs):
         """
         **Update the bonjour forwarding setting and rules for the SSID**
@@ -1475,6 +1504,37 @@ class ActionBatchWireless:
             "roamConsortOis",
             "mccMncs",
             "naiRealms",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessSsidHttpProxies(self, number: int, networkId: str, **kwargs):
+        """
+        **Update the HTTP force proxy settings for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-http-proxies
+
+        - number (integer): SSID number. Valid values are 0-14.
+        - networkId (string): Network ID
+        - enabled (boolean): Whether clients on the SSID are forced through the HTTP proxy.
+        - server (object): HTTP proxy server that intercepted traffic is forwarded to.
+        - exclusions (array): Destinations excluded from forced proxying. A supplied array replaces the list; an empty array clears it while the proxy is enabled.
+        """
+
+        kwargs.update(locals())
+
+        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/http/proxies"
+
+        body_params = [
+            "enabled",
+            "server",
+            "exclusions",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

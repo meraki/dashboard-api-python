@@ -7,7 +7,7 @@ class ActionBatchDevices:
 
     def updateDevice(self, serial: str, **kwargs):
         """
-        **Update the attributes of a device**
+        **Update the attributes of a device. After a successful claim, updates may return HTTP 404 for a few minutes. Retry with increasing delays and a timeout. See the <a href='https://developer.cisco.com/meraki/api-v1/claim-network-devices/'>Claim Network Devices endpoint</a>.**
         https://developer.cisco.com/meraki/api-v1/#!update-device
 
         - serial (string): Serial
@@ -147,6 +147,43 @@ class ActionBatchDevices:
         action = {
             "resource": resource,
             "operation": "revoke",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsDnsLookup(self, serial: str, hostname: str, dnsServer: str, queryType: str, **kwargs):
+        """
+        **Enqueue a DNS lookup job from the device. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-dns-lookup
+
+        - serial (string): Serial
+        - hostname (string): Hostname for the device to resolve.
+        - dnsServer (string): IPv4 or IPv6 DNS server address.
+        - queryType (string): DNS record type to request.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "queryType" in kwargs:
+            options = ["A", "AAAA"]
+            assert kwargs["queryType"] in options, (
+                f'''"queryType" cannot be "{kwargs["queryType"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/dnsLookup"
+
+        body_params = [
+            "hostname",
+            "dnsServer",
+            "queryType",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "lookup",
             "body": payload,
         }
         return action

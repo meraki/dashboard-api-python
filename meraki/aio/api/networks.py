@@ -3268,6 +3268,73 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
+    def getNetworkUmbrellaAccount(self, networkId: str):
+        """
+        **Show network-wide Umbrella account settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-umbrella-account
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "umbrella", "account"],
+            "operation": "getNetworkUmbrellaAccount",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/umbrella/account"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkUmbrellaAccount(self, networkId: str, key: str, secret: str, **kwargs):
+        """
+        **Update network-wide Umbrella account settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-umbrella-account
+
+        - networkId (string): Network ID
+        - key (string): API key generated from Umbrella dashboard
+        - secret (string): API secret generated from Umbrella dashboard
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["networks", "configure", "umbrella", "account"],
+            "operation": "updateNetworkUmbrellaAccount",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/umbrella/account"
+
+        body_params = [
+            "key",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkUmbrellaAccount: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkUmbrellaPolicies(self, networkId: str):
+        """
+        **Return a list of Umbrella protection policies available for applying on an SSID or Group Policy**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-umbrella-policies
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "umbrella", "policies"],
+            "operation": "getNetworkUmbrellaPolicies",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/umbrella/policies"
+
+        return self._session.get(metadata, resource)
+
     def unbindNetwork(self, networkId: str, **kwargs):
         """
         **Unbind a network from a template.**

@@ -576,7 +576,7 @@ class CampusGateway:
         **kwargs,
     ):
         """
-        **Provisions a cluster,adds campus gateways to it and associate/dissociate failover targets.**
+        **Provision a campus gateway cluster, add campus gateways, configure AP-assignment load balancing, and associate or dissociate failover targets**
         https://developer.cisco.com/meraki/api-v1/#!provision-organization-campus-gateway-clusters
 
         - organizationId (string): Organization ID

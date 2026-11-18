@@ -2685,13 +2685,13 @@ class Appliance:
 
     def updateNetworkApplianceTrafficShapingVpnExclusions(self, networkId: str, **kwargs):
         """
-        **Update VPN exclusion rules for an MX network.**
+        **Update VPN exclusion rules for a Security Appliance or Secure Router network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-vpn-exclusions
 
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
-        - applications (array): NBAR application-based VPN exclusion rules. The documented example is a Secure Router NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable. Available for networks on firmware >= 19.2.
+        - applications (array): NBAR application-based VPN exclusion rules. The documented example is a NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable with NBAR application IDs. Available for networks on firmware >= 19.2.
         - applicationCategoryMapping (object): Options for mapping configured majorApplications to application categories.
         """
 
@@ -5790,7 +5790,7 @@ class Appliance:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Display VPN exclusion rules for MX networks.**
+        **Display VPN exclusion rules for Security Appliance and Secure Router networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-traffic-shaping-vpn-exclusions-by-network
 
         - organizationId (string): Organization ID
