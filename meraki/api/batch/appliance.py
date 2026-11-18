@@ -1189,13 +1189,13 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceTrafficShapingVpnExclusions(self, networkId: str, **kwargs):
         """
-        **Update VPN exclusion rules for an MX network.**
+        **Update VPN exclusion rules for a Security Appliance or Secure Router network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-vpn-exclusions
 
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
-        - applications (array): NBAR application-based VPN exclusion rules. The documented example is a Secure Router NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable. Available for networks on firmware >= 19.2.
+        - applications (array): NBAR application-based VPN exclusion rules. The documented example is a NBAR catalog entry. On Secure Router networks, the ID and name must identify the same enabled NBAR application; traffic-shaping application IDs are not interchangeable with NBAR application IDs. Available for networks on firmware >= 19.2.
         - applicationCategoryMapping (object): Options for mapping configured majorApplications to application categories.
         """
 
@@ -1682,7 +1682,7 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, vrfs: list, **kwargs):
         """
-        **Replace the complete VRF mapping for a source network and hub pair. The required 'vrfs' array replaces the current VRF selection. An omitted array returns a 400 response and does not change the mapping. For a spoke source, an empty array selects only the default VRF. For a hub source, the array must contain at least one item. In a non-empty array, use VRF ID '0' to select the default VRF, either alone or alongside non-default VRFs.**
+        **Replace the complete VRF mapping for a source network and hub pair. Both the source and hub must be MX networks in the same organization. Configuration templates are not supported. The source network must support site-to-site VPN and VRF mappings and must use spoke or hub mode. For a spoke source, the specified hub must already be configured as a default-route hub. For a hub source, the specified hub must already be configured as an exit hub. The required 'vrfs' array replaces the current VRF selection. An omitted array returns a 400 response and does not change the mapping. For a spoke source, an empty array selects only the default VRF. For a hub source, the array must contain at least one item. In a non-empty array, use VRF ID '0' to select the default VRF, either alone or alongside non-default VRFs.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
 
         - networkId (string): Network ID
