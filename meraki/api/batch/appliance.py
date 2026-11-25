@@ -55,7 +55,7 @@ class ActionBatchAppliance:
 
     def updateDeviceApplianceInterfacesPort(self, serial: str, number: str, **kwargs):
         """
-        **Update configurations for an appliance's specified port**
+        **Update configurations for an appliance's specified port. This operation is not supported for Secure Routers; use the createDeviceApplianceInterfacesPortsUpdate operation instead.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-interfaces-port
 
         - serial (string): Serial
@@ -842,6 +842,39 @@ class ActionBatchAppliance:
             "idsRulesets",
             "policy",
             "protectedNetworks",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceSecurityMalware(self, networkId: str, mode: str, **kwargs):
+        """
+        **Set the supported malware settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-malware
+
+        - networkId (string): Network ID
+        - mode (string): Set mode to 'enabled' to enable malware prevention, otherwise 'disabled'
+        - allowedUrls (array): The urls that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP allow listing
+        - allowedFiles (array): The sha256 digests of files that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP allow listing
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["disabled", "enabled"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/security/malware"
+
+        body_params = [
+            "mode",
+            "allowedUrls",
+            "allowedFiles",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1682,7 +1715,7 @@ class ActionBatchAppliance:
 
     def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, vrfs: list, **kwargs):
         """
-        **Replace the complete VRF mapping for a source network and hub pair. Both the source and hub must be MX networks in the same organization. Configuration templates are not supported. The source network must support site-to-site VPN and VRF mappings and must use spoke or hub mode. For a spoke source, the specified hub must already be configured as a default-route hub. For a hub source, the specified hub must already be configured as an exit hub. The required 'vrfs' array replaces the current VRF selection. An omitted array returns a 400 response and does not change the mapping. For a spoke source, an empty array selects only the default VRF. For a hub source, the array must contain at least one item. In a non-empty array, use VRF ID '0' to select the default VRF, either alone or alongside non-default VRFs.**
+        **Replace the complete VRF mapping for a source network and hub pair. The source and hub must be security appliance networks in the same organization. Cross-platform mappings are supported only when authorized by site-to-site VPN interop validation. Configuration templates are not supported. The source network must support site-to-site VPN and VRF mappings and must use spoke or hub mode. For a spoke source, the specified hub must already be configured as a default-route hub. For a hub source, the specified hub must already be configured as an exit hub. The required 'vrfs' array replaces the current VRF selection. An omitted array returns a 400 response and does not change the mapping. For a spoke source, an empty array selects only the default VRF. For a hub source, the array must contain at least one item. In a non-empty array, use VRF ID '0' to select the default VRF, either alone or alongside non-default VRFs.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
 
         - networkId (string): Network ID

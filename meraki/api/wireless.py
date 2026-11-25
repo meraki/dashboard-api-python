@@ -4904,7 +4904,7 @@ class Wireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Time-series of wireless post connection capacity successes and failures by network.**
+        **Returns wireless post connection capacity metrics by network for each time interval**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-interval
 
         - organizationId (string): Organization ID
@@ -4918,7 +4918,7 @@ class Wireless:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -5599,7 +5599,7 @@ class Wireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Time-series of wireless coverage successes and failures by network.**
+        **Returns wireless coverage metrics by network for each time interval**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-interval
 
         - organizationId (string): Organization ID
@@ -5607,13 +5607,13 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -6076,7 +6076,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6142,7 +6142,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6208,7 +6208,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6274,7 +6274,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6342,7 +6342,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6408,13 +6408,13 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -6476,7 +6476,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6542,7 +6542,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6608,7 +6608,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by band.
         - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
@@ -6691,7 +6691,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6757,7 +6757,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6823,7 +6823,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6889,7 +6889,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6955,7 +6955,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -7021,7 +7021,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -7079,7 +7079,7 @@ class Wireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Time-series of wireless time to connect by network.**
+        **Returns wireless time to connect metrics by network for each time interval**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-interval
 
         - organizationId (string): Organization ID
@@ -7087,13 +7087,13 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
-        - bands (array): Filter results by band.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
+        - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -7155,7 +7155,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -7213,7 +7213,7 @@ class Wireless:
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Summarizes wireless connection time to connect metrics by ssid.**
+        **Summarizes wireless connection time to connect metrics by SSID.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-ssid
 
         - organizationId (string): Organization ID
@@ -7221,7 +7221,7 @@ class Wireless:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
-        - ssidNumbers (array): Filter results by SSID number.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -7286,12 +7286,12 @@ class Wireless:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
-        - serials (array): Filter results by SSID number. Valid values are 0-14.
-        - ssidNumbers (array): Filter results by SSID number.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number. Valid values are 0-14.
         - bands (array): Filter results by wireless band in GHz (2.4, 5, or 6).
         - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
-        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
+        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub-contributor insights.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.

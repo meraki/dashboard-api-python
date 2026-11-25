@@ -1808,6 +1808,100 @@ class ActionBatchOrganizations:
         }
         return action
 
+    def createOrganizationDevicesSoftwareMaintenanceUpdatesEvent(
+        self, organizationId: str, network: dict, productType: str, updateIds: list, **kwargs
+    ):
+        """
+        **Create an SMU install event for a network and product type in the organization. The caller must have write access to the network, and each updateId must identify an SMU available for that network and product type. Invalid or inaccessible targets fail without creating an event. A pending firmware operation on the target network returns 409 Conflict without replacing the existing event. A successful request returns 201 with a new eventId and status scheduled; installation starts at scheduledAt. If scheduledAt is omitted or in the past, the event is scheduled to start immediately; values more than one month in the future are rejected. The 201 response confirms scheduling, not installation completion; use GET to track the event status. This POST is not idempotent: a retry can create another event if the request remains eligible.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - network (object): The network to which the SMU install event applies.
+        - productType (string): The product family to update. Required to identify the target product; on a combined network, it selects which product family the SMU install event applies to.
+        - updateIds (array): IDs of the SMUs to install. Maximum 20 values.
+        - scheduledAt (string): The ISO 8601 timestamp in the network's local time zone when the SMU install event is scheduled to start. Values more than one month in the future are rejected; a past value is normalized to the current time. If omitted, the SMU install event is scheduled immediately.
+        - strategy (string): The strategy used to perform the software maintenance update. Applies only to campusGateway products; a supplied value is ignored for switch events and the response strategy is null. If omitted for campusGateway, the network's configured default strategy is used.
+        """
+
+        kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["campusGateway", "switch"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
+        if "strategy" in kwargs:
+            options = ["minimizeClientDowntime", "minimizeUpdateTime"]
+            assert kwargs["strategy"] in options, (
+                f'''"strategy" cannot be "{kwargs["strategy"]}", & must be set to one of: {options}'''
+            )
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events"
+
+        body_params = [
+            "network",
+            "productType",
+            "scheduledAt",
+            "strategy",
+            "updateIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationDevicesSoftwareMaintenanceUpdatesEvent(
+        self, organizationId: str, eventId: str, scheduledAt: str, **kwargs
+    ):
+        """
+        **Reschedule an SMU install event within an organization. Only scheduled events with scheduledAt more than one hour away can be updated. Requests for started, completed, or canceled events, or scheduled events within one hour of scheduledAt, return 400 Bad Request. A supplied scheduledAt more than one month in the future is rejected; a past value is normalized to the current time. scheduledAt is required. Empty requests return 400 Bad Request.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - eventId (string): Event ID
+        - scheduledAt (string): The ISO 8601 timestamp in the network's local time zone when the SMU install event is scheduled to start. Values more than one month in the future are rejected; a past value is normalized to the current time.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        eventId = urllib.parse.quote(eventId, safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events/{eventId}"
+
+        body_params = [
+            "scheduledAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def cancelOrganizationDevicesSoftwareMaintenanceUpdatesEvent(self, organizationId: str, eventId: str):
+        """
+        **Cancel a scheduled SMU install event within an organization. Cancellation is allowed only when the event has status scheduled and scheduledAt is more than one hour away. Requests for started or completed events, or scheduled events within one hour of scheduledAt, return 400 Bad Request. Updates on individual template child networks cannot be canceled directly. Repeating a request for an already canceled event is idempotent and returns 200 with the unchanged event, including its existing cancelledAt. A successful cancellation returns the event with status canceled and cancelledAt set.**
+        https://developer.cisco.com/meraki/api-v1/#!cancel-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - eventId (string): Event ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        eventId = urllib.parse.quote(eventId, safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events/{eventId}/cancel"
+
+        action = {
+            "resource": resource,
+            "operation": "cancel",
+        }
+        return action
+
     def updateOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str, **kwargs):
         """
         **Update an early access feature opt-in for an organization**
@@ -3052,17 +3146,29 @@ class ActionBatchOrganizations:
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
-        **Create a network**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-network
+                **Create a network. The details field can select the operating system for a new appliance network. When cloning, the source operating system is preserved. The native example clones an existing IOS XE appliance; details does not override its operating system.
 
-        - organizationId (string): Organization ID
-        - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
-        - tags (array): A list of tags to be applied to the network
-        - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
-        - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
-        - notes (string): Add any notes or additional information about this network here.
-        - details (array): An array of details
+        Additional creation examples without cloning:
+
+        Combined network request:
+        {"name":"Combined example","productTypes":["appliance","wireless"],"timeZone":"America/Los_Angeles","notes":"Example","details":[{"productType":"appliance","name":"operating system","value":"IOS XE"}]}
+        Combined network response (201):
+        {"id":"L_24329158","organizationId":"2930418","name":"Combined example","productTypes":["appliance","wireless"],"timeZone":"America/Los_Angeles","tags":[],"notes":"Example","url":"https://n1.meraki.com//n//manage/nodes/list","isBoundToConfigTemplate":false,"details":null}
+
+        Wireless-only request (details is ignored):
+        {"name":"Wireless example","productTypes":["wireless"],"timeZone":"America/Los_Angeles","notes":"Example","details":[{"productType":"appliance","name":"operating system","value":"IOS XE"}]}
+        Wireless-only response (201):
+        {"id":"N_24329159","organizationId":"2930418","name":"Wireless example","productTypes":["wireless"],"timeZone":"America/Los_Angeles","tags":[],"notes":"Example","url":"https://n1.meraki.com//n//manage/nodes/list","isBoundToConfigTemplate":false,"details":null}**
+                https://developer.cisco.com/meraki/api-v1/#!create-organization-network
+
+                - organizationId (string): Organization ID
+                - name (string): The name of the new network
+                - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
+                - tags (array): A list of tags to be applied to the network
+                - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
+                - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly. The details field does not override the copied operating system.
+                - notes (string): Add any notes or additional information about this network here.
+                - details (array): Appliance operating system selections. Omission, null and [] use the default appliance operating system. Ignored when productTypes excludes appliance or copyFromNetworkId is supplied. With appliance requested, entries are validated: one per requested product type, up to 10 entries. Ignored arrays have no field-specific size limit.
         """
 
         kwargs.update(locals())
