@@ -3648,18 +3648,25 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval(self, organizationId: str, **kwargs):
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
-        **Time-series of wired connection successes and failures by network.**
+        **Returns wired connection successes and failures metrics by network for each time interval**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-interval
 
         - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkIds (array): Filter results by network.
         - serials (array): Filter results by device serial.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
@@ -3678,6 +3685,9 @@ class AsyncOrganizations:
             "t1",
             "timespan",
             "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
@@ -3698,7 +3708,7 @@ class AsyncOrganizations:
                     f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
                 )
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByServer(self, organizationId: str, **kwargs):
         """
@@ -8077,6 +8087,271 @@ class AsyncOrganizations:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesSoftwareMaintenanceUpdates(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get available Software Maintenance Updates (SMUs) for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-maintenance-updates
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates"],
+            "operation": "getOrganizationDevicesSoftwareMaintenanceUpdates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareMaintenanceUpdates: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesSoftwareMaintenanceUpdatesByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Get available software maintenance updates (SMUs) by network in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-maintenance-updates-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filter by up to 100 network IDs. Use repeated bracketed keys: networkIds[]=N_1&networkIds[]=N_2. Omit to include all accessible networks in the organization. Only accessible requested networks are returned. If no requested network is accessible, the response is 200 with items: [].
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates", "byNetwork"],
+            "operation": "getOrganizationDevicesSoftwareMaintenanceUpdatesByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareMaintenanceUpdatesByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesSoftwareMaintenanceUpdatesEvents(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Get Software Maintenance Update (SMU) install events for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-maintenance-updates-events
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        - eventIds (array): Filter SMU install events by eventId. Values are alternatives (OR); when combined with networkIds or statuses, all supplied filters must match. Unknown or inaccessible event IDs are ignored. Use repeated bracketed keys: eventIds[]=7891011&eventIds[]=7891012. Maximum 100 values.
+        - networkIds (array): Filter SMU install events by network.id. Only networks accessible to the caller are considered; inaccessible IDs are ignored. If none of the requested networks are accessible, the response is 200 with items: []. Use repeated bracketed keys: networkIds[]=N_1&networkIds[]=N_2. Maximum 100 values.
+        - statuses (array): Filter SMU install events by status. Multiple status values are alternatives (OR); when combined with networkIds, both filters must match. Use repeated bracketed keys: statuses[]=scheduled&statuses[]=completed. Maximum 4 values.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates", "events"],
+            "operation": "getOrganizationDevicesSoftwareMaintenanceUpdatesEvents",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "eventIds",
+            "networkIds",
+            "statuses",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "eventIds",
+            "networkIds",
+            "statuses",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareMaintenanceUpdatesEvents: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationDevicesSoftwareMaintenanceUpdatesEvent(
+        self, organizationId: str, network: dict, productType: str, updateIds: list, **kwargs
+    ):
+        """
+        **Create an SMU install event for a network and product type in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - network (object): The network to which the SMU install event applies.
+        - productType (string): The product family to update. Required to identify the target product; on a combined network, it selects which product family the SMU install event applies to.
+        - updateIds (array): IDs of the SMUs to install. Maximum 20 values.
+        - scheduledAt (string): The ISO 8601 timestamp in the network's local time zone when the SMU install event is scheduled to start. Values more than one month in the future are rejected; a past value is normalized to the current time. If omitted, the SMU install event is scheduled immediately.
+        - strategy (string): The strategy used to perform the software maintenance update. Applies only to campusGateway products; a supplied value is ignored for switch events and the response strategy is null. If omitted for campusGateway, the network's configured default strategy is used.
+        """
+
+        kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["campusGateway", "switch"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
+        if "strategy" in kwargs:
+            options = ["minimizeClientDowntime", "minimizeUpdateTime"]
+            assert kwargs["strategy"] in options, (
+                f'''"strategy" cannot be "{kwargs["strategy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates", "events"],
+            "operation": "createOrganizationDevicesSoftwareMaintenanceUpdatesEvent",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events"
+
+        body_params = [
+            "network",
+            "productType",
+            "scheduledAt",
+            "strategy",
+            "updateIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesSoftwareMaintenanceUpdatesEvent: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationDevicesSoftwareMaintenanceUpdatesEvent(
+        self, organizationId: str, eventId: str, scheduledAt: str, **kwargs
+    ):
+        """
+        **Reschedule an SMU install event within an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - eventId (string): Event ID
+        - scheduledAt (string): The ISO 8601 timestamp in the network's local time zone when the SMU install event is scheduled to start. Values more than one month in the future are rejected; a past value is normalized to the current time.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates", "events"],
+            "operation": "updateOrganizationDevicesSoftwareMaintenanceUpdatesEvent",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        eventId = urllib.parse.quote(str(eventId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events/{eventId}"
+
+        body_params = [
+            "scheduledAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesSoftwareMaintenanceUpdatesEvent: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def cancelOrganizationDevicesSoftwareMaintenanceUpdatesEvent(self, organizationId: str, eventId: str):
+        """
+        **Cancel a scheduled SMU install event within an organization**
+        https://developer.cisco.com/meraki/api-v1/#!cancel-organization-devices-software-maintenance-updates-event
+
+        - organizationId (string): Organization ID
+        - eventId (string): Event ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "maintenance", "updates", "events"],
+            "operation": "cancelOrganizationDevicesSoftwareMaintenanceUpdatesEvent",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        eventId = urllib.parse.quote(str(eventId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/maintenance/updates/events/{eventId}/cancel"
+
+        return self._session.post(metadata, resource)
 
     def getOrganizationDevicesSoftwareUpdatesOverviewsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -13122,9 +13397,9 @@ class AsyncOrganizations:
         - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
-        - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
+        - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly. The details field does not override the copied operating system.
         - notes (string): Add any notes or additional information about this network here.
-        - details (array): An array of details
+        - details (array): Appliance operating system selections. Omission, null and [] use the default appliance operating system. Ignored when productTypes excludes appliance or copyFromNetworkId is supplied. With appliance requested, entries are validated: one per requested product type, up to 10 entries. Ignored arrays have no field-specific size limit.
         """
 
         kwargs.update(locals())
